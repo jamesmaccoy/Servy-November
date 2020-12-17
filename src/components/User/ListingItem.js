@@ -21,14 +21,14 @@ const ListingItem = ({
     image: "",
     state: false,
   });
-  const [compDistance, setCompDistace] = useState(10);
+  const [compDistance, setCompDistace] = useState(initialDistance);
 
   useEffect(() => {
     setCompDistace(initialDistance);
   }, [initialDistance]);
   const [distance, setDistance] = useState(0);
   useEffect(() => {
-    if (data.imagesUrl !== []) {
+    if (data.imagesUrl.length !== 0) {
       setServiceImage({
         ...serviceImage,
         image: data.imagesUrl[0],
@@ -52,6 +52,10 @@ const ListingItem = ({
       );
     }
   }, [data, userLocation]);
+  useEffect(() => {
+    if (distance <= compDistance) {
+    }
+  }, [initialDistance]);
   return (
     <>
       {distance <= compDistance && (

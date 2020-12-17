@@ -53,8 +53,12 @@ const getImage = ({ images }) => {
       </View>
       <View style={{ paddingTop: 20, flexDirection: "row", flexWrap: "wrap" }}>
         {imageState &&
-          images.map((url) => (
-            <Image source={{ uri: url }} style={{ width: 100, height: 100 }} />
+          images.map((url, index) => (
+            <Image
+              key={index}
+              source={{ uri: url }}
+              style={{ width: 100, height: 100 }}
+            />
           ))}
       </View>
     </>

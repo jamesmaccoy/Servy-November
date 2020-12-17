@@ -20,14 +20,31 @@ const AddService = ({
   serviceMessage,
   getAdminCategory,
   categories,
-  loading,
   serviceLoading,
 }) => {
   const [array, setArray] = useState([]);
-
   const [message, setMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState(false);
-
+  const [serviceAdded, setServiceAdded] = useState(false);
+  const [addServiceLoading, setAddServiceLoading] = useState(false);
+  const [stateChange, setStateChange] = useState(false);
+  const [images, setImages] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [select, setSelect] = useState(false);
+  const [newFeature, setNewFeature] = useState({
+    label: "",
+    state: false,
+  });
+  const [featureVisible, setFeatureVisible] = useState(false);
+  const [selectedValue, setSelectedValue] = useState({
+    value: "",
+    features: [],
+  });
+  const [userLocation, setUserLocation] = useState({
+    errorMessage: "",
+    locationCords: {},
+    map: false,
+  });
   const [state, setState] = useState({
     serviceName: "",
     location: "",
@@ -38,36 +55,24 @@ const AddService = ({
   useEffect(() => {
     getAdminCategory();
     setCat(categories);
+    setServiceAdded(false);
+    setMessage(false);
+    console.log("serviceMessgae", message);
+    setAddServiceLoading(false);
   }, []);
+  // useEffect(() => {
+  //   setServiceAdded(serviceMessage);
+  //   if (serviceMessage === true && serviceLoading === false) {
+  //     setAddServiceLoading(false);
+  //     setMessage(true);
+  //   }
+  // }, [serviceMessage, serviceAdded]);
   useEffect(() => {
     setCat(categories);
   }, [categories]);
-  useEffect(() => {
-    console.log();
-    setMessage(serviceMessage);
-  }, [serviceMessage]);
-
-  const [addServiceLoading, setAddServiceLoading] = useState(false);
-  const [stateChange, setStateChange] = useState(false);
-  useEffect(() => {
-    setAddServiceLoading(loading);
-  }, [loading]);
   const navigationHandler = () => {
     navigation.goBack();
   };
-  const [images, setImages] = useState([]);
-  const [selectedValue, setSelectedValue] = useState({
-    value: "",
-    features: [],
-  });
-
-  const [userLocation, setUserLocation] = useState({
-    errorMessage: "",
-    locationCords: {},
-    map: false,
-  });
-  const [visible, setVisible] = useState(false);
-
   const handleInfo = () => {
     if (
       state.serviceName !== "" &&
@@ -80,21 +85,17 @@ const AddService = ({
     ) {
       AddNewService(state, array, userLocation, images);
       setErrorMessage(false);
+      navigation.goBack();
+      setMessage(true);
     } else {
       setErrorMessage(true);
       setMessage(false);
     }
   };
-  const [newFeature, setNewFeature] = useState({
-    label: "",
-    state: false,
-  });
-  const [featureVisible, setFeatureVisible] = useState(false);
   const showFeature = () => {
     setFeatureVisible(!featureVisible);
   };
   const AddFeature = () => {
-    console.log("selected value", selectedValue);
     if (newFeature.label !== "") {
       setStateChange(true);
       setSelectedValue({
@@ -106,7 +107,7 @@ const AddService = ({
       });
     }
   };
-  const [select, setSelect] = useState(false);
+
   useEffect(() => {
     setArray([]);
     setSelect(false);
@@ -125,7 +126,7 @@ const AddService = ({
             {message && (
               <Text style={{ color: "green" }}>Data Added Sucessfully</Text>
             )}
-            {serviceLoading && (
+            {addServiceLoading && (
               <Text style={{ color: "green" }}>Please wait for a while</Text>
             )}
             {errorMessage && (
@@ -200,21 +201,19 @@ const AddService = ({
                     })}
                 </View>
                 <View>
-                  <View
-                    style={styles.nfbtn}
-                  > 
-                  <Text
-                        style={{
-                          textAlign: "left",
-                          paddingTop:10,
-                          paddingLeft:5,
-                          width:250,
-                          color: "#000",
-                          fontSize: 15,
-                        }}
-                      >
-                        New Features
-                      </Text>
+                  <View style={styles.nfbtn}>
+                    <Text
+                      style={{
+                        textAlign: "left",
+                        paddingTop: 10,
+                        paddingLeft: 5,
+                        width: 250,
+                        color: "#000",
+                        fontSize: 15,
+                      }}
+                    >
+                      New Features
+                    </Text>
                     <Button
                       style={styles.showFeatures}
                       onPress={showFeature}
@@ -224,7 +223,7 @@ const AddService = ({
                       <Text
                         style={{
                           textAlign: "center",
-                          paddingLeft:8,
+                          paddingLeft: 8,
                           color: "#000",
                           fontSize: 15,
                         }}
@@ -300,6 +299,7 @@ const mapStateToProps = (state) => {
     categories: state.category.adminCollection,
     categoryFeatures: state.Service.categoryFeatures,
     loading: state.Service.loading,
+    uploadData: state.Service.uploadData,
   };
 };
 export default connect(mapStateToProps, {

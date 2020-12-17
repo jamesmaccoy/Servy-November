@@ -5,9 +5,7 @@ export const getCurrentLocation = (location) => async (dispatch, getState) => {
   });
 };
 
-export const distanceRadius = (distance) => async (dispatch, getState) => {
-  console.log("Distanceee", distance);
-
+export const distanceRadius = (distance) => async (dispatch) => {
   dispatch({
     type: "DISTANCE_RADIUS",
     payload: distance,

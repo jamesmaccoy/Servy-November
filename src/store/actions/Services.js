@@ -12,80 +12,89 @@ export const AddNewService = (
   let category = service.category;
   let location = service.location;
   let imageArray = [];
-
-  if (user) {
-    dispatch({
-      type: "SERVICE_LOADING",
-      payload: true,
-    });
-    const data = await db
-      .collection("users")
-      .get()
-      .then((providerInfo) => {
-        providerInfo.docs.forEach((userData) => {
-          if (user.uid == userData.id) {
-            providerName = userData.data().Name;
+  // console.log("Imagess", images);
+  dispatch({
+    type: "SERVICE_LOADING",
+    payload: true,
+  });
+  const res = await images.forEach(async (serviceImage, index) => {
+    const ImageResponse = await fetch(serviceImage);
+    const blob = await ImageResponse.blob();
+    var ref = firebase.storage().ref().child(`images/${serviceImage}`);
+    await ref.put(blob).then((response) => {
+      response.ref
+        .getDownloadURL()
+        .then((url) => {
+          imageArray.push(url);
+        })
+        .then(async () => {
+          if (imageArray.length === images.length) {
+            if (user) {
+              dispatch({
+                type: "SERVICE_LOADING",
+                payload: true,
+              });
+              await db
+                .collection("users")
+                .get()
+                .then((providerInfo) => {
+                  providerInfo.docs.forEach((userData) => {
+                    if (user.uid == userData.id) {
+                      providerName = userData.data().Name;
+                    }
+                  });
+                })
+                .then(async () => {
+                  function addService() {}
+                  setTimeout(addService, 15000);
+                })
+                .then(async () => {
+                  const res = db
+                    .collection("services")
+                    .add({
+                      serviceName: serviceName,
+                      category: category,
+                      location: location,
+                      maps: userLocation.locationCords,
+                      userId: user.uid,
+                      attributes: attributes,
+                      approve: false,
+                      providerName: providerName,
+                      averageRating: 0,
+                      totalReviews: 0,
+                      imagesUrl: imageArray,
+                      createdAt: new Date(),
+                    })
+                    .then(() => {
+                      dispatch({
+                        type: "ADD_SERVICE",
+                        payload: true,
+                      });
+                      dispatch({
+                        type: "SERVICE_LOADING",
+                        payload: false,
+                      });
+                    })
+                    .catch(() => {
+                      dispatch({
+                        type: "FAIL_SERVICE",
+                        payload: true,
+                      });
+                      dispatch({
+                        type: "SERVICE_LOADING",
+                        payload: false,
+                      });
+                    });
+                });
+            } else {
+              console.log("user is not signed in");
+            }
           }
         });
-      })
-      .then(() => {
-        images.forEach(async (serviceImage) => {
-          const ImageResponse = await fetch(serviceImage);
-          const blob = await ImageResponse.blob();
+    });
+  });
 
-          var ref = firebase.storage().ref().child(`images/${serviceImage}`);
-
-          const imageRes = await ref.put(blob).then((response) => {
-            const firebaseRes = response.ref.getDownloadURL().then((url) => {
-              imageArray.push(url);
-            });
-          });
-        });
-        function addService() {
-          const res = db
-            .collection("services")
-            .add({
-              serviceName: serviceName,
-              category: category,
-              location: location,
-              maps: userLocation.locationCords,
-              userId: user.uid,
-              attributes: attributes,
-              approve: false,
-              providerName: providerName,
-              averageRating: 0,
-              totalReviews: 0,
-              imagesUrl: imageArray,
-              createdAt: new Date(),
-            })
-            .then((docRef) => {
-              dispatch({
-                type: "ADD_SERVICE",
-                payload: true,
-              });
-              dispatch({
-                type: "SERVICE_LOADING",
-                payload: false,
-              });
-            })
-            .catch(() => {
-              dispatch({
-                type: "FAIL_SERVICE",
-                payload: true,
-              });
-              dispatch({
-                type: "SERVICE_LOADING",
-                payload: false,
-              });
-            });
-        }
-
-        setTimeout(addService, 15000);
-      })
-      .then(async () => {});
-  } else {
-    console.log("user is not signed in");
-  }
+  
 };
 export const getServices = () => async (
   dispatch,
@@ -108,7 +117,7 @@ export const getServices = () => async (
         dispatch({
           type: "SERVICE_LOADER",
           payload: false,
-        });  
+        });
         services.push({ ...item.data(), id: item.id });
       });
       dispatch({

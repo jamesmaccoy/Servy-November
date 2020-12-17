@@ -8,6 +8,7 @@ const initialState = {
   userReviewInfo: [],
   loader: false,
   serviceLoader: true,
+  uploadData: [],
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -16,10 +17,17 @@ export default function ServiceReducer(state = initialState, action) {
         ...state,
         serviceMessage: action.payload,
       };
+    case "UPLOAD_SERVICE":
+      // console.log("reucer", action.payload);
+      return {
+        ...state,
+        uploadData: action.payload,
+      };
+
     case "SERVICE_LOADING":
       return {
         ...state,
-        serviceMessage: action.payload,
+        serviceLoading: action.payload,
       };
     case "SERVICES":
       return {

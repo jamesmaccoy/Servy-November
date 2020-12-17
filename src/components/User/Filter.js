@@ -31,21 +31,23 @@ const Filter = ({ ...props }) => {
   let getAdminCategory = props.getAdminCategory;
   let categories = props.categories;
   let navigation = props.navigation;
-  let distanceRadius  = props.distanceRadius;
+  let distanceRadius = props.distanceRadius;
   let initialDistance = props.initialDistance;
 
   const [key, setKey] = useState(1);
-
-  useEffect(() => {
-    setKey(navigation.dangerouslyGetState().routes[0].params.key);
-  }, [navigation]);
-
   const [distance, setDistance] = useState(initialDistance);
   const [categoriesList, setCategoriesList] = useState([]);
   const [visible, setVisible] = useState(false);
   const [categoryVisible, setCategoryVisible] = useState(true);
   const [locationVisible, setLocationVisible] = useState(false);
   const [featuresVisible, setFeaturesVisible] = useState(false);
+  const [state, setState] = useState("");
+  const [allVisible, setAll] = useState(false);
+  const closeMenu = () => setVisible(false);
+
+  useEffect(() => {
+    setKey(navigation.dangerouslyGetState().routes[0].params.key);
+  }, [navigation]);
 
   useEffect(() => {
     setCategoriesList(categories);
@@ -73,9 +75,6 @@ const Filter = ({ ...props }) => {
     setFeaturesVisible(true);
     setVisible(false);
   };
-  const [state, setState] = useState("");
-  const [allVisible, setAll] = useState(false);
-  const closeMenu = () => setVisible(false);
 
   const handleCategory = (data) => {
     setState(data.label);
@@ -113,14 +112,9 @@ const Filter = ({ ...props }) => {
       setShowFilter(!modalVisible);
     }
   };
-  const handleDistance = (e) => {
-    setDistance(e);
-    console.log("ee",e)
-    props.distanceRadius(e);
+  const handleDistance = () => {
+    props.distanceRadius(distance);
   };
-  useEffect(() => {
-    console.log("Distance", distance);
-  }, [distance]);
 
   return (
     <KeyboardAvoidingView enabled={true}>
@@ -213,9 +207,11 @@ const Filter = ({ ...props }) => {
                       <Text style={styles.distance}>{distance} km </Text>
                     </View>
                     <Slider
-                      onValueChange={(e) => handleDistance(e)}
+                      onValueChange={(e) => setDistance(e)}
+                      onSlidingComplete={handleDistance}
                       style={{ height: 10, paddingTop: 50, flex: 1 }}
-                      minimumValue={0}
+                      minimumValue={1}
+                      value={distance}
                       maximumValue={1000}
                       minimumTrackTintColor="#488d4b"
                       maximumTrackTintColor="#a9a9a9"
@@ -326,10 +322,10 @@ const styles = StyleSheet.create({
   filterWrapper: {
     backgroundColor: "#fff",
     width: deviceWidth,
-    // height: deviceHeight,
-    height: deviceHeight - 300,
+    height: deviceHeight,
+    // height: deviceHeight - 300,
     position: "absolute",
-    paddingTop: 10,
+    paddingTop: 30,
     paddingLeft: 10,
     paddingRight: 10,
     zIndex: 1,

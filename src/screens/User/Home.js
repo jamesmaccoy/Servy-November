@@ -65,7 +65,11 @@ const Home = ({ ...props }) => {
   }, [props.services]);
   useEffect(() => {
     if (props.route.params.id === 2) {
-      getServicesByCategory(props.route.params.state);
+      if (props.route.params.state !== "") {
+        getServicesByCategory(props.route.params.state);
+      } else {
+        getServices();
+      }
     }
     if (props.route.params.id === 3) {
       getServices();

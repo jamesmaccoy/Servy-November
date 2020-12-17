@@ -1,6 +1,6 @@
 const initialState = {
   userLocation: null,
-  initialDistance: 1000
+  initialDistance: 20
 };
 
 export default function locationReducer(state = initialState, action) {
