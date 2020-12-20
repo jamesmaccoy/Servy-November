@@ -28,6 +28,7 @@ const Services = ({ ...props }) => {
 
   useEffect(() => {
     if (services.length === 0) {
+      console.log("servicessss");
       getServices();
     }
     getAdminCategory();
@@ -41,7 +42,10 @@ const Services = ({ ...props }) => {
     if (props.route.params.id === 2) {
       setAttributes(props.route.params.attributes);
       if (props.route.params.state !== "") {
-        getServicesByCategory(props.route.params.state);
+        getServicesByCategory(
+          props.route.params.state,
+          props.route.params.attributes
+        );
       } else {
         getServices();
       }
@@ -81,8 +85,9 @@ const Services = ({ ...props }) => {
             flex: 1,
             alignItems: "center",
             justifyContent: "center",
-            paddingTop: 300,
-            marginBottom: 20,
+            minHeight: deviceHeight -100,
+            // paddingTop: 300,
+            // marginBottom: 20,
           }}
         >
           <Loader />
@@ -98,12 +103,12 @@ const Services = ({ ...props }) => {
                 height: deviceHeight,
               }}
             >
-              <Text style={{ color: "red" }}>No Service Available</Text>
+              <Text>No Service Available</Text>
             </View>
           ) : (
             <View style={styles.list}>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ paddingTop: 50 , minHeight: deviceHeight }}>
+                <View style={{ paddingTop: 50, minHeight: deviceHeight }}>
                   {services.map((data) => {
                     if (
                       attributes.length !== 0 &&

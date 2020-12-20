@@ -16,6 +16,7 @@ import {
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { cos } from "react-native-reanimated";
 
 const items = [
   {
@@ -57,7 +58,6 @@ const Home = ({ ...props }) => {
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
-
   useEffect(() => {
     getServices();
   }, []);
@@ -68,7 +68,10 @@ const Home = ({ ...props }) => {
     if (props.route.params.id === 2) {
       setAttributes(props.route.params.attributes);
       if (props.route.params.state !== "") {
-        getServicesByCategory(props.route.params.state);
+        getServicesByCategory(
+          props.route.params.state,
+          props.route.params.attributes
+        );
       } else {
         getServices();
       }
@@ -78,10 +81,6 @@ const Home = ({ ...props }) => {
       getServices();
     }
   }, [props.route]);
-
-  useEffect(() => {
-    console.log("Attributes from home", attributes);
-  }, [attributes]);
 
   return (
     <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
@@ -122,7 +121,7 @@ const Home = ({ ...props }) => {
                     style={{ fontSize: 22, paddingTop: 10 }}
                     name="filter-variant"
                   />
-                  <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
+                  <Text style={styles.milesdatatxtmi}> 2 Km</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -140,6 +139,11 @@ const Home = ({ ...props }) => {
                 />
               ))}
             </ScrollView>
+            {newServices.length === 0 && (
+              <View style={{ paddingLeft: 15 }}>
+                <Text>No service Available</Text>
+              </View>
+            )}
           </View>
 
           <View style={styles.bannercont}>
@@ -199,7 +203,9 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   screenitem: { paddingTop: 20, paddingLeft: 0 },
-  screenitemcontainer: {},
+  screenitemcontainer: {
+    minHeight: 450,
+  },
 
   listoption: {
     alignItems: "center",

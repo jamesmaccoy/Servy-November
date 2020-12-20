@@ -5,7 +5,7 @@ let deviceWidth = Dimensions.get("window").width;
 import { connect } from "react-redux";
 
 const FeaturesSelect = ({ setAttributes, categories, attributes }) => {
-  // const [state, setState] = useState([]);
+  const [state, setState] = useState([]);
   const [newCataegories, setNewCategories] = useState([]);
 
   const onSelectedItemsChange = (selectedItems) => {
@@ -13,56 +13,28 @@ const FeaturesSelect = ({ setAttributes, categories, attributes }) => {
   };
 
   useEffect(() => {
-    // for (let i = 0; i < categories.length; i++) {
-    //   for (let j = 0; j < categories[i].features.length - 1; j++) {
-    //     if (i === 0) {
-    //       newCataegories.push(categories[i].features[j]);
-    //     }
-    //     newCataegories.forEach((e) => {
-    //       // if (e !== categories[i].features[j]) {
-    //       //   console.log("E", e);
-    //       //   // newCataegories.push(categories[i].features[j]);
-    //       // }
-    //     });
-    //   }
-    // }
+    categories.forEach((element, index) => {
+      element.features.filter((e, i, array) => {
+        if (!newCataegories.includes(e.label)) {
+          newCataegories.push(e.label);
+        }
+      });
+    });
 
-    // categories.forEach((element, index) => {
-    //   element.features.filter((e, i, array) => {
-    //     if (e.state === true) {
+    newCataegories.forEach((e) => {
+      state.push({
+        id: e.replace(/\s/g, ""),
+        label: e,
+      });
+    });
+  }, [categories, newCataegories]);
 
-    //       if (!newCataegories.newArray.indexOf(e) === -1) {
-    //         setNewCategories((prevState) => ({
-    //           newArray: [...prevState.newArray, e],
-    //         }));
-    //       }
-    //       setNewCategories((prevState) => ({
-    //         newArray: [...prevState.newArray, e],
-    //       }));
-
-    //       if (!newCataegories.includes(e.id)) {
-
-    //       }
-    //     }
-    //   });
-    // });
-  }, [categories]);
-
-  // useEffect(() => {
-  //   categories.forEach((element, index) => {
-  //     element.features.forEach((e, i) => {
-  //       if (newCataegories.indexOf(e) === -1) {
-  //         newCataegories.push(e);
-  //       }
-  //     });
-  //   });
-  // }, [categories]);
   return (
     <View
       style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: "#fff" }}
     >
       <MultiSelect
-        items={newCataegories}
+        items={state}
         uniqueKey="id"
         hideSubmitButton={true}
         iconSearch={false}

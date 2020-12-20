@@ -13,7 +13,7 @@ export const AddNewService = (
   let category = service.category;
   let location = service.location;
   let imageArray = [];
-  // console.log("Imagess", images);
+
   dispatch({
     type: "SERVICE_LOADING",
     payload: true,
@@ -112,7 +112,7 @@ export const getServices = () => async (
   });
   let services = [];
 
-  const res = await db
+  await db
     .collection("services")
     .where("approve", "==", true)
     .get()
@@ -255,7 +255,7 @@ export const getServiceReview = (id) => async (
     });
 };
 
-export const getServicesByCategory = (data) => async (
+export const getServicesByCategory = (data, attributes) => async (
   dispatch,
   getState,
   { getFirestore, getFirebase }
@@ -266,7 +266,7 @@ export const getServicesByCategory = (data) => async (
     type: "SERVICE_LOADER",
     payload: true,
   });
-  const res = await db
+  await db
     .collection("services")
     .where("category", "==", data)
     .get()
@@ -277,10 +277,14 @@ export const getServicesByCategory = (data) => async (
           payload: false,
         });
         if (item.data().approve === true) {
-          services.push({ ...item.data(), id: item.id });
+          const array = item.data().attributes.filter((e) => {
+            if (attributes.includes(e.id)) {
+              services.push({ ...item.data(), id: item.id });
+              return;
+            }
+          });
         }
       });
-      console.log("Hereeee");
       dispatch({
         type: "SERVICES",
         payload: services,

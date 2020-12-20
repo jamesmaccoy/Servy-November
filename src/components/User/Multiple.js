@@ -86,7 +86,10 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
         styleInputGroup={{ backgroundColor: "#f7f7f7" }}
         selectText={"Search"}
         searchInputStyle={{ backgroundColor: "f7f7f7" }}
-        styleItemsContainer={{ backgroundColor: "#f7f7f7", elevation: 2 }}
+        styleItemsContainer={{
+          backgroundColor: "#f7f7f7",
+          elevation: 2,
+        }}
         searchInputStyle={{ backgroundColor: "#f7f7f7" }}
         styleSelectorContainer={{
           elevation: 0,
