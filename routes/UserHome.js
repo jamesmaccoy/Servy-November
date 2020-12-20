@@ -13,7 +13,6 @@ import Loader from "../src/screens/Auth/Loader";
 const Stack = createStackNavigator();
 const UserHome = ({ getCurrentLocation }) => {
   const [location, setLocation] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(null);
   const [state, setState] = useState(false);
   useEffect(() => {
     if (location) {
@@ -23,7 +22,6 @@ const UserHome = ({ getCurrentLocation }) => {
       let { status } = await Location.requestPermissionsAsync();
       console.log("Status", status);
       if (status !== "granted") {
-        // setErrorMsg("Permission to access location was denied");
         BackHandler.exitApp();
         return;
       }
@@ -40,7 +38,6 @@ const UserHome = ({ getCurrentLocation }) => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        // setErrorMsg("Permission to access location was denied");
         BackHandler.exitApp();
         return;
       }

@@ -4,7 +4,10 @@ import {
   ScrollView,
   View,
   Image,
+  ActivityIndicator,
+  FlatList,
   TouchableOpacity,
+  PermissionsAndroid,
 } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
@@ -16,7 +19,6 @@ import {
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { cos } from "react-native-reanimated";
 
 const items = [
   {
@@ -50,14 +52,13 @@ const Home = ({ ...props }) => {
   let getServicesByCategory = props.getServicesByCategory;
 
   const [showFilter, setShowFilter] = useState(false);
-  const [attributes, setAttributes] = useState([]);
-  const [newServices, setNewServices] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
+  const [newServices, setNewServices] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
@@ -66,7 +67,6 @@ const Home = ({ ...props }) => {
   }, [props.services]);
   useEffect(() => {
     if (props.route.params.id === 2) {
-      setAttributes(props.route.params.attributes);
       if (props.route.params.state !== "") {
         getServicesByCategory(
           props.route.params.state,
@@ -77,10 +77,18 @@ const Home = ({ ...props }) => {
       }
     }
     if (props.route.params.id === 3) {
-      setAttributes(props.route.params.attributes);
       getServices();
     }
   }, [props.route]);
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetch("https://webrabbit.in/survey/banner-content.php")
+      .then((response) => response.json())
+      .then((json) => setData(json.content))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
@@ -121,7 +129,7 @@ const Home = ({ ...props }) => {
                     style={{ fontSize: 22, paddingTop: 10 }}
                     name="filter-variant"
                   />
-                  <Text style={styles.milesdatatxtmi}> 2 Km</Text>
+                  <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -131,7 +139,6 @@ const Home = ({ ...props }) => {
             >
               {newServices.map((data) => (
                 <ListingItem
-                  // initialDistance={distance}
                   pad={15}
                   key={data.id}
                   data={data}
@@ -139,32 +146,36 @@ const Home = ({ ...props }) => {
                 />
               ))}
             </ScrollView>
-            {newServices.length === 0 && (
-              <View style={{ paddingLeft: 15 }}>
-                <Text>No service Available</Text>
-              </View>
-            )}
           </View>
 
           <View style={styles.bannercont}>
-            <View style={styles.bannerdetail}>
-              <Text style={styles.bannertitle}>Lorem Ipsum Dior almet</Text>
+            {isLoading ? (
+              <ActivityIndicator />
+            ) : (
+              <FlatList
+                data={data}
+                keyExtractor={({ id }, index) => id}
+                renderItem={({ item }) => (
+                  <View style={styles.bannerdetail}>
+                    <Text style={styles.bannertitle}>{item.title}</Text>
 
-              <Text style={styles.bannerdescription}>Lorem Ipsum</Text>
-              <View style={styles.bannerbuttontok}>
-                <TouchableOpacity
-                  style={styles.loginScreenButton}
-                  underlayColor="#fff"
-                >
-                  <FontAwesome
-                    style={{ fontSize: 30, color: "#62ad80" }}
-                    name="code-fork"
-                  />
-                  <Text style={styles.bannerbutton}>Button</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-
+                    <Text style={styles.bannerdescription}>{item.content}</Text>
+                    <View style={styles.bannerbuttontok}>
+                      <TouchableOpacity
+                        style={styles.loginScreenButton}
+                        underlayColor="#fff"
+                      >
+                        <FontAwesome
+                          style={{ fontSize: 30, color: "#62ad80" }}
+                          name="code-fork"
+                        />
+                        <Text style={styles.bannerbutton}>Button</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )}
+              />
+            )}
             <Image
               style={styles.bannerimg}
               source={require("../../../assets/images/13.png")}
@@ -203,9 +214,7 @@ const styles = StyleSheet.create({
     paddingBottom: 0,
   },
   screenitem: { paddingTop: 20, paddingLeft: 0 },
-  screenitemcontainer: {
-    minHeight: 450,
-  },
+  screenitemcontainer: {},
 
   listoption: {
     alignItems: "center",

@@ -40,7 +40,6 @@ const Services = ({ ...props }) => {
   }, [services, filterCategory]);
   useEffect(() => {
     if (props.route.params.id === 2) {
-      setAttributes(props.route.params.attributes);
       if (props.route.params.state !== "") {
         getServicesByCategory(
           props.route.params.state,
@@ -51,7 +50,6 @@ const Services = ({ ...props }) => {
       }
     }
     if (props.route.params.id === 3) {
-      setAttributes(props.route.params.attributes);
       getServices();
     }
   }, [props.route]);

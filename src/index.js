@@ -20,44 +20,8 @@ const index = ({ userState, verifyUser, loading }) => {
   // const [errorMsg, setErrorMsg] = useState(null);
   useEffect(() => {
     verifyUser();
-
-    // if (location) {
-    //   console.log("locaton", JSON.stringify(location));
-    // }
   }, []);
 
-  useEffect(() => {
-    // (async () => {
-    //   let { status } = await Location.requestPermissionsAsync();
-    //   if (status !== "granted") {
-    //     BackHandler.exitApp();
-    //     setErrorMsg("Permission to access location was denied");
-    //     return;
-    //   }
-    //   let location = await Location.getCurrentPositionAsync({});
-    //   setLocation(location);
-    // })();
-  }, []);
-
-  // const allowLocation = () => {
-  //   (async () => {
-  //     let { status } = await Location.requestPermissionsAsync();
-  //     if (status !== "granted") {
-  //       BackHandler.exitApp();
-  //       setErrorMsg("Permission to access location was denied");
-  //       return;
-  //     }
-
-  //     let location = await Location.getCurrentPositionAsync({});
-  //     setLocation(location);
-  //   })();
-  // };
-
-  // if (errorMsg) {
-  //   text = errorMsg;
-  // } else if (location) {
-  //   text = JSON.stringify(location);
-  // }
   useEffect(() => {
     setSignedIn(userState);
   }, [userState]);

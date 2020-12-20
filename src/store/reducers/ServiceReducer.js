@@ -18,7 +18,6 @@ export default function ServiceReducer(state = initialState, action) {
         serviceMessage: action.payload,
       };
     case "UPLOAD_SERVICE":
-      // console.log("reucer", action.payload);
       return {
         ...state,
         uploadData: action.payload,
