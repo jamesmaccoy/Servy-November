@@ -5,7 +5,6 @@ import {
   View,
   Image,
   TouchableOpacity,
-  PermissionsAndroid,
 } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
@@ -50,13 +49,15 @@ const Home = ({ ...props }) => {
   let getServicesByCategory = props.getServicesByCategory;
 
   const [showFilter, setShowFilter] = useState(false);
+  const [attributes, setAttributes] = useState([]);
+  const [newServices, setNewServices] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
-  const [newServices, setNewServices] = useState([]);
+
   useEffect(() => {
     getServices();
   }, []);
@@ -65,6 +66,7 @@ const Home = ({ ...props }) => {
   }, [props.services]);
   useEffect(() => {
     if (props.route.params.id === 2) {
+      setAttributes(props.route.params.attributes);
       if (props.route.params.state !== "") {
         getServicesByCategory(props.route.params.state);
       } else {
@@ -72,9 +74,14 @@ const Home = ({ ...props }) => {
       }
     }
     if (props.route.params.id === 3) {
+      setAttributes(props.route.params.attributes);
       getServices();
     }
   }, [props.route]);
+
+  useEffect(() => {
+    console.log("Attributes from home", attributes);
+  }, [attributes]);
 
   return (
     <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
@@ -125,6 +132,7 @@ const Home = ({ ...props }) => {
             >
               {newServices.map((data) => (
                 <ListingItem
+                  // initialDistance={distance}
                   pad={15}
                   key={data.id}
                   data={data}

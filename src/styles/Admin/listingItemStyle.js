@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   left: {
     flexDirection: "row",
     padding: 10,
-    paddingRight: 0
+    paddingRight: 0,
   },
   updateIcon: {
     textAlign: "center",

@@ -21,9 +21,10 @@ const ListingItem = ({
     image: "",
     state: false,
   });
-  const [compDistance, setCompDistace] = useState(initialDistance);
+  const [compDistance, setCompDistace] = useState(10);
 
   useEffect(() => {
+    console.log("INitial", initialDistance);
     setCompDistace(initialDistance);
   }, [initialDistance]);
   const [distance, setDistance] = useState(0);
@@ -52,10 +53,6 @@ const ListingItem = ({
       );
     }
   }, [data, userLocation]);
-  useEffect(() => {
-    if (distance <= compDistance) {
-    }
-  }, [initialDistance]);
   return (
     <>
       {distance <= compDistance && (

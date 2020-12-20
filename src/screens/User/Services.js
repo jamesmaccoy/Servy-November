@@ -23,13 +23,13 @@ const Services = ({ ...props }) => {
 
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
-  // const [bool, setBool] = useEffect(false);
+  const [attributes, setAttributes] = useState([]);
+  const [items, setItems] = useState(false);
 
   useEffect(() => {
     if (services.length === 0) {
       getServices();
     }
-
     getAdminCategory();
   }, []);
   useEffect(() => {
@@ -37,16 +37,20 @@ const Services = ({ ...props }) => {
       setNewServices(services);
     }
   }, [services, filterCategory]);
-
   useEffect(() => {
     if (props.route.params.id === 2) {
-      getServicesByCategory(props.route.params.state);
+      setAttributes(props.route.params.attributes);
+      if (props.route.params.state !== "") {
+        getServicesByCategory(props.route.params.state);
+      } else {
+        getServices();
+      }
     }
     if (props.route.params.id === 3) {
+      setAttributes(props.route.params.attributes);
       getServices();
     }
   }, [props.route]);
-
   useEffect(() => {
     setLoading(props.serviceLoader);
   }, [props.serviceLoader]);
@@ -58,6 +62,10 @@ const Services = ({ ...props }) => {
       setNewServices(props.services);
     }
   }, [filterCategory]);
+
+  useEffect(() => {
+    console.log("Attributes from Services", attributes);
+  }, [attributes]);
 
   return (
     <View style={styles.screen}>
@@ -74,7 +82,7 @@ const Services = ({ ...props }) => {
             alignItems: "center",
             justifyContent: "center",
             paddingTop: 300,
-            paddingBottom: 300,
+            marginBottom: 20,
           }}
         >
           <Loader />
@@ -85,39 +93,57 @@ const Services = ({ ...props }) => {
             <View
               style={{
                 backgroundColor: "#f7f7f7",
-                paddingTop: 20,
+                paddingTop: 80,
                 paddingBottom: 20,
                 height: deviceHeight,
               }}
             >
-              <Text>No Service Available</Text>
+              <Text style={{ color: "red" }}>No Service Available</Text>
             </View>
           ) : (
             <View style={styles.list}>
               <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={{ paddingTop: 50 }}></View>
-                {services.map((data) => {
-                  if (filterCategory.includes(data.category)) {
-                    return (
-                      <ListingItem
-                        pad={0}
-                        key={data.id}
-                        data={data}
-                        navigation={navigation}
-                      />
-                    );
-                  }
-                  if (filterCategory.length === 0) {
-                    return (
-                      <ListingItem
-                        pad={0}
-                        key={data.id}
-                        data={data}
-                        navigation={navigation}
-                      />
-                    );
-                  }
-                })}
+                <View style={{ paddingTop: 50 , minHeight: deviceHeight }}>
+                  {services.map((data) => {
+                    if (
+                      attributes.length !== 0 &&
+                      data.attributes.includes(attributes)
+                    ) {
+                      if (filterCategory.includes(data.category)) {
+                        return (
+                          <ListingItem
+                            pad={0}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        );
+                      }
+                    }
+                    if (attributes.length === 0) {
+                      if (filterCategory.includes(data.category)) {
+                        return (
+                          <ListingItem
+                            pad={0}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        );
+                      }
+                    }
+                    if (filterCategory.length === 0) {
+                      return (
+                        <ListingItem
+                          pad={0}
+                          key={data.id}
+                          data={data}
+                          navigation={navigation}
+                        />
+                      );
+                    }
+                  })}
+                </View>
               </ScrollView>
             </View>
           )}
@@ -147,6 +173,6 @@ const styles = StyleSheet.create({
   },
   list: {
     paddingTop: 30,
-    marginBottom: 130,
+    marginBottom: 90,
   },
 });

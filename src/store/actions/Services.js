@@ -2,7 +2,8 @@ export const AddNewService = (
   service,
   attributes,
   userLocation,
-  images
+  images,
+  selectedValue
 ) => async (dispatch, getState, { getFirestore, getFirebase }) => {
   const db = getFirestore();
   const firebase = getFirebase();
@@ -45,10 +46,6 @@ export const AddNewService = (
                   });
                 })
                 .then(async () => {
-                  function addService() {}
-                  setTimeout(addService, 15000);
-                })
-                .then(async () => {
                   const res = db
                     .collection("services")
                     .add({
@@ -65,7 +62,16 @@ export const AddNewService = (
                       imagesUrl: imageArray,
                       createdAt: new Date(),
                     })
-                    .then(() => {
+                    .then(async () => {
+                      if (selectedValue === "other") {
+                        await db.collection("categories").add({
+                          label: category,
+                          value: category.replace(/\s/g, ""),
+                          other: true,
+                          features: attributes,
+                          createdAt: new Date(),
+                        });
+                      }
                       dispatch({
                         type: "ADD_SERVICE",
                         payload: true,
@@ -93,8 +99,6 @@ export const AddNewService = (
         });
     });
   });
-
-  
 };
 export const getServices = () => async (
   dispatch,

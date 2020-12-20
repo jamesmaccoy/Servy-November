@@ -33,7 +33,6 @@ export const AddCategory = (category, features) => async (
       dispatch({
         type: "GET_CATEGORY",
       });
-      console.log("sucessss");
     });
 };
 export const updateCategory = (category, features, id) => async (

@@ -13,6 +13,7 @@ import ServiceLocation from "../../components/User/ServiceLocation";
 import CategoryPicker from "../../components/User/CategoryPicker";
 import Loader from "../../screens/Auth/Loader";
 import { Button } from "native-base";
+import { AddCategory } from "../../store/actions/Category";
 
 const AddService = ({
   navigation,
@@ -21,6 +22,7 @@ const AddService = ({
   getAdminCategory,
   categories,
   serviceLoading,
+  AddCategory,
 }) => {
   const [array, setArray] = useState([]);
   const [message, setMessage] = useState(false);
@@ -29,6 +31,7 @@ const AddService = ({
   const [addServiceLoading, setAddServiceLoading] = useState(false);
   const [stateChange, setStateChange] = useState(false);
   const [images, setImages] = useState([]);
+  const [addNewCategory, setAddNewCategory] = useState(false);
   const [visible, setVisible] = useState(false);
   const [select, setSelect] = useState(false);
   const [newFeature, setNewFeature] = useState({
@@ -57,23 +60,16 @@ const AddService = ({
     setCat(categories);
     setServiceAdded(false);
     setMessage(false);
-    console.log("serviceMessgae", message);
     setAddServiceLoading(false);
+    setAddNewCategory(false);
   }, []);
-  // useEffect(() => {
-  //   setServiceAdded(serviceMessage);
-  //   if (serviceMessage === true && serviceLoading === false) {
-  //     setAddServiceLoading(false);
-  //     setMessage(true);
-  //   }
-  // }, [serviceMessage, serviceAdded]);
   useEffect(() => {
     setCat(categories);
   }, [categories]);
   const navigationHandler = () => {
     navigation.goBack();
   };
-  const handleInfo = () => {
+  const handleInfo = async () => {
     if (
       state.serviceName !== "" &&
       state.location !== "" &&
@@ -83,8 +79,11 @@ const AddService = ({
       Object.keys(userLocation.locationCords).length !== 0 &&
       images.length !== 0
     ) {
-      AddNewService(state, array, userLocation, images);
+      AddNewService(state, array, userLocation, images , selectedValue.value);
       setErrorMessage(false);
+      // if (selectedValue.value === "other") {
+      //   await AddCategory(state.category, array);
+      // }
       navigation.goBack();
       setMessage(true);
     } else {
@@ -167,9 +166,10 @@ const AddService = ({
                     name="NewCateogry"
                     head="Suggest a new Category"
                     placeHolder="eg. Electrition"
-                    onChangeText={(text) =>
-                      setState({ ...state, category: text })
-                    }
+                    onChangeText={(text) => {
+                      // setAddNewCategory(true);
+                      setState({ ...state, category: text });
+                    }}
                   />
                 )}
                 <Text
@@ -305,4 +305,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   AddNewService,
   getAdminCategory,
+  AddCategory,
 })(AddService);

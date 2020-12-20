@@ -4,128 +4,107 @@ import MultiSelect from "react-native-multiple-select";
 let deviceWidth = Dimensions.get("window").width;
 import { connect } from "react-redux";
 
-const FeaturesSelect = ({ categories }) => {
+const FeaturesSelect = ({ setAttributes, categories, attributes }) => {
+  // const [state, setState] = useState([]);
   const [newCataegories, setNewCategories] = useState([]);
 
-  useEffect(() => {
-    console.log(newCataegories);
-  }, [newCataegories]);
-  const [state, setState] = useState([]);
-
   const onSelectedItemsChange = (selectedItems) => {
-    setState(selectedItems);
+    setAttributes(selectedItems);
   };
+
   useEffect(() => {
     // for (let i = 0; i < categories.length; i++) {
-    //   for (let j = 0; j < categories[i].features.length; j++) {
-    //     console.log(categories[i].features[j].id, j);
-    //     if(newCataegories.indexOf(categories[i].features[j]) > -1){
-
-    //     }
-
-    //     if (categories[i].features[j].id === categories[i].features[j].id) {
-    //         console.log(categories[i].features[j], j)
-    //       j++;
-    //     }
-    //     if (categories[i].features[j] !== categories[i].features[j + 1]) {
-
+    //   for (let j = 0; j < categories[i].features.length - 1; j++) {
+    //     if (i === 0) {
     //       newCataegories.push(categories[i].features[j]);
     //     }
+    //     newCataegories.forEach((e) => {
+    //       // if (e !== categories[i].features[j]) {
+    //       //   console.log("E", e);
+    //       //   // newCataegories.push(categories[i].features[j]);
+    //       // }
+    //     });
     //   }
     // }
-    categories.forEach((element, index) => {
-      element.features.filter((e, i) => {
-        if (e.state === true) {
-          if (newCataegories.length === 0) {
-            newCataegories.push({
-              label: e.label,
-            });
-          }
-          if (newCataegories.includes(e.label)) {
-            return;
-          } else {
-            newCataegories.push({
-              label: e.label,
-            });
-          }
-        }
-      });
-    });
+
+    // categories.forEach((element, index) => {
+    //   element.features.filter((e, i, array) => {
+    //     if (e.state === true) {
+
+    //       if (!newCataegories.newArray.indexOf(e) === -1) {
+    //         setNewCategories((prevState) => ({
+    //           newArray: [...prevState.newArray, e],
+    //         }));
+    //       }
+    //       setNewCategories((prevState) => ({
+    //         newArray: [...prevState.newArray, e],
+    //       }));
+
+    //       if (!newCataegories.includes(e.id)) {
+
+    //       }
+    //     }
+    //   });
+    // });
   }, [categories]);
+
+  // useEffect(() => {
+  //   categories.forEach((element, index) => {
+  //     element.features.forEach((e, i) => {
+  //       if (newCataegories.indexOf(e) === -1) {
+  //         newCataegories.push(e);
+  //       }
+  //     });
+  //   });
+  // }, [categories]);
   return (
-    <View style={{ zIndex: -1 }}>
+    <View
+      style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: "#fff" }}
+    >
       <MultiSelect
         items={newCataegories}
-        uniqueKey="label"
+        uniqueKey="id"
+        hideSubmitButton={true}
+        iconSearch={false}
+        hideDropdown={true}
         onSelectedItemsChange={(text) => onSelectedItemsChange(text)}
-        selectedItems={state}
-        selectText="Search"
+        selectedItems={attributes}
+        selectText="Features"
         searchInputPlaceholderText="Search Items.."
-        tagRemoveIconColor="#CCC"
-        tagBorderColor="#CCC"
-        tagTextColor="#CCC"
+        tagRemoveIconColor="#000"
+        tagBorderColor="#eee"
+        tagTextColor="#000"
         selectedItemTextColor="#CCC"
-        selectedItemIconColor="#CCC"
+        selectedItemIconColor="#000"
         itemTextColor="#000"
         displayKey="label"
-        searchInputStyle={{ color: "#CCC" }}
+        searchInputStyle={{ color: "#000" }}
         submitButtonColor="#CCC"
         submitButtonText="Submit"
         styleListContainer={{
           justifyContent: "flex-start",
-          height: 150,
-          zIndex: -1,
+          height: 100,
         }}
+        styleDropdownMenu={{ backgroundColor: "#fff" }}
         styleTextDropdown={{ paddingLeft: 5 }}
         styleTextTag={{ padding: 0 }}
         tagContainerStyle={{
-          width: 100,
+          width: 120,
           padding: 0,
           margin: 2,
           height: 30,
+          backgroundColor: "#eee",
         }}
+        styleItemsContainer={{ backgroundColor: "#f7f7f7" }}
         styleMainWrapper={{ backgroundColor: "#fff" }}
       />
     </View>
   );
 };
-
-export default connect("", {})(FeaturesSelect);
-const items = [
-  {
-    id: "92iijs7yta",
-    name: "Ondo",
-  },
-  {
-    id: "a0s0a8ssbsd",
-    name: "Ogun",
-  },
-  {
-    id: "16hbajsabsd",
-    name: "Calabar",
-  },
-  {
-    id: "nahs75a5sg",
-    name: "Lagos",
-  },
-  {
-    id: "667atsas",
-    name: "Maiduguri",
-  },
-  {
-    id: "hsyasajs",
-    name: "Anambra",
-  },
-  {
-    id: "djsjudksjd",
-    name: "Benue",
-  },
-  {
-    id: "sdhyaysdj",
-    name: "Kaduna",
-  },
-  {
-    id: "suudydjsjd",
-    name: "Abuja",
-  },
-];
+const mapStateToProps = (state) => {
+  return {
+    services: state.Service.services,
+    categories: state.category.adminCollection,
+  };
+};
+export default connect(mapStateToProps)(FeaturesSelect);
