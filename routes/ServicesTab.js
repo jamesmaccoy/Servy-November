@@ -5,7 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Services from "../src/screens/User/Services";
 import ListDetail from "../src/screens/User/ListDetail";
 import Notification from "../src/screens/User/Notification";
-
+import SearchResult from "../src/screens/User/SearchResult";
 const Stack = createStackNavigator();
 
 const ServicesTab = () => {
@@ -39,6 +39,14 @@ const ServicesTab = () => {
         }}
         name="Services"
         component={Services}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="SearchResult"
+        component={SearchResult}
+        initialParams={{ key: 4 }}
       />
       <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>

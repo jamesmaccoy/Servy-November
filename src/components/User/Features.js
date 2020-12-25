@@ -4,7 +4,12 @@ import MultiSelect from "react-native-multiple-select";
 let deviceWidth = Dimensions.get("window").width;
 import { connect } from "react-redux";
 
-const FeaturesSelect = ({ setAttributes, categories, attributes }) => {
+const FeaturesSelect = ({
+  setAttributes,
+  categories,
+  attributes,
+  featuresSelect,
+}) => {
   const [state, setState] = useState([]);
   const [newCataegories, setNewCategories] = useState([]);
 
@@ -12,29 +17,12 @@ const FeaturesSelect = ({ setAttributes, categories, attributes }) => {
     setAttributes(selectedItems);
   };
 
-  useEffect(() => {
-    categories.forEach((element, index) => {
-      element.features.filter((e, i, array) => {
-        if (!newCataegories.includes(e.label)) {
-          newCataegories.push(e.label);
-        }
-      });
-    });
-
-    newCataegories.forEach((e) => {
-      state.push({
-        id: e.replace(/\s/g, ""),
-        label: e,
-      });
-    });
-  }, [categories, newCataegories]);
-
   return (
     <View
       style={{ paddingLeft: 10, paddingRight: 10, backgroundColor: "#fff" }}
     >
       <MultiSelect
-        items={state}
+        items={featuresSelect.features}
         uniqueKey="id"
         hideSubmitButton={true}
         iconSearch={false}

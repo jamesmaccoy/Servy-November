@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
-  PermissionsAndroid,
 } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
@@ -94,7 +93,13 @@ const Home = ({ ...props }) => {
     <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
       <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
         <View style={styles.header}>
-          <Header navigation={navigation} name="Home" visible={true} />
+          <Header
+            navigation={navigation}
+            name="Home"
+            visible={true}
+            notificationButton={true}
+            filterButton={false}
+          />
         </View>
         <ScrollView style={styles.screenitemcontainer}>
           <View>

@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { getAdminCategory } from "../../store/actions/Category";
 import FeaturesSelect from "./Features";
 import { distanceRadius } from "../../store/actions/Location";
-import DropDownPicker from "react-native-dropdown-picker";
+import { Picker } from "@react-native-community/picker";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
@@ -29,10 +29,7 @@ const Filter = ({ ...props }) => {
   const [distance, setDistance] = useState(props.initialDistance);
   const [categoriesList, setCategoriesList] = useState([]);
   const [attributes, setAttributes] = useState([]);
-  // const [visible, setVisible] = useState(false);
   const [state, setState] = useState("");
-  // const [allVisible, setAll] = useState(false);
-  // const closeMenu = () => setVisible(false);
 
   useEffect(() => {
     setKey(navigation.dangerouslyGetState().routes[0].params.key);
@@ -40,20 +37,26 @@ const Filter = ({ ...props }) => {
 
   useEffect(() => {
     setCategoriesList(categories);
-  }, [props.categories]);
+
+    categories.forEach((e, index) => {
+      if (index === 0) {
+        setState(e);
+      }
+    });
+  }, [categories]);
 
   useEffect(() => {
     getAdminCategory();
   }, []);
   const handleCategory = (data) => {
-    setState(data.label);
-    // setAll(false);
+    setState(data);
+    console.log("data", data.label);
   };
   const handleFilter = () => {
     if (key === 1) {
-      navigation.navigate("ServicesHome", {
+      navigation.navigate("SearchResult", {
         id: 2,
-        state: state,
+        state: state.label,
         distance: distance,
         attributes: attributes,
       });
@@ -61,9 +64,9 @@ const Filter = ({ ...props }) => {
       setShowFilter(!modalVisible);
     }
     if (key === 0) {
-      navigation.navigate("Services", {
+      navigation.navigate("SearchResult", {
         id: 2,
-        state: state,
+        state: state.label,
         distance: distance,
         attributes: attributes,
       });
@@ -73,21 +76,23 @@ const Filter = ({ ...props }) => {
   };
   const handleClear = () => {
     if (key === 1) {
-      navigation.navigate("ServicesHome", {
+      navigation.navigate("SearchResult", {
         id: 3,
         state: state,
         distance: distance,
         attributes: attributes,
       });
+      props.distanceRadius(distance);
       setShowFilter(!modalVisible);
     }
     if (key === 0) {
-      navigation.navigate("Services", {
+      navigation.navigate("SearchResult", {
         id: 3,
         state: state,
         distance: distance,
         attributes: attributes,
       });
+      props.distanceRadius(distance);
       setShowFilter(!modalVisible);
     }
   };
@@ -133,7 +138,7 @@ const Filter = ({ ...props }) => {
                   <View style={styles.filterLocation}>
                     <MaterialIcons style={styles.filter} name="location-on" />
                     <Text style={styles.headerText}>Distance</Text>
-                    <Text style={styles.distance}>{distance} km </Text>
+                    <Text style={styles.distance}>{distance} Mile </Text>
                   </View>
                   <Slider
                     onValueChange={(e) => setDistance(e)}
@@ -145,7 +150,8 @@ const Filter = ({ ...props }) => {
                     maximumTrackTintColor="#a9a9a9"
                   />
                 </View>
-                <DropDownPicker
+
+                {/* <DropDownPicker
                   items={categoriesList}
                   placeholder="Select Category"
                   containerStyle={{ height: 50 }}
@@ -157,7 +163,26 @@ const Filter = ({ ...props }) => {
                   onChangeItem={(item) => {
                     handleCategory(item);
                   }}
-                />
+                /> */}
+
+                <Picker
+                  selectedValue={state}
+                  style={{ width: deviceWidth - 50, paddingLeft: 50 }}
+                  enabled={true}
+                  itemStyle={{ paddingLeft: 50, backgroundColor: "red" }}
+                  prompt={"Service Category"}
+                  onValueChange={(itemValue, itemIndex) =>
+                    handleCategory(itemValue)
+                  }
+                >
+                  {categoriesList.map((item) => (
+                    <Picker.Item
+                      itemStyle={{ paddingLeft: 100, backgroundColor: "red" }}
+                      label={item.label}
+                      value={item}
+                    />
+                  ))}
+                </Picker>
                 <View
                   style={{
                     backgroundColor: "red",
@@ -167,6 +192,7 @@ const Filter = ({ ...props }) => {
                   }}
                 >
                   <FeaturesSelect
+                    featuresSelect={state}
                     setAttributes={setAttributes}
                     attributes={attributes}
                   />
@@ -185,6 +211,27 @@ const Filter = ({ ...props }) => {
               </View>
             </View>
           </View>
+          {/* <ScrollView
+            style={{
+              position: "absolute",
+              alignSelf: "center",
+              top: deviceHeight / 25,
+              backgroundColor: "#fff",
+              zIndex: 1,
+              height: 300,
+            }}
+          >
+            {categoriesList.map((data) => (
+              <View style={{ flexDirection: "row" }}>
+                <RadioButton
+                  value="first"
+                  status={checked === "first" ? "checked" : "unchecked"}
+                  onPress={() => setChecked("first")}
+                />
+                <Text>{data.label} </Text>
+              </View>
+            ))}
+          </ScrollView> */}
         </Modal>
       </View>
     </KeyboardAvoidingView>

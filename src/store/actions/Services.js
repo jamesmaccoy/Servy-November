@@ -277,22 +277,30 @@ export const getServicesByCategory = (data, attributes) => async (
           payload: false,
         });
         if (item.data().approve === true) {
-          item.data().attributes.filter((e) => {
-            if (attributes.length !== 0) {
-              if (attributes.includes(e.id)) {
-                if (services.includes(item.id)) {
-                  return;
-                } else {
-                  services.push({ ...item.data(), id: item.id });
-                }
-              }
-            }
-          });
+          services.push({ ...item.data(), id: item.id });
+          const index = services.findIndex((e) => e.id === item.id);
+          if (index === -1) {
+            services.push({ ...item.data(), id: item.id });
+          }
+          // item.data().attributes.filter((e) => {
+          //   if (attributes.length !== 0) {
+          //     if (attributes.includes(e.id)) {
+          //       const index = services.findIndex({
+          //         ...item.data(),
+          //         id: item.id,
+          //       });
+          //       if (index === -1) {
+          //         services.push({ ...item.data(), id: item.id });
+          //       }
+          //     }
+          //   }
+          // });
           if (attributes.length === 0) {
             services.push({ ...item.data(), id: item.id });
           }
         }
       });
+
       dispatch({
         type: "SERVICES",
         payload: services,

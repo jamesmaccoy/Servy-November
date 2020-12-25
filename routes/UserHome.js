@@ -15,24 +15,25 @@ const UserHome = ({ getCurrentLocation }) => {
   const [location, setLocation] = useState(null);
   const [state, setState] = useState(false);
   useEffect(() => {
-    if (location) {
-      getCurrentLocation(location);
-    }
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
-      console.log("Status", status);
       if (status !== "granted") {
         BackHandler.exitApp();
         return;
       }
       try {
-        let location = await Location.getCurrentPositionAsync({});
-        setLocation(location);
+        let loc = await Location.getCurrentPositionAsync({});
+        setLocation(loc);
       } catch (e) {
         setState(true);
       }
     })();
   }, []);
+  useEffect(() => {
+    if (location !== null) {
+      getCurrentLocation(location);
+    }
+  }, [location]);
 
   const allowLocation = () => {
     (async () => {

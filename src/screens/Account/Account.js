@@ -72,7 +72,13 @@ const Account = ({
       {check ? (
         <ScrollView style={styles.screen}>
           <View>
-            <Header navigation={navigation} visible={true} name="My Accounnt" />
+            <Header
+              filterButton={false}
+              notificationButton={true}
+              navigation={navigation}
+              visible={true}
+              name="My Accounnt"
+            />
             <View>
               <View style={styles.content}>
                 <View>

@@ -16,8 +16,6 @@ LogBox.ignoreAllLogs();
 
 const index = ({ userState, verifyUser, loading }) => {
   const [isSignedIn, setSignedIn] = useState(false);
-  // const [location, setLocation] = useState(null);
-  // const [errorMsg, setErrorMsg] = useState(null);
   useEffect(() => {
     verifyUser();
   }, []);

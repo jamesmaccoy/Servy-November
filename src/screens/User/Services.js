@@ -24,11 +24,9 @@ const Services = ({ ...props }) => {
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
   const [attributes, setAttributes] = useState([]);
-  const [items, setItems] = useState(false);
 
   useEffect(() => {
     if (services.length === 0) {
-      console.log("servicessss");
       getServices();
     }
     getAdminCategory();
@@ -65,42 +63,27 @@ const Services = ({ ...props }) => {
     }
   }, [filterCategory]);
 
-  useEffect(() => {
-    console.log("Attributes from Services", attributes);
-  }, [attributes]);
-
   return (
     <View style={styles.screen}>
-      <Header name="Services" navigation={navigation} visible={true} />
+      <Header
+        filterButton={false}
+        notificationButton={true}
+        name="Services"
+        navigation={navigation}
+        visible={true}
+      />
       <MutipleSelect
         setFilterCategory={setFilterCategory}
         categories={categories}
       />
       {loading ? (
-        <View
-          style={{
-            backgroundColor: "#f7f7f7",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: deviceHeight -100,
-            // paddingTop: 300,
-            // marginBottom: 20,
-          }}
-        >
+        <View style={styles.loading}>
           <Loader />
         </View>
       ) : (
         <>
           {newServices.length === 0 ? (
-            <View
-              style={{
-                backgroundColor: "#f7f7f7",
-                paddingTop: 80,
-                paddingBottom: 20,
-                height: deviceHeight,
-              }}
-            >
+            <View style={styles.noService}>
               <Text>No Service Available</Text>
             </View>
           ) : (
@@ -177,5 +160,18 @@ const styles = StyleSheet.create({
   list: {
     paddingTop: 30,
     marginBottom: 90,
+  },
+  noService: {
+    backgroundColor: "#f7f7f7",
+    paddingTop: 80,
+    paddingBottom: 20,
+    height: deviceHeight,
+  },
+  loading: {
+    backgroundColor: "#f7f7f7",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: deviceHeight - 100,
   },
 });

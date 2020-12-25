@@ -24,7 +24,6 @@ const ListingItem = ({
   const [compDistance, setCompDistace] = useState(10);
 
   useEffect(() => {
-    console.log("INitial", initialDistance);
     setCompDistace(initialDistance);
   }, [initialDistance]);
   const [distance, setDistance] = useState(0);
@@ -38,7 +37,7 @@ const ListingItem = ({
     }
   }, [data.imagesUrl]);
   useEffect(() => {
-    if (userLocation) {
+    if (userLocation !== null) {
       setDistance(
         getPreciseDistance(
           {
@@ -49,13 +48,15 @@ const ListingItem = ({
             latitude: data.maps.coords.latitude,
             longitude: data.maps.coords.longitude,
           }
-        )
+        ) / 1609.344
       );
     }
-  }, [data, userLocation]);
+
+    console.log("Distance", distance);
+  }, [data, userLocation, compDistance]);
   return (
     <>
-      {distance <= compDistance && (
+      {userLocation !== null && distance <= initialDistance && (
         <TouchableOpacity
           activeOpacity={1}
           onPress={() => {
