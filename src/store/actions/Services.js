@@ -282,19 +282,6 @@ export const getServicesByCategory = (data, attributes) => async (
           if (index === -1) {
             services.push({ ...item.data(), id: item.id });
           }
-          // item.data().attributes.filter((e) => {
-          //   if (attributes.length !== 0) {
-          //     if (attributes.includes(e.id)) {
-          //       const index = services.findIndex({
-          //         ...item.data(),
-          //         id: item.id,
-          //       });
-          //       if (index === -1) {
-          //         services.push({ ...item.data(), id: item.id });
-          //       }
-          //     }
-          //   }
-          // });
           if (attributes.length === 0) {
             services.push({ ...item.data(), id: item.id });
           }
