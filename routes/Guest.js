@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Home from "./ServicesTab";
-import Services from "./Provider";
+import Home from "./HomeTab";
+import Services from "./ServicesTab";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 const Tab = createBottomTabNavigator();

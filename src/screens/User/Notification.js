@@ -1,6 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, ScrollView, View, Animated } from "react-native";
-import Header from "../../components/User/Header";
+import { StyleSheet, Text, View } from "react-native";
 
 const Notification = ({ navigation }) => {
   return (

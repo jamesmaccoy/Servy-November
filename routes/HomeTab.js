@@ -1,23 +1,23 @@
 import React, { useState } from "react";
+import ServicesHome from "../src/screens/User/Home";
 import AddService from "../src/screens/User/AddService";
 import { createStackNavigator } from "@react-navigation/stack";
 import Services from "../src/screens/User/Services";
 import ListDetail from "../src/screens/User/ListDetail";
 import Notification from "../src/screens/User/Notification";
 import SearchResult from "../src/screens/User/SearchResult";
-
 const Stack = createStackNavigator();
 
-const ServicesTab = () => {
+const HomeTab = () => {
   return (
-    <Stack.Navigator initialRouteName="Services">
+    <Stack.Navigator initialRouteName="ServicesHome">
       <Stack.Screen
         options={{
           headerShown: false,
         }}
-        name="Services"
-        component={Services}
-        initialParams={{ key: 0 }}
+        name="ServicesHome"
+        component={ServicesHome}
+        initialParams={{ key: 1 }}
       />
       <Stack.Screen
         options={{
@@ -37,13 +37,19 @@ const ServicesTab = () => {
         options={{
           headerShown: false,
         }}
+        name="Services"
+        component={Services}
+      />
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
         name="SearchResult"
         component={SearchResult}
         initialParams={{ key: 4 }}
       />
-
       <Stack.Screen name="Notification" component={Notification} />
     </Stack.Navigator>
   );
 };
-export default ServicesTab;
+export default HomeTab;

@@ -111,23 +111,20 @@ export const getServices = () => async (
     payload: true,
   });
   let services = [];
-
   await db
     .collection("services")
     .where("approve", "==", true)
     .get()
     .then((response) => {
       response.docs.forEach((item, index) => {
-        dispatch({
-          type: "SERVICE_LOADER",
-          payload: false,
-        });
         services.push({ ...item.data(), id: item.id });
       });
       dispatch({
         type: "SERVICES",
         payload: services,
       });
+    })
+    .then(() => {
       dispatch({
         type: "SERVICE_LOADER",
         payload: false,

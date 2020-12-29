@@ -4,7 +4,7 @@ import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
 import { Text } from "native-base";
 import { connect } from "react-redux";
-import Loader from "./Loader";
+import Loader from "../Auth/Loader";
 import {
   getServices,
   getServicesByCategory,
@@ -22,7 +22,6 @@ const Services = ({ ...props }) => {
 
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
-  const [attributes, setAttributes] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {

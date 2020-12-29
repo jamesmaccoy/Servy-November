@@ -32,6 +32,9 @@ const Filter = ({ ...props }) => {
   const [state, setState] = useState("");
 
   useEffect(() => {
+    getAdminCategory();
+  }, []);
+  useEffect(() => {
     setKey(navigation.dangerouslyGetState().routes[0].params.key);
   }, [navigation]);
 
@@ -45,12 +48,8 @@ const Filter = ({ ...props }) => {
     });
   }, [categories]);
 
-  useEffect(() => {
-    getAdminCategory();
-  }, []);
   const handleCategory = (data) => {
     setState(data);
-    console.log("data", data.label);
   };
   const handleFilter = () => {
     if (key === 1) {
@@ -125,12 +124,6 @@ const Filter = ({ ...props }) => {
                 style={styles.filter}
                 name="filter-variant"
               />
-              {/* <Entypo
-                onPress={() => setShowFilter(!modalVisible)}
-                size={25}
-                color="#000"
-                name="cross"
-              /> */}
             </View>
             <View style={styles.filterInner}>
               <View style={styles.filterCategory}>
@@ -150,21 +143,6 @@ const Filter = ({ ...props }) => {
                     maximumTrackTintColor="#a9a9a9"
                   />
                 </View>
-
-                {/* <DropDownPicker
-                  items={categoriesList}
-                  placeholder="Select Category"
-                  containerStyle={{ height: 50 }}
-                  style={{ backgroundColor: "#fff", borderWidth: 0 }}
-                  itemStyle={{
-                    justifyContent: "flex-start",
-                  }}
-                  dropDownStyle={{ backgroundColor: "#fff" }}
-                  onChangeItem={(item) => {
-                    handleCategory(item);
-                  }}
-                /> */}
-
                 <Picker
                   selectedValue={state}
                   style={{ width: deviceWidth - 50, paddingLeft: 50 }}

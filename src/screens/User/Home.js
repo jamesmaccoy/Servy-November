@@ -49,18 +49,20 @@ const Home = ({ ...props }) => {
   let navigation = props.navigation;
   let getServices = props.getServices;
   let getServicesByCategory = props.getServicesByCategory;
+  let checkVisible = props.checkVisible;
+  let serviceLoader = props.serviceLoader;
 
   const [showFilter, setShowFilter] = useState(false);
-  useEffect(() => {
-    getServices();
-  }, []);
-  const handleFilter = () => {
-    setShowFilter(!showFilter);
-  };
   const [newServices, setNewServices] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
+  useEffect(() => {
+    console.log("visible", checkVisible);
+  }, [checkVisible]);
+
   useEffect(() => {
     setNewServices(props.services);
   }, [props.services]);
@@ -79,15 +81,18 @@ const Home = ({ ...props }) => {
       getServices();
     }
   }, [props.route]);
-  const [isLoading, setLoading] = useState(true);
-  const [data, setData] = useState([]);
   useEffect(() => {
-    fetch("https://webrabbit.in/survey/banner-content.php")
-      .then((response) => response.json())
-      .then((json) => setData(json.content))
-      .catch((error) => console.error(error))
-      .finally(() => setLoading(false));
+    (async () => {
+      await fetch("https://webrabbit.in/survey/banner-content.php")
+        .then((response) => response.json())
+        .then((json) => setData(json.content))
+        .catch((error) => console.error(error))
+        .finally(() => setLoading(false));
+    })();
   }, []);
+  const handleFilter = () => {
+    setShowFilter(!showFilter);
+  };
 
   return (
     <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
@@ -142,14 +147,56 @@ const Home = ({ ...props }) => {
               showsHorizontalScrollIndicator={false}
               horizontal={true}
             >
-              {newServices.map((data) => (
-                <ListingItem
-                  pad={15}
-                  key={data.id}
-                  data={data}
-                  navigation={navigation}
-                />
-              ))}
+              <>
+                {serviceLoader ? (
+                  <View
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <View
+                      style={{
+                        marginLeft: 15,
+
+                        flex: 1,
+                        width: 260,
+                        backgroundColor: "#eee",
+                        height: 280,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        marginLeft: 15,
+                        flex: 1,
+                        width: 260,
+                        backgroundColor: "#eee",
+                        height: 280,
+                      }}
+                    ></View>
+                  </View>
+                ) : (
+                  checkVisible === false && (
+                    <>
+                      {newServices.length === 0 ? (
+                        <View style={{ paddingLeft: 15 }}>
+                          <Text>No Service Available</Text>
+                        </View>
+                      ) : (
+                        newServices.map((data) => (
+                          <ListingItem
+                            pad={15}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        ))
+                      )}
+                    </>
+                  )
+                )}
+              </>
             </ScrollView>
           </View>
 
@@ -201,6 +248,8 @@ const mapStateToProps = (state) => {
   return {
     services: state.Service.services,
     userLocation: state.location.userLocation,
+    serviceLoader: state.Service.serviceLoader,
+    checkVisible: state.User.status,
   };
 };
 export default connect(mapStateToProps, { getServices, getServicesByCategory })(

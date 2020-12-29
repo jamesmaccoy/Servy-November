@@ -31,6 +31,15 @@ import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../../styles/User/ListDestailStyle";
 const { width } = Dimensions.get("window");
 const ListDetail = ({ ...props }) => {
+  let navigation = props.navigation;
+  let data = props.route.params.data;
+  let addServiceReview = props.addServiceReview;
+  let getServiceReview = props.getServiceReview;
+  let ReviewsList = props.ReviewsList;
+  let dataLoader = props.loader;
+  const [information, setInformation] = useState({
+    about: "",
+  });
   const stars = [1, 2, 3, 4, 5];
   const [Review, setReview] = useState({
     service: 0,
@@ -38,40 +47,18 @@ const ListDetail = ({ ...props }) => {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [visibleText, setTextVisible] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
-  let navigation = props.navigation;
-  let data = props.route.params.data;
-  let addServiceReview = props.addServiceReview;
-  let getServiceReview = props.getServiceReview;
-  let ReviewsList = props.ReviewsList;
-  let dataLoader = props.loader;
-
-
-  const [information, setInformation] = useState({
-    about: "",
-  });
   useEffect(() => {
     props.serviceProviderInformation(data.userId);
     getServiceReview(data.id);
   }, []);
-
-  const navHandler = () => {
-    navigation.goBack();
-  };
   useEffect(() => {
     props.serviceProviderInfo.map((providerData) => {
       setInformation({ ...information, about: providerData.about });
     });
   }, [props.serviceProviderInfo]);
-  const handleRatingService = (star) => {
-    setReview({ ...Review, service: star });
-  };
-  const handleReview = () => {
-    addServiceReview(Review, data.id);
-    setModalVisible(!modalVisible);
-  };
-  const [loader, setLoader] = useState(false);
-
   useEffect(() => {
     setLoader(dataLoader);
   }, [dataLoader]);
@@ -89,7 +76,17 @@ const ListDetail = ({ ...props }) => {
       setTextVisible(true);
     }
   }, []);
-  const [showFilter, setShowFilter] = useState(false);
+  const navHandler = () => {
+    navigation.goBack();
+  };
+
+  const handleRatingService = (star) => {
+    setReview({ ...Review, service: star });
+  };
+  const handleReview = () => {
+    addServiceReview(Review, data.id);
+    setModalVisible(!modalVisible);
+  };
 
   const handleFilter = () => {
     setShowFilter(!showFilter);

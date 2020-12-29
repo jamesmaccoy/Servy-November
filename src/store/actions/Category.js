@@ -82,7 +82,7 @@ export const getAdminCategory = () => async (
   const firebase = getFirebase();
   let parentCategory = [];
 
-  const res = db
+  await db
     .collection("categories")
     .get()
     .then((docRef) => {

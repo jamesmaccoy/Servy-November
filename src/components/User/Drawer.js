@@ -21,13 +21,13 @@ import { profileInformation, userStatus } from "../../store/actions/User";
 import imagebg from "../../../assets/images/hamburger_BG.jpg";
 import firebase from "../../config/config.js";
 const signOutUser = async () => {
-    try {
-        await firebase.auth().signOut();
-        navigate('Auth');
-    } catch (e) {
-        console.log(e);
-    }
-}
+  try {
+    await firebase.auth().signOut();
+    navigate("Auth");
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const Drawer = ({
   navigation,
@@ -74,10 +74,6 @@ const Drawer = ({
 
     setModalVisible(!modalVisible);
   };
-  useEffect(() => {
-    console.log("Vlueeee", state.switchValue);
-  }, [state.switchValue]);
-
   return (
     <>
       <View style={styles.centeredView}>
@@ -166,9 +162,9 @@ const Drawer = ({
                       width: 200,
                     }}
                     onValueChange={(switchValue) => {
+                      setModalVisible(!modalVisible);
                       setState({ ...state, switchValue });
                       userStatus(switchValue);
-                      setModalVisible(!modalVisible);
                     }}
                   />
                 </View>
@@ -195,7 +191,7 @@ const Drawer = ({
                     <Text style={styles.naviconsubtxt}>Your profile </Text>{" "}
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity  onPress={signOutUser} style={styles.listnav}>
+                <TouchableOpacity onPress={signOutUser} style={styles.listnav}>
                   <MaterialCommunityIcons
                     style={styles.navicon}
                     name="key"
@@ -206,14 +202,27 @@ const Drawer = ({
               </View>
               <View style={styles.copyrights}>
                 <Text style={styles.rightstxt}> ©2020 Servey </Text>
-                <View style={{display:'flex',flexDirection:'row'}}>
-                <Text style={styles.rightstxt} onPress={ ()=> Linking.openURL('http://servy.co.za/terms-of-use/') }> Term & Conditions. </Text> 
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <Text
+                    style={styles.rightstxt}
+                    onPress={() =>
+                      Linking.openURL("http://servy.co.za/terms-of-use/")
+                    }
+                  >
+                    {" "}
+                    Term & Conditions.{" "}
+                  </Text>
 
-                <Text style={styles.rightstxt} onPress={ ()=> Linking.openURL('http://servy.co.za/privacy-policy/') }> Privacy policy
-                </Text>
+                  <Text
+                    style={styles.rightstxt}
+                    onPress={() =>
+                      Linking.openURL("http://servy.co.za/privacy-policy/")
+                    }
+                  >
+                    {" "}
+                    Privacy policy
+                  </Text>
                 </View>
-                
-                
               </View>
             </View>
           </View>

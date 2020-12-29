@@ -21,12 +21,11 @@ const ListingItem = ({
     image: "",
     state: false,
   });
-  const [compDistance, setCompDistace] = useState(10);
-
-  useEffect(() => {
-    setCompDistace(initialDistance);
-  }, [initialDistance]);
   const [distance, setDistance] = useState(0);
+  useEffect(() => {
+    console.log("1");
+  }, []);
+
   useEffect(() => {
     if (data.imagesUrl.length !== 0) {
       setServiceImage({
@@ -35,7 +34,7 @@ const ListingItem = ({
         state: true,
       });
     }
-  }, [data.imagesUrl]);
+  }, [data]);
   useEffect(() => {
     if (userLocation !== null) {
       setDistance(
@@ -51,9 +50,7 @@ const ListingItem = ({
         ) / 1609.344
       );
     }
-
-    console.log("Distance", distance);
-  }, [data, userLocation, compDistance]);
+  }, [data, userLocation]);
   return (
     <>
       {userLocation !== null && distance <= initialDistance && (

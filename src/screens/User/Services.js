@@ -4,7 +4,7 @@ import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
 import { Text } from "native-base";
 import { connect } from "react-redux";
-import Loader from "./Loader";
+import Loader from "../Auth/Loader";
 import {
   getServices,
   getServicesByCategory,
@@ -20,15 +20,15 @@ const Services = ({ ...props }) => {
   let getAdminCategory = props.getAdminCategory;
   let categories = props.categories;
   let services = props.services;
+  let serviceLoader = props.serviceLoader;
 
   const [loading, setLoading] = useState(true);
+  const [filterCategory, setFilterCategory] = useState([]);
   const [newServices, setNewServices] = useState([]);
   const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
-    if (services.length === 0) {
-      getServices();
-    }
+    getServices();
     getAdminCategory();
   }, []);
   useEffect(() => {
@@ -55,8 +55,6 @@ const Services = ({ ...props }) => {
     setLoading(props.serviceLoader);
   }, [props.serviceLoader]);
 
-  const [filterCategory, setFilterCategory] = useState([]);
-
   useEffect(() => {
     if (filterCategory.length === 0) {
       setNewServices(props.services);
@@ -76,7 +74,7 @@ const Services = ({ ...props }) => {
         setFilterCategory={setFilterCategory}
         categories={categories}
       />
-      {loading ? (
+      {serviceLoader ? (
         <View style={styles.loading}>
           <Loader />
         </View>

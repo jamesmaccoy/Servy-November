@@ -1,49 +1,44 @@
-import React, { useState } from "react";
-import AddService from "../src/screens/User/AddService";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import Services from "../src/screens/User/Services";
-import ListDetail from "../src/screens/User/ListDetail";
-import Notification from "../src/screens/User/Notification";
-import SearchResult from "../src/screens/User/SearchResult";
-
+import Home from "./HomeTab";
+import Services from "./ServicesTab";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-const ServicesTab = () => {
+const ProviderTab = () => {
   return (
-    <Stack.Navigator initialRouteName="Services">
-      <Stack.Screen
+    <Tab.Navigator
+      tabBarOptions={{
+        inactiveTintColor: "#000",
+        activeTintColor: "#666",
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={Home}
         options={{
-          headerShown: false,
+          tabBarLabel: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
         }}
+      />
+      <Tab.Screen
         name="Services"
         component={Services}
-        initialParams={{ key: 0 }}
-      />
-      <Stack.Screen
         options={{
-          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="briefcase"
+              color={color}
+              size={size}
+            />
+          ),
         }}
-        name="AddService"
-        component={AddService}
       />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="ListDetail"
-        component={ListDetail}
-      />
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="SearchResult"
-        component={SearchResult}
-        initialParams={{ key: 4 }}
-      />
-
-      <Stack.Screen name="Notification" component={Notification} />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 };
-export default ServicesTab;
+export default ProviderTab;

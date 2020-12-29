@@ -18,12 +18,12 @@ import {
 import { connect } from "react-redux";
 import Loader from "../Auth/Loader";
 
-const Account = ({
-  navigation,
-  profileInformation,
-  profileInfo,
-  updateInformation,
-}) => {
+const Account = ({ ...props }) => {
+  let navigation = props.navigation;
+  let profileInformation = props.profileInformation;
+  let profileInfo = props.profileInfo;
+  let updateInformation = props.updateInformation;
+
   let profile = profileInfo[0];
   const handleNavigation = () => {
     navigation.navigate("EditImage");
@@ -37,6 +37,7 @@ const Account = ({
       setImageUrl(data.photoURL);
     });
     setEdit(false);
+    console.log("Propsss", props.route);
   }, []);
 
   const [Edit, setEdit] = useState(false);

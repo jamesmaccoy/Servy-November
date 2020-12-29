@@ -12,6 +12,7 @@ const AccountTab = () => {
         }}
         name="ProfileInfo"
         component={Account}
+        initialParams={{ key: 10 }}
       />
       <Stack.Screen name="EditImage" component={EditImage} />
     </Stack.Navigator>
