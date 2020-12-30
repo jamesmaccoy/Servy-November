@@ -1,16 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Image, Text } from "react-native";
 import {
-  Container,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button,
-  View,
-  TouchableOpacity,
-} from "native-base";
+  Container,  Content,  Form, Item, Input,  Label,  Button,  View,  TouchableOpacity, } from "native-base";
 import icon from "../../../assets/icon.png";
 import { connect } from "react-redux";
 import { signInWithEmail } from "../../store/actions/Auth";
@@ -20,18 +11,22 @@ import facebookIcon from "../../../assets/images/facebook.png";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
+  const [shouldShow, setShouldShow] = useState(false);
   const [userEmail, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignIn = (event) => {
     event && event.preventDefault && event.preventDefault();
-    signInWithEmail(userEmail, password);
+    
+      signInWithEmail(userEmail, password);
+      setShouldShow(true);
   };
   const handleSignInWithGoogle = (event) => {
     event && event.preventDefault && event.preventDefault();
     signInWithGoogle();
   };
   const handleNavigation = () => {
+
     navigation.navigate("signup");
   };
 
@@ -41,10 +36,12 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
         <FontAwesome name="envelope" size={50} color={'#000'} style={styles.topenvicon}/>
 
         <Text style={styles.loginsizetxt}>Sign in with your {"\n"} email address</Text>
+         {shouldShow ? (
         <View style={styles.ifdontha}>
             <Text style={styles.cnatxt}>Sorry, we can't find an account with this email address. Please try again or   
              <Text onPress={handleNavigation} style={{color:'#fff',textDecorationLine: 'underline',}}> create a new account</Text></Text>
         </View>
+ ) : null}
 
         <Form vstyle={styles.form}>
           <Item floatingLabel last style={styles.inputtexts}>
@@ -59,7 +56,7 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
             />
           </Item>
 
-          <Button onPress={handleSignIn} full success style={styles.buttons}>
+          <Button  onPress={handleSignIn} full success style={styles.buttons}>
             <Text style={styles.buttonstxt}>Login</Text>
           </Button>
 
@@ -81,7 +78,7 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
           </Button> */}
         </Form>
         <View>
-      <View style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center', marginTop:60}}>
+      <View style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center', marginTop:40}}>
           <Text style={styles.textinfob}>Forgot your password? </Text>
           <Text onPress={handleNavigation} style={styles.signuplink}> Reset Password </Text>
           </View>
@@ -109,7 +106,7 @@ export default connect("", {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 30,
+    marginTop: 10,
     padding: 15,
   },
   topenvicon:{alignSelf:'center', marginBottom:20},

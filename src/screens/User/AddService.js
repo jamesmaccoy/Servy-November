@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Animated, KeyboardAvoidingView } from "react-native";
+import { Text, View, Animated, KeyboardAvoidingView, TouchableOpacity, } from "react-native";
 import Input from "../../components/Generic/Input";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import CheckBoxList from "../../components/User/CheckBoxList";
 import { styles } from "../../styles/User/AddServiceStyle";
@@ -201,24 +201,30 @@ const AddService = ({
                 </View>
                 <View>
                   <View style={styles.nfbtn}>
-                    <Text
-                      style={{
-                        textAlign: "left",
-                        paddingTop: 10,
-                        paddingLeft: 5,
-                        width: 250,
-                        color: "#000",
-                        fontSize: 15,
-                      }}
-                    >
-                      New Features
-                    </Text>
-                    <Button
+                    
+                     <Input
+                        name="Feature"
+                        head=""
+                        placeHolder="eg. DeliveryIncluded"
+                        onChangeText={(values) =>
+                          setNewFeature({
+                            ...newFeature,
+                            attributeState: false,
+                            label: values,
+                            state: true,
+                            id: values.replace(/\s/g, ""),
+                          })
+
+                        }
+                         
+                      />
+               
+                    <TouchableOpacity
                       style={styles.showFeatures}
-                      onPress={showFeature}
+                      onPress={AddFeature}
                       full
                     >
-                      <Entypo name="plus" color={"#000"} size={20} />
+                      <Entypo name="plus" color={"#000"} style={styles.btnupr} size={20} />
                       <Text
                         style={{
                           textAlign: "center",
@@ -229,9 +235,9 @@ const AddService = ({
                       >
                         Add
                       </Text>
-                    </Button>
+                    </TouchableOpacity>
                   </View>
-                  {featureVisible && (
+                {/*
                     <View>
                       <Input
                         name="Feature"
@@ -265,7 +271,7 @@ const AddService = ({
                         </Button>
                       </View>
                     </View>
-                  )}
+               */}
                 </View>
                 <Text style={styles.heading}>Location</Text>
                 <Input

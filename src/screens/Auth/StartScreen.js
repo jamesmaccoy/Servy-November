@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
   },
-  centerContentStyle:{padding:12,marginTop:200,},
-  termsandcondition:{marginTop:70},
+  centerContentStyle:{padding:12,marginTop:170,},
+  termsandcondition:{marginTop:60},
   usernamedetail: {
     display: "flex",
     justifyContent: "space-between",
