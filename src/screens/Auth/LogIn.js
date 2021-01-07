@@ -21,12 +21,15 @@ import facebookIcon from "../../../assets/images/facebook.png";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
+  const [shouldShow, setShouldShow] = useState(false);
   const [userEmail, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignIn = (event) => {
     event && event.preventDefault && event.preventDefault();
+
     signInWithEmail(userEmail, password);
+    setShouldShow(true);
   };
   const handleSignInWithGoogle = (event) => {
     event && event.preventDefault && event.preventDefault();

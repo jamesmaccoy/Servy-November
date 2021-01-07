@@ -7,7 +7,7 @@ import {
   Alert,
 } from "react-native";
 import Input from "../../components/Generic/Input";
-import { TouchableOpacity } from "react-native-gesture-handler";
+
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import CheckBoxList from "../../components/User/CheckBoxList";
 import { styles } from "../../styles/User/AddServiceStyle";

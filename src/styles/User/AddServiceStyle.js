@@ -36,8 +36,7 @@ export const styles = StyleSheet.create({
   },
   checkboxList: {
     flexDirection: "row",
-    paddingTop: 20,
-    paddingBottom: 20,
+ 
     flexWrap: "wrap",
   },
   image: {
@@ -91,15 +90,19 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   showFeatures: {
-    flex: 1,
-     elevation: 0,
-     width:250,
+  
+     width:100,
      borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
- 
+    justifyContent:'center',
     backgroundColor: "#efefef",
+    position:'relative',
+    padding:8,
+    position:'absolute',
+    right:4,
+    top:38,
   },
   addFeatures: {
     flex: 1,
@@ -113,6 +116,6 @@ export const styles = StyleSheet.create({
     backgroundColor: "red",
     backgroundColor: "#f7f7f7",
   },
-  nfbtn:{flexDirection: "row", justifyContent: "flex-end",  borderColor: "#a9a9a9", borderWidth:1,borderRadius:5,padding:3}
-  
+  nfbtn:{  borderColor: "#a9a9a9",},
+  btnupr:{position:'absolute',left:8}
 });
