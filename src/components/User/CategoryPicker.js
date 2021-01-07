@@ -12,12 +12,11 @@ const CategoryPicker = ({
   setSelect,
   setVisible,
   stateChange,
+  setStateChange,
+  setIniState,
 }) => {
-  const [selectCategory, setSelectCateory] = useState("");
+  const [selectCategory, setSelectCateory] = useState(false);
 
-  useEffect(() => {
-    setSelectCateory(selectedValue);
-  }, [selectedValue]);
   return (
     <View style={styles.picker}>
       <Picker
@@ -26,6 +25,8 @@ const CategoryPicker = ({
           selectedValue.value !== "other" ? selectedValue : "other"
         }
         onValueChange={(itemValue, itemIndex) => {
+          setIniState(2);
+          setStateChange(false);
           if (stateChange === false) {
             if (itemValue !== "other") {
               setSelectedValue(itemValue);

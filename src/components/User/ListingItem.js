@@ -23,10 +23,6 @@ const ListingItem = ({
   });
   const [distance, setDistance] = useState(0);
   useEffect(() => {
-    console.log("1");
-  }, []);
-
-  useEffect(() => {
     if (data.imagesUrl.length !== 0) {
       setServiceImage({
         ...serviceImage,
@@ -60,6 +56,7 @@ const ListingItem = ({
             navigation.navigate("ListDetail", {
               data: data,
               key: data.id,
+              user: "Guest",
             });
           }}
         >

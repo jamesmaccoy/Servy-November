@@ -9,6 +9,7 @@ import {
   Label,
   Button,
   View,
+  ScrollView,
   TouchableOpacity,
 } from "native-base";
 import icon from "../../../assets/icon.png";
@@ -38,12 +39,27 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>
-        <FontAwesome name="envelope" size={50} color={'#000'} style={styles.topenvicon}/>
-
-        <Text style={styles.loginsizetxt}>Sign in with your {"\n"} email address</Text>
+        <FontAwesome
+          name="envelope"
+          size={50}
+          color={"#000"}
+          style={styles.topenvicon}
+        />
+        <Text style={styles.loginsizetxt}>
+          Sign in with your {"\n"} email address
+        </Text>
         <View style={styles.ifdontha}>
-            <Text style={styles.cnatxt}>Sorry, we can't find an account with this email address. Please try again or   
-             <Text onPress={handleNavigation} style={{color:'#fff',textDecorationLine: 'underline',}}> create a new account</Text></Text>
+          <Text style={styles.cnatxt}>
+            Sorry, we can't find an account with this email address. Please try
+            again or
+            <Text
+              onPress={handleNavigation}
+              style={{ color: "#fff", textDecorationLine: "underline" }}
+            >
+              {" "}
+              create a new account
+            </Text>
+          </Text>
         </View>
 
         <Form vstyle={styles.form}>
@@ -52,7 +68,7 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
             <Input onChangeText={(text) => setEmail(text)} />
           </Item>
           <Item floatingLabel last style={styles.inputtexts}>
-            <Label  style={styles.label}>Password</Label>
+            <Label style={styles.label}>Password</Label>
             <Input
               secureTextEntry={true}
               onChangeText={(text) => setPassword(text)}
@@ -81,16 +97,37 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
           </Button> */}
         </Form>
         <View>
-      <View style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center', marginTop:60}}>
-          <Text style={styles.textinfob}>Forgot your password? </Text>
-          <Text onPress={handleNavigation} style={styles.signuplink}> Reset Password </Text>
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 60,
+            }}
+          >
+            <Text style={styles.textinfob}>Forgot your password? </Text>
+            <Text onPress={handleNavigation} style={styles.signuplink}>
+              Reset Password
+            </Text>
           </View>
-      
-       <View style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center', marginTop:10}}>
-          <Text style={styles.textinfob}>Dont't have an account? </Text>
-          <Text onPress={handleNavigation} style={styles.signuplink}> Sign Up </Text>
+
+          <View
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: 10,
+              paddingBottom: 50,
+            }}
+          >
+            <Text style={styles.textinfob}>Dont't have an account? </Text>
+            <Text onPress={handleNavigation} style={styles.signuplink}>
+              Sign Up
+            </Text>
           </View>
-      </View>
+        </View>
 
         {/* <View>
           <Text style={styles.textinfob}>Not receiving your magic link? </Text>
@@ -108,14 +145,24 @@ export default connect("", {
 })(Login);
 
 const styles = StyleSheet.create({
+  wrapper: {
+    // paddingBottom: 300,
+  },
   container: {
-    marginTop: 30,
     padding: 15,
   },
-  topenvicon:{alignSelf:'center', marginBottom:20},
-  
-  ifdontha:{backgroundColor: "#5dae7e",paddingTop:15,borderRadius:5, paddingBottom:15, paddingRight:5, paddingLeft:5, marginTop:25},
-cnatxt:{color:'#fff', textAlign:'center',fontSize:15,lineHeight:25},
+  topenvicon: { alignSelf: "center", marginBottom: 20 },
+
+  ifdontha: {
+    backgroundColor: "#5dae7e",
+    paddingTop: 15,
+    borderRadius: 5,
+    paddingBottom: 15,
+    paddingRight: 5,
+    paddingLeft: 5,
+    marginTop: 25,
+  },
+  cnatxt: { color: "#fff", textAlign: "center", fontSize: 15, lineHeight: 25 },
   imtxc: {
     display: "flex",
     alignItems: "center",
@@ -125,7 +172,7 @@ cnatxt:{color:'#fff', textAlign:'center',fontSize:15,lineHeight:25},
   },
   loginsizetxt: {
     fontSize: 26,
-    lineHeight:40,
+    lineHeight: 40,
     textAlign: "center",
   },
   usernamedetail: {
@@ -167,17 +214,26 @@ cnatxt:{color:'#fff', textAlign:'center',fontSize:15,lineHeight:25},
     justifyContent: "flex-start",
     paddingLeft: 20,
   },
-  buttons: {  backgroundColor: "#5dae7e",
-    marginTop: 40,   position:'relative',
+  buttons: {
+    backgroundColor: "#5dae7e",
+    marginTop: 40,
+    position: "relative",
     paddingLeft: 0,
-    borderRadius:5,
-      height:70},
-  inputtexts: { paddingBottom: 10, borderRadius:2, borderBottomWidth:2,borderLeftWidth:2,
-    borderTopWidth:2,borderRightWidth:2, borderColor:'#cfcfcf',  },
-  label:{ fontSize:18, marginTop:0, },
-  textinfob: { color: "#666", textAlign: "center", fontSize:16 },
-  signuplink: { textAlign: "center", color: "#60ad7f", fontSize:16},
-  buttonstxt: { color: "#fff", textAlign:'center', fontSize:18 },
+    borderRadius: 5,
+    height: 70,
+  },
+  inputtexts: {
+    paddingBottom: 10,
+    borderRadius: 2,
+    borderBottomWidth: 2,
+    borderLeftWidth: 2,
+    borderTopWidth: 2,
+    borderRightWidth: 2,
+    borderColor: "#cfcfcf",
+  },
+  label: { fontSize: 18, marginTop: 0 },
+  textinfob: { color: "#666", textAlign: "center", fontSize: 16 },
+  signuplink: { textAlign: "center", color: "#60ad7f", fontSize: 16 },
+  buttonstxt: { color: "#fff", textAlign: "center", fontSize: 18 },
   socialBtnText: { paddingLeft: 50, color: "#fff" },
- 
 });

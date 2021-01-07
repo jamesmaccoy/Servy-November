@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
+  Modal,
+  Dimensions,
 } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
@@ -15,9 +17,15 @@ import { connect } from "react-redux";
 import {
   getServices,
   getServicesByCategory,
+  getServicesByProvider,
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
+import ProviderItem from "../../components/User/ProviderItem";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { switchLoader } from "../../store/actions/User";
+import Loader from "../Auth/Loader";
+let deviceWidth = Dimensions.get("window").width;
+let deviceHeight = Dimensions.get("window").height;
 
 const items = [
   {
@@ -51,21 +59,36 @@ const Home = ({ ...props }) => {
   let getServicesByCategory = props.getServicesByCategory;
   let checkVisible = props.checkVisible;
   let serviceLoader = props.serviceLoader;
+  let currentUser = props.currentUser;
+  let switchLoader = props.switchLoader;
+  let switchLoading = props.switchLoading;
+  let getServicesByProvider = props.getServicesByProvider;
 
   const [showFilter, setShowFilter] = useState(false);
   const [newServices, setNewServices] = useState([]);
+  const [proServices, setProServices] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
   useEffect(() => {
-    console.log("visible", checkVisible);
+    switchLoader(false);
   }, [checkVisible]);
 
   useEffect(() => {
+    if (checkVisible === true) {
+      getServicesByProvider();
+    }
+  }, [checkVisible]);
+  useEffect(() => {
     setNewServices(props.services);
   }, [props.services]);
+
+  useEffect(() => {
+    setProServices(props.providerServices);
+  }, [props.providerServices]);
+
   useEffect(() => {
     if (props.route.params.id === 2) {
       if (props.route.params.state !== "") {
@@ -95,7 +118,22 @@ const Home = ({ ...props }) => {
   };
 
   return (
-    <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
+    <View>
+      {switchLoading && (
+        <View
+          style={{
+            zIndex: 1,
+            width: deviceWidth,
+            height: deviceHeight,
+            backgroundColor: "#fff",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Text>Switching...</Text>
+        </View>
+      )}
       <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
         <View style={styles.header}>
           <Header
@@ -129,26 +167,28 @@ const Home = ({ ...props }) => {
             </ScrollView>
           </View>
           <View style={styles.categorieslisting}>
-            <View style={styles.milesdata}>
-              <Text style={styles.milesdatatxt}>
-                Suggested Servey pro's in your area
-              </Text>
-              <TouchableOpacity activeOpacity={0.7} onPress={handleFilter}>
-                <View style={styles.milesdatain}>
-                  <MaterialCommunityIcons
-                    style={{ fontSize: 22, paddingTop: 10 }}
-                    name="filter-variant"
-                  />
-                  <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
+            {checkVisible === false && (
+              <View style={styles.milesdata}>
+                <Text style={styles.milesdatatxt}>
+                  Suggested Servey pro's in your area
+                </Text>
+                <TouchableOpacity activeOpacity={0.7} onPress={handleFilter}>
+                  <View style={styles.milesdatain}>
+                    <MaterialCommunityIcons
+                      style={{ fontSize: 22, paddingTop: 10 }}
+                      name="filter-variant"
+                    />
+                    <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            )}
             <ScrollView
               showsHorizontalScrollIndicator={false}
               horizontal={true}
             >
               <>
-                {serviceLoader ? (
+                {serviceLoader || switchLoading ? (
                   <View
                     style={{
                       display: "flex",
@@ -176,30 +216,38 @@ const Home = ({ ...props }) => {
                       }}
                     ></View>
                   </View>
-                ) : (
-                  checkVisible === false && (
-                    <>
-                      {newServices.length === 0 ? (
-                        <View style={{ paddingLeft: 15 }}>
-                          <Text>No Service Available</Text>
-                        </View>
-                      ) : (
-                        newServices.map((data) => (
-                          <ListingItem
-                            pad={15}
-                            key={data.id}
-                            data={data}
-                            navigation={navigation}
-                          />
-                        ))
-                      )}
-                    </>
+                ) : checkVisible === false ? (
+                  newServices.length === 0 ? (
+                    <View style={{ paddingLeft: 15 }}>
+                      <Text>No Service Available</Text>
+                    </View>
+                  ) : (
+                    newServices.map((data) => (
+                      <ListingItem
+                        pad={15}
+                        key={data.id}
+                        data={data}
+                        navigation={navigation}
+                      />
+                    ))
                   )
+                ) : (
+                  <>
+                    {proServices.map((data) => {
+                      return (
+                        <ProviderItem
+                          pad={15}
+                          key={data.id}
+                          data={data}
+                          navigation={navigation}
+                        />
+                      );
+                    })}
+                  </>
                 )}
               </>
             </ScrollView>
           </View>
-
           <View style={styles.bannercont}>
             {isLoading ? (
               <ActivityIndicator />
@@ -235,13 +283,14 @@ const Home = ({ ...props }) => {
           </View>
         </ScrollView>
       </View>
+
       <Filter
         navigation={navigation}
         setShowFilter={setShowFilter}
         modalVisible={showFilter}
         route={props.route}
       />
-    </TouchableOpacity>
+    </View>
   );
 };
 const mapStateToProps = (state) => {
@@ -250,16 +299,23 @@ const mapStateToProps = (state) => {
     userLocation: state.location.userLocation,
     serviceLoader: state.Service.serviceLoader,
     checkVisible: state.User.status,
+    currentUser: state.Auth.user,
+    switchLoading: state.User.switchLoader,
+    providerServices: state.Service.userServices,
   };
 };
-export default connect(mapStateToProps, { getServices, getServicesByCategory })(
-  Home
-);
+export default connect(mapStateToProps, {
+  getServices,
+  getServicesByCategory,
+  switchLoader,
+  getServicesByProvider,
+})(Home);
 
 const styles = StyleSheet.create({
   screen: {
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "#fff",
     paddingBottom: 110,
+    minHeight: deviceHeight,
     paddingTop: 35,
   },
   header: { paddingLeft: 15, paddingRight: 15 },

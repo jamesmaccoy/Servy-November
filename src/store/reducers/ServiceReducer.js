@@ -9,6 +9,8 @@ const initialState = {
   loader: false,
   serviceLoader: true,
   uploadData: [],
+  deleteService: false,
+  userServices: [],
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -62,6 +64,16 @@ export default function ServiceReducer(state = initialState, action) {
       return {
         ...state,
         serviceLoader: action.payload,
+      };
+    case "DELETE_SERVICE":
+      return {
+        ...state,
+        deleteService: action.payload,
+      };
+    case "USER_SERVICES":
+      return {
+        ...state,
+        userServices: action.payload,
       };
 
     default:

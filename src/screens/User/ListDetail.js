@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "native-base";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
@@ -37,6 +37,7 @@ const ListDetail = ({ ...props }) => {
   let getServiceReview = props.getServiceReview;
   let ReviewsList = props.ReviewsList;
   let dataLoader = props.loader;
+  let user = props.route.params.user;
   const [information, setInformation] = useState({
     about: "",
   });
@@ -91,6 +92,13 @@ const ListDetail = ({ ...props }) => {
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
+  const handleEdit = () => {
+    navigation.navigate("AddService", {
+      data: data,
+      key: data.id,
+      navFrom: 2,
+    });
+  };
 
   const renderItem = ({ item }) => {
     return (
@@ -131,11 +139,20 @@ const ListDetail = ({ ...props }) => {
 
                   <Text style={styles.title}>{data.category}</Text>
                 </View>
-                <MaterialCommunityIcons
-                  style={styles.close}
-                  name="filter-variant"
-                  onPress={handleFilter}
-                />
+                {user === "Guest" && (
+                  <MaterialCommunityIcons
+                    style={styles.close}
+                    name="filter-variant"
+                    onPress={handleFilter}
+                  />
+                )}
+                {user === "Provider" && (
+                  <AntDesign
+                    style={styles.close}
+                    onPress={handleEdit}
+                    name="edit"
+                  />
+                )}
                 <Entypo name="share" size={30} color={"#fff"} />
               </SafeAreaView>
               <Text style={styles.categoryTitle}>{data.serviceName} </Text>
@@ -167,33 +184,37 @@ const ListDetail = ({ ...props }) => {
                   No Features for this service
                 </Text>
               )}
-
               <View style={styles.checkboxList}>
                 {data.attributes.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: "row",
-                        paddingTop: 10,
-                        paddingLeft: 0,
-                      }}
-                    >
-                      <Image style={{ width: 20, height: 20 }} source={tick} />
-
-                      <Text
+                  if (item.attributeState === true) {
+                    return (
+                      <View
+                        key={index}
                         style={{
-                          color: "#282828",
-                          fontSize: 16,
-                          width: 150,
-                          textAlign: "left",
-                          paddingLeft: 10,
+                          flexDirection: "row",
+                          paddingTop: 10,
+                          paddingLeft: 0,
                         }}
                       >
-                        {item.label}
-                      </Text>
-                    </View>
-                  );
+                        <Image
+                          style={{ width: 20, height: 20 }}
+                          source={tick}
+                        />
+
+                        <Text
+                          style={{
+                            color: "#282828",
+                            fontSize: 16,
+                            width: 150,
+                            textAlign: "left",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          {item.label}
+                        </Text>
+                      </View>
+                    );
+                  }
                 })}
               </View>
               <View></View>

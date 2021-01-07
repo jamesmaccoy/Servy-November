@@ -10,16 +10,25 @@ const CheckBoxList = ({
   index,
   state,
   id,
+  initialValue,
+  subValue,
+  initialArray,
 }) => {
+  const [check, setCheck] = useState(false);
   useEffect(() => {
     setCheck(false);
   }, [select]);
-  const [check, setCheck] = useState(false);
   useEffect(() => {
     if (array === []) {
+      console.log("hello");
       setCheck(false);
     }
   }, []);
+  useEffect(() => {
+    if (initialValue) {
+      setCheck(initialValue.attributeState);
+    }
+  }, [initialValue]);
   const handleCheckBox = () => {
     setCheck(!check);
     array.splice(index, 1, {

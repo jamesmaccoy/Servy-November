@@ -195,11 +195,11 @@ export const signInWithGoogle = () => async (
                 }
               })
               .catch(function (error) {
-                console.log(error, "errrrr");
-                var errorCode = error.code;
-                var errorMessage = error.message;
-                var email = error.email;
-                var credential = error.credential;
+                // console.log(error, "errrrr");
+                // var errorCode = error.code;
+                // var errorMessage = error.message;
+                // var email = error.email;
+                // var credential = error.credential;
               });
           } else {
             console.log("User already signed-in Firebase.");
@@ -230,21 +230,19 @@ export const Authorization = () => async (
   { getFirestore, getFirebase }
 ) => {
   const db = getFirestore();
-  const firebase = getFirebase();
   const state = getState();
   let currentUser = state.Auth.user;
-  let data;
+
   dispatch({
     type: "AUTH_CHECK",
     payload: true,
   });
-
-  const res = await db
+  await db
     .collection("users")
     .doc(currentUser)
-    .onSnapshot(function (response) {
-      console.log("response data", response.data());
-      if (response.data().type) {
+    .get()
+    .then((response) => {
+      if (response) {
         dispatch({
           type: "ADMIN",
           payload: response.data().type,

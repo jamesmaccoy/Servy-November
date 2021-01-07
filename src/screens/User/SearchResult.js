@@ -26,21 +26,25 @@ const Services = ({ ...props }) => {
 
   useEffect(() => {
     if (filterCategory.length === 0) {
+      console.log("Serrrrr", services.length);
       setNewServices(services);
     }
   }, [services, filterCategory]);
   useEffect(() => {
     if (props.route.params.id === 2) {
       if (props.route.params.state !== "") {
+        console.log("ifff");
         getServicesByCategory(
           props.route.params.state,
           props.route.params.attributes
         );
       } else {
+        console.log("elseeee");
         getServices();
       }
     }
     if (props.route.params.id === 3) {
+      console.log("idddd")
       getServices();
     }
   }, [props.route]);

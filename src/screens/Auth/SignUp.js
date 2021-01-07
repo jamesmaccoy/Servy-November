@@ -17,10 +17,7 @@ const SignUp = (props) => {
   let onSignUp = props.onSignUp;
   let signUpState = props.signUpState;
   useEffect(() => {
-    
-
-      setError(false);
-   
+    setError(false);
   }, []);
   useEffect(() => {
     if (signUpState == true) {
@@ -50,7 +47,6 @@ const SignUp = (props) => {
   const handleSignUp = (event) => {
     event && event.preventDefault && event.preventDefault();
     if (userInfo.password1 === userInfo.password2 && emailError === false) {
-      // setError(false);
       onSignUp(userInfo);
     } else {
       setError(true);

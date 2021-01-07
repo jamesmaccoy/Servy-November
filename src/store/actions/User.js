@@ -4,6 +4,12 @@ export const userStatus = (state) => async (dispatch) => {
     payload: state,
   });
 };
+export const switchLoader = (state) => async (dispatch) => {
+  dispatch({
+    type: "SWITCH_LOADER",
+    payload: state,
+  });
+};
 export const profileInformation = () => async (
   dispatch,
   getState,
@@ -18,13 +24,10 @@ export const profileInformation = () => async (
   if (user) {
     const data = await db
       .collection("users")
+      .doc(user.uid)
       .get()
       .then((providerInfo) => {
-        providerInfo.docs.forEach((userData) => {
-          if (user.uid == userData.id) {
-            userInformation.push({ ...userData.data(), id: userData.id });
-          }
-        });
+        userInformation.push({ ...providerInfo.data(), id: providerInfo.id });
       })
       .then(() => {
         dispatch({

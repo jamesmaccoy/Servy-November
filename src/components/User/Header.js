@@ -20,13 +20,6 @@ const Header = ({ ...props }) => {
   const [userName, setUserName] = useState("");
   const [check, setCheck] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  useEffect(() => {
-    profileInfo.map((data) => {
-      if (data.photoURL !== "") {
-        setState({ ...state, update: true, photo: data.photoURL });
-      }
-    });
-  }, []);
 
   useEffect(() => {
     profileInfo.map((data) => {
@@ -52,9 +45,10 @@ const Header = ({ ...props }) => {
   }, [checkVisible]);
 
   const navigationHanlder = () => {
-    navigation.navigate("AddService");
+    navigation.navigate("AddService", {
+      key: 2,
+    });
   };
-
   const handleNotification = () => {
     navigation.navigate("Notification");
   };

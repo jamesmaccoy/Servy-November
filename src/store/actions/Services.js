@@ -37,13 +37,10 @@ export const AddNewService = (
               });
               await db
                 .collection("users")
+                .doc(user.uid)
                 .get()
                 .then((providerInfo) => {
-                  providerInfo.docs.forEach((userData) => {
-                    if (user.uid == userData.id) {
-                      providerName = userData.data().Name;
-                    }
-                  });
+                  providerName = providerInfo.data().Name;
                 })
                 .then(async () => {
                   const res = db
@@ -105,14 +102,14 @@ export const getServices = () => async (
   getState,
   { getFirestore, getFirebase }
 ) => {
+  console.log("servicess");
   const db = getFirestore();
   dispatch({
     type: "SERVICE_LOADER",
     payload: true,
   });
   let services = [];
-  await db
-    .collection("services")
+  db.collection("services")
     .where("approve", "==", true)
     .get()
     .then((response) => {
@@ -259,6 +256,7 @@ export const getServicesByCategory = (data, attributes) => async (
 ) => {
   const db = getFirestore();
   let services = [];
+  let newService = [];
   dispatch({
     type: "SERVICE_LOADER",
     payload: true,
@@ -274,21 +272,270 @@ export const getServicesByCategory = (data, attributes) => async (
           payload: false,
         });
         if (item.data().approve === true) {
-          services.push({ ...item.data(), id: item.id });
-          const index = services.findIndex((e) => e.id === item.id);
-          if (index === -1) {
-            services.push({ ...item.data(), id: item.id });
-          }
-          if (attributes.length === 0) {
-            services.push({ ...item.data(), id: item.id });
+          if (attributes.length !== 0) {
+            item.data().attributes.filter((fire) => {
+              if (attributes.includes(fire.id)) {
+                if (fire.attributeState === true) {
+                  services.push({ ...item.data(), id: item.id });
+                }
+              }
+            });
+          } else {
+            newService.push({ ...item.data(), id: item.id });
           }
         }
       });
-
+    })
+    .then(() => {
+      if (attributes.length !== 0) {
+        for (let i = 0; i < services.length; i++) {
+          if (newService.length === 0) {
+            newService.push(services[i]);
+          }
+          if (newService.length > 0) {
+            const Index = newService.findIndex((e) => e.id === services[i].id);
+            if (Index === -1) {
+              newService.push(services[i]);
+            }
+          }
+        }
+      }
+    })
+    .then(() => {
       dispatch({
         type: "SERVICES",
+        payload: newService,
+      });
+      dispatch({
+        type: "SERVICE_LOADER",
+        payload: false,
+      });
+    })
+    .catch(() => {
+      console.log("errrrrrrrrrrrrrr");
+    });
+};
+
+export const deletesService = (id) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+
+  await db
+    .collection("services")
+    .doc(id)
+    .delete()
+    .then(() => {
+      dispatch({
+        type: "DELETE_SERVICE",
+        payload: true,
+      });
+    });
+};
+export const updateService = (
+  service,
+  attributes,
+  userLocation,
+  images,
+  selectedValue,
+  serviceId,
+  sample
+) => async (dispatch, getState, { getFirestore, getFirebase }) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  var user = await firebase.auth().currentUser;
+  let serviceName = service.serviceName;
+  let category = service.category;
+  let location = service.location;
+  let services = [];
+  const state = getState();
+  const providerInfo = state.profile.profileInformation;
+  let providerName = providerInfo[0].Name;
+
+  dispatch({
+    type: "SERVICE_LOADING",
+    payload: true,
+  });
+
+  const promises = images.map(async (serviceImage, index) => {
+    if (serviceImage.startsWith("file")) {
+      const ImageResponse = await fetch(serviceImage);
+      const blob = await ImageResponse.blob();
+      var ref = await firebase.storage().ref().child(`images/${serviceImage}`);
+      const response = await ref.put(blob);
+      const url = await response.ref.getDownloadURL();
+      return url;
+    } else {
+      return serviceImage;
+    }
+  });
+  const asb = await Promise.all(promises);
+
+  if (asb) {
+    if (sample === false) {
+      let docRefrence = db.collection("services").doc(serviceId);
+      docRefrence
+        .update({
+          serviceName: serviceName,
+          category: category,
+          location: location,
+          maps: userLocation.locationCords,
+          attributes: attributes,
+          imagesUrl: asb,
+        })
+        .then(async () => {
+          dispatch({
+            type: "ADD_SERVICE",
+            payload: true,
+          });
+          dispatch({
+            type: "SERVICE_LOADING",
+            payload: false,
+          });
+          await db
+            .collection("services")
+            .where("userId", "==", user.uid)
+            .get()
+            .then((response) => {
+              response.docs.forEach((item, index) => {
+                services.push({ ...item.data(), id: item.id });
+              });
+              dispatch({
+                type: "USER_SERVICES",
+                payload: services,
+              });
+            });
+          if (selectedValue === "other") {
+            await db.collection("categories").add({
+              label: category,
+              value: category.replace(/\s/g, ""),
+              other: true,
+              features: attributes,
+              createdAt: new Date(),
+            });
+          }
+        })
+        .catch(() => {
+          dispatch({
+            type: "FAIL_SERVICE",
+            payload: true,
+          });
+          dispatch({
+            type: "SERVICE_LOADING",
+            payload: false,
+          });
+        });
+    }
+    if (sample === true) {
+      console.log("sampleeeeeeeeee");
+      db.collection("services")
+        .add({
+          serviceName: serviceName,
+          category: category,
+          location: location,
+          maps: userLocation.locationCords,
+          userId: user.uid,
+          attributes: attributes,
+          approve: false,
+          providerName: providerName,
+          averageRating: 0,
+          totalReviews: 0,
+          imagesUrl: asb,
+          createdAt: new Date(),
+        })
+        .then(() => {
+          db.collection("services")
+            .where("userId", "==", user.uid)
+            .get()
+            .then((response) => {
+              response.docs.forEach((item, index) => {
+                services.push({ ...item.data(), id: item.id });
+              });
+              dispatch({
+                type: "USER_SERVICES",
+                payload: services,
+              });
+              dispatch({
+                type: "ADD_SERVICE",
+                payload: true,
+              });
+              dispatch({
+                type: "SERVICE_LOADING",
+                payload: false,
+              });
+            })
+            .then(() => {
+              if (selectedValue === "other") {
+                db.collection("categories").add({
+                  label: category,
+                  value: category.replace(/\s/g, ""),
+                  other: true,
+                  features: attributes,
+                  createdAt: new Date(),
+                });
+              }
+            });
+        })
+        .catch(() => {
+          dispatch({
+            type: "FAIL_SERVICE",
+            payload: true,
+          });
+          dispatch({
+            type: "SERVICE_LOADING",
+            payload: false,
+          });
+        });
+    }
+  }
+};
+
+export const getServicesByProvider = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  var user = await firebase.auth().currentUser;
+
+  let services = [];
+  let proService = [];
+  dispatch({
+    type: "SERVICE_LOADER",
+    payload: true,
+  });
+  await db
+    .collection("services")
+    .where("userId", "==", user.uid)
+    .get()
+    .then((response) => {
+      response.docs.forEach((item, index) => {
+        services.push({ ...item.data(), id: item.id });
+      });
+      dispatch({
+        type: "USER_SERVICES",
         payload: services,
       });
+    })
+    .then(() => {
+      if (services.length === 0) {
+        db.collection("services")
+          .where("serviceName", "==", "Sample")
+          .get()
+          .then((response) => {
+            response.docs.forEach((item, index) => {
+              console.log("iteeeee", item.data());
+              proService.push({ ...item.data(), id: item.id });
+            });
+            dispatch({
+              type: "USER_SERVICES",
+              payload: proService,
+            });
+          });
+      }
       dispatch({
         type: "SERVICE_LOADER",
         payload: false,

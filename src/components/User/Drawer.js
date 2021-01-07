@@ -17,7 +17,11 @@ import {
 } from "@expo/vector-icons";
 import { styles } from "../../styles/User/UserHeaderStyle";
 import { connect } from "react-redux";
-import { profileInformation, userStatus } from "../../store/actions/User";
+import {
+  profileInformation,
+  userStatus,
+  switchLoader,
+} from "../../store/actions/User";
 import imagebg from "../../../assets/images/hamburger_BG.jpg";
 import firebase from "../../config/config.js";
 const signOutUser = async () => {
@@ -36,6 +40,7 @@ const Drawer = ({
   setModalVisible,
   userStatus,
   checkVisible,
+  switchLoader,
 }) => {
   const [state, setState] = useState({
     update: false,
@@ -71,9 +76,11 @@ const Drawer = ({
   }, [profileInfo]);
   const accountpage = () => {
     navigation.dangerouslyGetParent().navigate("MyAccount");
-
     setModalVisible(!modalVisible);
   };
+  useEffect(() => {
+    userStatus(state.switchValue);
+  }, [state.switchValue]);
   return (
     <>
       <View style={styles.centeredView}>
@@ -162,9 +169,10 @@ const Drawer = ({
                       width: 200,
                     }}
                     onValueChange={(switchValue) => {
+                      // console.log("dsfdf");
+                      switchLoader(true);
                       setModalVisible(!modalVisible);
                       setState({ ...state, switchValue });
-                      userStatus(switchValue);
                     }}
                   />
                 </View>
@@ -237,6 +245,8 @@ const mapStateToProps = (state) => {
     checkVisible: state.User.status,
   };
 };
-export default connect(mapStateToProps, { profileInformation, userStatus })(
-  Drawer
-);
+export default connect(mapStateToProps, {
+  profileInformation,
+  userStatus,
+  switchLoader,
+})(Drawer);

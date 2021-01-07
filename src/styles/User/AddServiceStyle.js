@@ -21,7 +21,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
   },
   create: {
-    paddingBottom: 100,
+    paddingBottom: 0,
     paddingTop: 50,
   },
 
