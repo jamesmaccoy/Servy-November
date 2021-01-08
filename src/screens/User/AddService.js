@@ -5,9 +5,9 @@ import {
   Animated,
   KeyboardAvoidingView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import Input from "../../components/Generic/Input";
-
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import CheckBoxList from "../../components/User/CheckBoxList";
 import { styles } from "../../styles/User/AddServiceStyle";
@@ -148,6 +148,7 @@ const AddService = ({ ...props }) => {
   };
 
   const showFeature = () => {
+    console.log("heloooooooooooooooo");
     setFeatureVisible(!featureVisible);
   };
   const AddFeature = () => {
@@ -325,29 +326,30 @@ const AddService = ({ ...props }) => {
                       textAlign: "left",
                       paddingTop: 10,
                       paddingLeft: 5,
-                      width: 250,
                       color: "#000",
                       fontSize: 15,
                     }}
                   >
                     New Features
                   </Text>
-                  <Button
-                    style={styles.showFeatures}
-                    onPress={showFeature}
-                    full
-                  >
-                    <Entypo name="plus" color={"#000"} size={20} />
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        paddingLeft: 8,
-                        color: "#000",
-                        fontSize: 15,
-                      }}
+
+                  <Button style={styles.showFeatures} full>
+                    <TouchableOpacity
+                      style={{ flexDirection: "row" }}
+                      onPress={showFeature}
                     >
-                      Add
-                    </Text>
+                      <Entypo name="plus" color={"#000"} size={20} />
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          paddingLeft: 8,
+                          color: "#000",
+                          fontSize: 15,
+                        }}
+                      >
+                        Add
+                      </Text>
+                    </TouchableOpacity>
                   </Button>
                 </View>
                 {featureVisible && (

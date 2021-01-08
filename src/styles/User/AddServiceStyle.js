@@ -36,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   checkboxList: {
     flexDirection: "row",
- 
+
     flexWrap: "wrap",
   },
   image: {
@@ -70,15 +70,14 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     color: "#a9a9a9",
   },
-   inputfml: {
+  inputfml: {
     height: 50,
     paddingLeft: 10,
     flex: 1,
-    color:'#000',
+    color: "#000",
 
     textAlign: "center",
     paddingTop: 14,
-
   },
   inputContainer: {
     borderWidth: 1,
@@ -90,19 +89,14 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   showFeatures: {
-  
-     width:100,
-     borderTopLeftRadius: 5,
+    width: 100,
+    borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
-    justifyContent:'center',
+    justifyContent: "center",
+    marginRight: 2,
     backgroundColor: "#efefef",
-    position:'relative',
-    padding:8,
-    position:'absolute',
-    right:4,
-    top:38,
   },
   addFeatures: {
     flex: 1,
@@ -116,6 +110,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "red",
     backgroundColor: "#f7f7f7",
   },
-  nfbtn:{  borderColor: "#a9a9a9",},
-  btnupr:{position:'absolute',left:8}
+  nfbtn: {
+    flexDirection: "row",
+    paddingTop: 10,
+    alignItems: "center",
+    justifyContent: "space-between",
+    borderColor: "#a9a9a9",
+  },
+  btnupr: { position: "absolute", left: 8 },
 });
