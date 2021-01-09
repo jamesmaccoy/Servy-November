@@ -13,7 +13,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "native-base";
-import { Entypo, MaterialCommunityIcons, AntDesign } from "@expo/vector-icons";
+import {
+  Entypo,
+  MaterialCommunityIcons,
+  AntDesign,
+  Octicons,
+} from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
@@ -155,7 +160,52 @@ const ListDetail = ({ ...props }) => {
                 )}
                 <Entypo name="share" size={30} color={"#fff"} />
               </SafeAreaView>
-              <Text style={styles.categoryTitle}>{data.serviceName} </Text>
+              <SafeAreaView
+                style={{
+                  bottom: 10,
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "flex-end",
+                }}
+              >
+                <Text style={styles.categoryTitle}>{data.serviceName} </Text>
+                {user === "Provider" && (
+                  <>
+                    {data.approve === true ? (
+                      <View style={styles.active}>
+                        <Octicons
+                          color="green"
+                          size={25}
+                          name="primitive-dot"
+                        />
+                        <Text
+                          style={{
+                            color: "green",
+                            fontSize: 15,
+                            paddingLeft: 10,
+                          }}
+                        >
+                          Active
+                        </Text>
+                      </View>
+                    ) : (
+                      <View style={styles.active}>
+                        <Octicons color="red" size={25} name="primitive-dot" />
+                        <Text
+                          style={{
+                            color: "red",
+                            fontSize: 15,
+                            paddingLeft: 10,
+                          }}
+                        >
+                          Pending
+                        </Text>
+                      </View>
+                    )}
+                  </>
+                )}
+              </SafeAreaView>
             </View>
 
             <Carousel

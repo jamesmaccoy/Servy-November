@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import Input from "../../components/Generic/Input";
-
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import CheckBoxList from "../../components/User/CheckBoxList";
 import { styles } from "../../styles/User/AddServiceStyle";
@@ -129,8 +128,6 @@ const AddService = ({ ...props }) => {
   };
 
   const handleInfo = () => {
-    console.log("state", state);
-    console.log("array", array);
     if (
       state.serviceName !== "" &&
       state.location !== "" &&
@@ -140,10 +137,10 @@ const AddService = ({ ...props }) => {
       Object.keys(userLocation.locationCords).length !== 0 &&
       images.length !== 0
     ) {
-      // setAddServiceLoading(true);
-      // setGoBack(true);
-      // AddNewService(state, array, userLocation, pickImages, selectedValue);
-      // setErrorMessage(false);
+      setAddServiceLoading(true);
+      setGoBack(true);
+      AddNewService(state, array, userLocation, pickImages, selectedValue);
+      setErrorMessage(false);
     } else {
       setErrorMessage(true);
       setMessage(false);
@@ -204,21 +201,19 @@ const AddService = ({ ...props }) => {
       Object.keys(userLocation.locationCords).length !== 0 &&
       images.length !== 0
     ) {
-      console.log("state", state);
-      console.log("array", array);
-      // setAddServiceLoading(true);
-      // setGoBack(true);
-      // updateService(
-      //   state,
-      //   array,
-      //   userLocation,
-      //   pickImages,
-      //   selectedValue,
-      //   props.route.params.data.id,
-      //   sample
-      // );
+      setAddServiceLoading(true);
+      setGoBack(true);
+      updateService(
+        state,
+        array,
+        userLocation,
+        pickImages,
+        selectedValue,
+        props.route.params.data.id,
+        sample
+      );
 
-      // setErrorMessage(false);
+      setErrorMessage(false);
     } else {
       setErrorMessage(true);
       setMessage(false);
@@ -284,7 +279,6 @@ const AddService = ({ ...props }) => {
                 array={array}
                 setStateChange={setStateChange}
               />
-
               {visible && (
                 <Input
                   name="NewCateogry"

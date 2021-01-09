@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import { styles } from "../../styles/User/AddServiceStyle";
 import { Picker } from "@react-native-community/picker";
