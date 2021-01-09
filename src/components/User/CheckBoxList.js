@@ -40,7 +40,7 @@ const CheckBoxList = ({
   };
 
   return (
-    <View style={styles.checkboxList}>
+    <View key={index} style={styles.checkboxList}>
       <View style={styles.checkboxContainer}>
         <CheckBox
           value={check}

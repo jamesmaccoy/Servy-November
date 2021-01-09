@@ -5,6 +5,7 @@ import {
   Animated,
   KeyboardAvoidingView,
   Alert,
+  TouchableOpacity,
 } from "react-native";
 import Input from "../../components/Generic/Input";
 
@@ -22,7 +23,7 @@ import PickImage from "../../components/User/PickImage";
 import ServiceLocation from "../../components/User/ServiceLocation";
 import CategoryPicker from "../../components/User/CategoryPicker";
 import PleaseWait from "../../components/Generic/PleaseWait";
-import { Button } from "native-base";
+import { Button } from "react-native-paper";
 
 const AddService = ({ ...props }) => {
   let navigation = props.navigation;
@@ -128,6 +129,8 @@ const AddService = ({ ...props }) => {
   };
 
   const handleInfo = () => {
+    console.log("state", state);
+    console.log("array", array);
     if (
       state.serviceName !== "" &&
       state.location !== "" &&
@@ -137,10 +140,10 @@ const AddService = ({ ...props }) => {
       Object.keys(userLocation.locationCords).length !== 0 &&
       images.length !== 0
     ) {
-      setAddServiceLoading(true);
-      setGoBack(true);
-      AddNewService(state, array, userLocation, pickImages, selectedValue);
-      setErrorMessage(false);
+      // setAddServiceLoading(true);
+      // setGoBack(true);
+      // AddNewService(state, array, userLocation, pickImages, selectedValue);
+      // setErrorMessage(false);
     } else {
       setErrorMessage(true);
       setMessage(false);
@@ -201,19 +204,21 @@ const AddService = ({ ...props }) => {
       Object.keys(userLocation.locationCords).length !== 0 &&
       images.length !== 0
     ) {
-      setAddServiceLoading(true);
-      setGoBack(true);
-      updateService(
-        state,
-        array,
-        userLocation,
-        pickImages,
-        selectedValue,
-        props.route.params.data.id,
-        sample
-      );
+      console.log("state", state);
+      console.log("array", array);
+      // setAddServiceLoading(true);
+      // setGoBack(true);
+      // updateService(
+      //   state,
+      //   array,
+      //   userLocation,
+      //   pickImages,
+      //   selectedValue,
+      //   props.route.params.data.id,
+      //   sample
+      // );
 
-      setErrorMessage(false);
+      // setErrorMessage(false);
     } else {
       setErrorMessage(true);
       setMessage(false);
@@ -264,9 +269,10 @@ const AddService = ({ ...props }) => {
               />
               <CategoryPicker
                 selectedValue={selectedValue}
-                setIniState={setIniState}
+                initState={initState}
                 setState={setState}
-                initialValue={categoryInital}
+                categoryInital={categoryInital}
+                setCategoryInitial={setCategoryInitial}
                 categories={cat}
                 setSelectedValue={setSelectedValue}
                 state={state}
@@ -283,7 +289,6 @@ const AddService = ({ ...props }) => {
                 <Input
                   name="NewCateogry"
                   head="Suggest a new Category"
-                  initialValue={state.category}
                   placeHolder="eg. Electrition"
                   onChangeText={(text) =>
                     setState({ ...state, category: text })
@@ -325,14 +330,13 @@ const AddService = ({ ...props }) => {
                       textAlign: "left",
                       paddingTop: 10,
                       paddingLeft: 5,
-                      width: 250,
                       color: "#000",
                       fontSize: 15,
                     }}
                   >
                     New Features
                   </Text>
-                  <Button
+                  <TouchableOpacity
                     style={styles.showFeatures}
                     onPress={showFeature}
                     full
@@ -348,7 +352,7 @@ const AddService = ({ ...props }) => {
                     >
                       Add
                     </Text>
-                  </Button>
+                  </TouchableOpacity>
                 </View>
                 {featureVisible && (
                   <View>

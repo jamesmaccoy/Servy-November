@@ -13,10 +13,10 @@ const CategoryPicker = ({
   setVisible,
   stateChange,
   setStateChange,
-  setIniState,
+  categoryInital,
+  setCategoryInitial,
+  initState,
 }) => {
-  const [selectCategory, setSelectCateory] = useState(false);
-
   return (
     <View style={styles.picker}>
       <Picker
@@ -25,8 +25,8 @@ const CategoryPicker = ({
           selectedValue.value !== "other" ? selectedValue : "other"
         }
         onValueChange={(itemValue, itemIndex) => {
-          setIniState(2);
           setStateChange(false);
+          setCategoryInitial(false);
           if (stateChange === false) {
             if (itemValue !== "other") {
               setSelectedValue(itemValue);
@@ -51,14 +51,32 @@ const CategoryPicker = ({
         mode="dropdown"
       >
         {stateChange ? (
-          <Picker.Item label={selectedValue.label} key={0} value="0" />
+          <Picker.Item
+            label={selectedValue.label}
+            key={0}
+            value={selectedValue}
+          />
         ) : (
           <Picker.Item label="Select Category" key={1} value="0" />
         )}
         {categories != null ? (
-          categories.map((data, index) => (
-            <Picker.Item label={data.label} key={index + 2} value={data} />
-          ))
+          categories.map((data, index) => {
+            if (categoryInital === true) {
+              if (data.label !== selectedValue.label) {
+                return (
+                  <Picker.Item
+                    label={data.label}
+                    key={index + 2}
+                    value={data}
+                  />
+                );
+              }
+            } else {
+              return (
+                <Picker.Item label={data.label} key={index + 2} value={data} />
+              );
+            }
+          })
         ) : (
           <Picker />
         )}
