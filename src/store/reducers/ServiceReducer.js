@@ -11,6 +11,7 @@ const initialState = {
   uploadData: [],
   deleteService: false,
   userServices: [],
+  optionSelect: "",
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -74,6 +75,11 @@ export default function ServiceReducer(state = initialState, action) {
       return {
         ...state,
         userServices: action.payload,
+      };
+    case "PREVIEW_LISTING":
+      return {
+        ...state,
+        optionSelect: action.payload,
       };
 
     default:

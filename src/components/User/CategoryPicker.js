@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { styles } from "../../styles/User/AddServiceStyle";
 import { Picker } from "@react-native-community/picker";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CategoryPicker = ({
   selectedValue,

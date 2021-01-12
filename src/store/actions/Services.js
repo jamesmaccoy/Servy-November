@@ -321,7 +321,12 @@ export const deletesService = (id) => async (
   getState,
   { getFirestore, getFirebase }
 ) => {
+  console.log("idddd", id);
   const db = getFirestore();
+  const firebase = getFirebase();
+  var user = await firebase.auth().currentUser;
+  let services = [];
+  let proService = [];
 
   await db
     .collection("services")
@@ -331,6 +336,39 @@ export const deletesService = (id) => async (
       dispatch({
         type: "DELETE_SERVICE",
         payload: true,
+      });
+    });
+  db.collection("services")
+    .where("userId", "==", user.uid)
+    .get()
+    .then((response) => {
+      console.log("kholayyyyyy");
+      response.docs.forEach((item, index) => {
+        services.push({ ...item.data(), id: item.id });
+      });
+      dispatch({
+        type: "USER_SERVICES",
+        payload: services,
+      });
+    })
+    .then(() => {
+      if (services.length === 0) {
+        db.collection("services")
+          .where("serviceName", "==", "Hoola hoop teacher")
+          .get()
+          .then((response) => {
+            response.docs.forEach((item, index) => {
+              proService.push({ ...item.data(), id: item.id });
+            });
+            dispatch({
+              type: "USER_SERVICES",
+              payload: proService,
+            });
+          });
+      }
+      dispatch({
+        type: "SERVICE_LOADER",
+        payload: false,
       });
     });
 };
@@ -429,7 +467,6 @@ export const updateService = (
         });
     }
     if (sample === true) {
-      console.log("sampleeeeeeeeee");
       db.collection("services")
         .add({
           serviceName: serviceName,
@@ -523,7 +560,7 @@ export const getServicesByProvider = () => async (
     .then(() => {
       if (services.length === 0) {
         db.collection("services")
-          .where("serviceName", "==", "Sample")
+          .where("serviceName", "==", "Hoola hoop teacher")
           .get()
           .then((response) => {
             response.docs.forEach((item, index) => {
@@ -541,4 +578,11 @@ export const getServicesByProvider = () => async (
         payload: false,
       });
     });
+};
+
+export const selectOption = (data) => async (dispatch, getState) => {
+  dispatch({
+    type: "PREVIEW_LISTING",
+    payload: data,
+  });
 };

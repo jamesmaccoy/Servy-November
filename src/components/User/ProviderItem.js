@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, Text } from "react-native";
+import { ImageBackground, Text, Modal, Dimensions } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { View } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Rating from "../Generic/Rating";
 import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import { selectOption } from "../../store/actions/Services";
+let deviceWidth = Dimensions.get("window").width;
+let deviceHeight = Dimensions.get("window").height;
 const stars = [1, 2, 3, 4, 5];
-const ListingItem = ({ data, navigation, pad }) => {
+const ProviderItem = ({
+  data,
+  navigation,
+  pad,
+  setProviderModal,
+  selectOption,
+}) => {
   const [serviceImage, setServiceImage] = useState({
     image: "",
     state: false,
@@ -26,17 +34,25 @@ const ListingItem = ({ data, navigation, pad }) => {
     }
   }, [data]);
 
+  const [visiblePreview, seVisiblePreview] = useState(true);
+
+  const handlePreview = () => {
+    setProviderModal(true);
+    selectOption(data);
+  };
+
   return (
-    <TouchableOpacity
-      activeOpacity={1}
-      onPress={() => {
-        navigation.navigate("ListDetail", {
-          data: data,
-          key: data.id,
-          user: "Provider",
-        });
-      }}
-    >
+    // <TouchableOpacity
+    //   activeOpacity={1}
+    //   onPress={() => {
+    //     navigation.navigate("ListDetail", {
+    //       data: data,
+    //       key: data.id,
+    //       user: "Provider",
+    //     });
+    //   }}
+    // >
+    <View>
       <View style={{ paddingBottom: 20, paddingLeft: pad, paddingRight: pad }}>
         <Card style={{ height: 280 }}>
           <ImageBackground
@@ -48,40 +64,26 @@ const ListingItem = ({ data, navigation, pad }) => {
             <LinearGradient
               colors={["rgba(0,0,0,0.5)", "transparent"]}
               style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: 0,
                 height: 300,
+                flexDirection: "row",
+                justifyContent: "space-between",
               }}
             >
               <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
                 {data.serviceName}
               </Text>
+              <View style={{ paddingTop: 20, paddingRight: 5 }}>
+                <TouchableOpacity onPress={handlePreview}>
+                  <Entypo size={20} color="#fff" name="dots-three-vertical" />
+                </TouchableOpacity>
+              </View>
             </LinearGradient>
           </ImageBackground>
-          <Card.Content
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: 0,
-            }}
-          >
-            <View
-              style={{
-                padding: 0,
-                flexDirection: "column",
-                justifyContent: "flex-end",
-                flex: 1,
-                marginTop: 10,
-              }}
-            >
-              <MaterialCommunityIcons style={{ fontSize: 30 }} name="update" />
-              <Paragraph style={{ fontSize: 10 }}>
-                {data.createdAt.toDate().toLocaleTimeString("en-US")} {"\n"}
-                {data.createdAt.toDate().toLocaleDateString("en-US")}
-              </Paragraph>
-            </View>
+          <Card.Content style={{ flexDirection: "row", padding: 20 }}>
+            <FontAwesome
+              style={{ fontSize: 30, paddingTop: 10 }}
+              name="briefcase"
+            />
             <Card.Content style={{ fontSize: 20 }}>
               <Paragraph>{data.category} </Paragraph>
               <Card.Content style={{ paddingLeft: 0, flexDirection: "row" }}>
@@ -105,7 +107,9 @@ const ListingItem = ({ data, navigation, pad }) => {
           </Card.Content>
         </Card>
       </View>
-    </TouchableOpacity>
+
+      {/* </TouchableOpacity> */}
+    </View>
   );
 };
 const mapStateToProps = (state) => {
@@ -114,4 +118,4 @@ const mapStateToProps = (state) => {
     initialDistance: state.location.initialDistance,
   };
 };
-export default connect(mapStateToProps)(ListingItem);
+export default connect(mapStateToProps, { selectOption })(ProviderItem);

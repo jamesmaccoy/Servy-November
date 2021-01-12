@@ -7,7 +7,6 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
-  Modal,
   Dimensions,
 } from "react-native";
 import Header from "../../components/User/Header";
@@ -23,7 +22,7 @@ import Filter from "../../components/User/Filter";
 import ProviderItem from "../../components/User/ProviderItem";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { switchLoader } from "../../store/actions/User";
-import Loader from "../Auth/Loader";
+import ProviderModal from "../../components/User/ProviderModal";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
@@ -68,6 +67,7 @@ const Home = ({ ...props }) => {
   const [newServices, setNewServices] = useState([]);
   const [proServices, setProServices] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [providerModal, setProviderModal] = useState(false);
   const [data, setData] = useState([]);
   useEffect(() => {
     getServices();
@@ -199,7 +199,6 @@ const Home = ({ ...props }) => {
                     <View
                       style={{
                         marginLeft: 15,
-
                         flex: 1,
                         width: 260,
                         backgroundColor: "#eee",
@@ -222,20 +221,23 @@ const Home = ({ ...props }) => {
                       <Text>No Service Available</Text>
                     </View>
                   ) : (
-                    newServices.map((data) => (
-                      <ListingItem
-                        pad={15}
-                        key={data.id}
-                        data={data}
-                        navigation={navigation}
-                      />
-                    ))
+                    newServices.map((data) => {
+                      return (
+                        <ListingItem
+                          pad={15}
+                          key={data.id}
+                          data={data}
+                          navigation={navigation}
+                        />
+                      );
+                    })
                   )
                 ) : (
                   <>
                     {proServices.map((data) => {
                       return (
                         <ProviderItem
+                          setProviderModal={setProviderModal}
                           pad={15}
                           key={data.id}
                           data={data}
@@ -283,7 +285,11 @@ const Home = ({ ...props }) => {
           </View>
         </ScrollView>
       </View>
-
+      <ProviderModal
+        navigation={navigation}
+        setProviderModal={setProviderModal}
+        visible={providerModal}
+      />
       <Filter
         navigation={navigation}
         setShowFilter={setShowFilter}

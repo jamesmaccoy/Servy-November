@@ -14,6 +14,7 @@ import { switchLoader } from "../../store/actions/User";
 import { getAdminCategory } from "../../store/actions/Category";
 import MutipleSelect from "../../components/User/Multiple";
 import ProviderItem from "../../components/User/ProviderItem";
+import ProviderModal from "../../components/User/ProviderModal";
 let deviceHeight = Dimensions.get("window").height;
 let deviceWidth = Dimensions.get("window").width;
 
@@ -36,6 +37,7 @@ const Services = ({ ...props }) => {
   const [newServices, setNewServices] = useState([]);
   const [attributes, setAttributes] = useState([]);
   const [proServices, setProServices] = useState([]);
+  const [providerModal, setProviderModal] = useState(false);
 
   useEffect(() => {
     getServices();
@@ -134,14 +136,24 @@ const Services = ({ ...props }) => {
                   <View style={{ paddingTop: 50, minHeight: deviceHeight }}>
                     {checkVisible ? (
                       proServices.map((data) => {
-                        return (
-                          <ProviderItem
-                            pad={0}
-                            key={data.id}
-                            data={data}
-                            navigation={navigation}
-                          />
-                        );
+                        if (providerServices.length == 0) {
+                          return (
+                            <View style={styles.proService}>
+                              <Text>No Service Available</Text>
+                            </View>
+                          );
+                        }
+                        if (providerServices.length !== 0) {
+                          return (
+                            <ProviderItem
+                              setProviderModal={setProviderModal}
+                              pad={0}
+                              key={data.id}
+                              data={data}
+                              navigation={navigation}
+                            />
+                          );
+                        }
                       })
                     ) : (
                       <>
@@ -192,6 +204,11 @@ const Services = ({ ...props }) => {
             )}
           </>
         )}
+        <ProviderModal
+          navigation={navigation}
+          setProviderModal={setProviderModal}
+          visible={providerModal}
+        />
       </View>
     </View>
   );
@@ -227,6 +244,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
     paddingTop: 80,
     paddingBottom: 20,
+    height: deviceHeight,
+  },
+  proService: {
+    backgroundColor: "#f7f7f7",
     height: deviceHeight,
   },
   loading: {

@@ -81,7 +81,7 @@ const AddService = ({ ...props }) => {
   useEffect(() => {
     if (props.route.params.key !== 2) {
       let data = props.route.params.data;
-      if (data.serviceName === "Sample") {
+      if (data.serviceName === "Hoola hoop teacher") {
         setSample(true);
       }
       setDeleteIcon(true);
@@ -153,6 +153,7 @@ const AddService = ({ ...props }) => {
   const AddFeature = () => {
     if (newFeature.label !== "") {
       setStateChange(true);
+      setCategoryInitial(true);
       setSelectedValue({
         ...selectedValue,
         other: selectedValue.other,
@@ -169,28 +170,6 @@ const AddService = ({ ...props }) => {
     }
     setSelect(false);
   }, [select]);
-
-  const handleDelete = () => {
-    Alert.alert(
-      "Are You Sure You Want to Delete? ",
-      ``,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            deletesService(props.route.params.data.id);
-            navigation.navigate("ServicesHome");
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  };
   const handleUpdateInfo = () => {
     if (
       state.serviceName !== "" &&
@@ -365,10 +344,9 @@ const AddService = ({ ...props }) => {
                       }
                     />
                     <View style={{ flexDirection: "row", paddingTop: 20 }}>
-                      <Button
+                      <TouchableOpacity
                         style={styles.addFeatures}
                         onPress={AddFeature}
-                        full
                       >
                         <Text
                           style={{
@@ -379,7 +357,7 @@ const AddService = ({ ...props }) => {
                         >
                           Add Feature
                         </Text>
-                      </Button>
+                      </TouchableOpacity>
                     </View>
                   </View>
                 )}
@@ -407,25 +385,6 @@ const AddService = ({ ...props }) => {
                 images={images}
                 imgInitial={imgInitial}
               />
-              {deleteIcon && (
-                <View style={{ flexDirection: "row", paddingTop: 20 }}>
-                  <Button
-                    onPress={handleDelete}
-                    style={styles.addFeatures}
-                    full
-                  >
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        color: "#000",
-                        fontSize: 12,
-                      }}
-                    >
-                      Delete
-                    </Text>
-                  </Button>
-                </View>
-              )}
             </KeyboardAvoidingView>
           </View>
         </Animated.ScrollView>

@@ -108,12 +108,13 @@ export const styles = StyleSheet.create({
     flex: 1,
     borderColor: "#a9a9a9",
     elevation: 0,
+    paddingTop: 10,
+    paddingBottom: 10,
     borderWidth: 1,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
-    backgroundColor: "red",
     backgroundColor: "#f7f7f7",
   },
   nfbtn: {
@@ -121,7 +122,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderColor: "#a9a9a9",
     alignItems: "flex-start",
-    marginTop: 10
+    marginTop: 10,
   },
   btnupr: { position: "absolute", left: 8 },
 });

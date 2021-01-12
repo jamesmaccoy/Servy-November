@@ -227,7 +227,6 @@ const Drawer = ({
                       Linking.openURL("http://servy.co.za/privacy-policy/")
                     }
                   >
-                    {" "}
                     Privacy policy
                   </Text>
                 </View>
