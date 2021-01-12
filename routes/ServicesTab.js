@@ -5,20 +5,32 @@ import Services from "../src/screens/User/Services";
 import ListDetail from "../src/screens/User/ListDetail";
 import Notification from "../src/screens/User/Notification";
 import SearchResult from "../src/screens/User/SearchResult";
-
+import Bookings from "../src/screens/User/Bookings";
+import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
-const ServicesTab = () => {
+const ServicesTab = ({ checkVisible }) => {
   return (
     <Stack.Navigator initialRouteName="Services">
-      <Stack.Screen
-        options={{
-          headerShown: false,
-        }}
-        name="Services"
-        component={Services}
-        initialParams={{ key: 0 }}
-      />
+      {checkVisible ? (
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Services"
+          component={Services}
+          initialParams={{ key: 0 }}
+        />
+      ) : (
+        <Stack.Screen
+          options={{
+            headerShown: false,
+          }}
+          name="Services"
+          component={Bookings}
+          initialParams={{ key: 0 }}
+        />
+      )}
       <Stack.Screen
         options={{
           headerShown: false,
@@ -46,4 +58,9 @@ const ServicesTab = () => {
     </Stack.Navigator>
   );
 };
-export default ServicesTab;
+const mapStateToProps = (state) => {
+  return {
+    checkVisible: state.User.status,
+  };
+};
+export default connect(mapStateToProps)(ServicesTab);

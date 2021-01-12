@@ -112,12 +112,12 @@ const Services = ({ ...props }) => {
           navigation={navigation}
           visible={true}
         />
-        {checkVisible === false && (
-          <MutipleSelect
-            setFilterCategory={setFilterCategory}
-            categories={categories}
-          />
-        )}
+
+        <MutipleSelect
+          setFilterCategory={setFilterCategory}
+          categories={categories}
+        />
+
         {serviceLoader ? (
           <View style={styles.loading}>
             <Loader />
@@ -129,12 +129,116 @@ const Services = ({ ...props }) => {
                 <Text>No Service Available</Text>
               </View>
             ) : (
-              <View
-                style={{ paddingTop: checkVisible ? 0 : 30, marginBottom: 90 }}
-              >
+              <View style={{ paddingTop: 30, marginBottom: 90 }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={{ paddingTop: 50, minHeight: deviceHeight }}>
-                    {checkVisible ? (
+                    {proServices.map((data) => {
+                      if (
+                        attributes.length !== 0 &&
+                        data.attributes.includes(attributes)
+                      ) {
+                        if (filterCategory.includes(data.category)) {
+                          return (
+                            <ProviderItem
+                              setProviderModal={setProviderModal}
+                              pad={0}
+                              key={data.id}
+                              data={data}
+                              navigation={navigation}
+                            />
+                          );
+                        }
+                      }
+                      if (attributes.length === 0) {
+                        if (filterCategory.includes(data.category)) {
+                          console.log("1")
+                          return (
+                            <ProviderItem
+                              setProviderModal={setProviderModal}
+                              pad={0}
+                              key={data.id}
+                              data={data}
+                              navigation={navigation}
+                            />
+                          );
+                        }
+                      }
+                      if (filterCategory.length === 0) {
+                        console.log("2")
+                        return (
+                          <ProviderItem
+                            setProviderModal={setProviderModal}
+                            pad={0}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        );
+                      }
+                    })}
+                  </View>
+                </ScrollView>
+              </View>
+            )}
+          </>
+        )}
+        <ProviderModal
+          navigation={navigation}
+          setProviderModal={setProviderModal}
+          visible={providerModal}
+        />
+      </View>
+    </View>
+  );
+};
+const mapStateToProps = (state) => {
+  return {
+    services: state.Service.services,
+    serviceLoader: state.Service.serviceLoader,
+    categories: state.category.adminCollection,
+    switchLoading: state.User.switchLoader,
+    checkVisible: state.User.status,
+    currentUser: state.Auth.user,
+    providerServices: state.Service.userServices,
+  };
+};
+export default connect(mapStateToProps, {
+  getServices,
+  getServicesByCategory,
+  getAdminCategory,
+  switchLoader,
+  getServicesByProvider,
+})(Services);
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: "#f7f7f7",
+    padding: 15,
+    paddingTop: 35,
+    paddingBottom: 80,
+  },
+
+  noService: {
+    backgroundColor: "#f7f7f7",
+    paddingTop: 80,
+    paddingBottom: 20,
+    height: deviceHeight,
+  },
+  proService: {
+    backgroundColor: "#f7f7f7",
+    height: deviceHeight,
+  },
+  loading: {
+    backgroundColor: "#f7f7f7",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: deviceHeight - 100,
+  },
+});
+
+{
+  /* {checkVisible ? (
                       proServices.map((data) => {
                         if (providerServices.length == 0) {
                           return (
@@ -197,64 +301,5 @@ const Services = ({ ...props }) => {
                           }
                         })}
                       </>
-                    )}
-                  </View>
-                </ScrollView>
-              </View>
-            )}
-          </>
-        )}
-        <ProviderModal
-          navigation={navigation}
-          setProviderModal={setProviderModal}
-          visible={providerModal}
-        />
-      </View>
-    </View>
-  );
-};
-const mapStateToProps = (state) => {
-  return {
-    services: state.Service.services,
-    serviceLoader: state.Service.serviceLoader,
-    categories: state.category.adminCollection,
-    switchLoading: state.User.switchLoader,
-    checkVisible: state.User.status,
-    currentUser: state.Auth.user,
-    providerServices: state.Service.userServices,
-  };
-};
-export default connect(mapStateToProps, {
-  getServices,
-  getServicesByCategory,
-  getAdminCategory,
-  switchLoader,
-  getServicesByProvider,
-})(Services);
-
-const styles = StyleSheet.create({
-  screen: {
-    backgroundColor: "#f7f7f7",
-    padding: 15,
-    paddingTop: 35,
-    paddingBottom: 80,
-  },
-
-  noService: {
-    backgroundColor: "#f7f7f7",
-    paddingTop: 80,
-    paddingBottom: 20,
-    height: deviceHeight,
-  },
-  proService: {
-    backgroundColor: "#f7f7f7",
-    height: deviceHeight,
-  },
-  loading: {
-    backgroundColor: "#f7f7f7",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: deviceHeight - 100,
-  },
-});
+                    )} */
+}
