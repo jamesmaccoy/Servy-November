@@ -4,25 +4,19 @@ import {
   View,
   Animated,
   KeyboardAvoidingView,
-  Alert,
   TouchableOpacity,
 } from "react-native";
 import Input from "../../components/Generic/Input";
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import CheckBoxList from "../../components/User/CheckBoxList";
 import { styles } from "../../styles/User/AddServiceStyle";
-import {
-  AddNewService,
-  deletesService,
-  updateService,
-} from "../../store/actions/Services";
+import { AddNewService, updateService } from "../../store/actions/Services";
 import { getAdminCategory } from "../../store/actions/Category";
 import { connect } from "react-redux";
 import PickImage from "../../components/User/PickImage";
 import ServiceLocation from "../../components/User/ServiceLocation";
 import CategoryPicker from "../../components/User/CategoryPicker";
 import PleaseWait from "../../components/Generic/PleaseWait";
-import { Button } from "react-native-paper";
 
 const AddService = ({ ...props }) => {
   let navigation = props.navigation;
@@ -31,7 +25,6 @@ const AddService = ({ ...props }) => {
   let getAdminCategory = props.getAdminCategory;
   let categories = props.categories;
   let serviceLoading = props.serviceLoading;
-  let deletesService = props.deletesService;
   let updateService = props.updateService;
 
   const [array, setArray] = useState([]);
@@ -69,7 +62,6 @@ const AddService = ({ ...props }) => {
   });
   const [featureVisible, setFeatureVisible] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [deleteIcon, setDeleteIcon] = useState(false);
   const [categoryInital, setCategoryInitial] = useState(false);
   useEffect(() => {
     getAdminCategory();
@@ -84,7 +76,6 @@ const AddService = ({ ...props }) => {
       if (data.serviceName === "Hoola hoop teacher") {
         setSample(true);
       }
-      setDeleteIcon(true);
       setSaveBtn(true);
       setState({
         ...state,
@@ -211,9 +202,6 @@ const AddService = ({ ...props }) => {
           <TouchableOpacity onPress={navigationHandler}>
             <AntDesign name="arrowleft" size={25} color="#000" />
           </TouchableOpacity>
-          {/* {message && (
-            <Text style={{ color: "green" }}>Data Added Sucessfully</Text>
-          )} */}
           {errorMessage && (
             <Text style={{ color: "red" }}>Provide All Information</Text>
           )}
@@ -405,6 +393,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   AddNewService,
   getAdminCategory,
-  deletesService,
   updateService,
 })(AddService);

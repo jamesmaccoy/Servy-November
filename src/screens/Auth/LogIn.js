@@ -9,31 +9,18 @@ import {
   Label,
   Button,
   View,
-  ScrollView,
-  TouchableOpacity,
 } from "native-base";
-import icon from "../../../assets/icon.png";
 import { connect } from "react-redux";
 import { signInWithEmail } from "../../store/actions/Auth";
-import { signInWithGoogle } from "../../store/actions/Auth";
-import googleIcon from "../../../assets/images/google.jpg";
-import facebookIcon from "../../../assets/images/facebook.png";
 import { FontAwesome } from "@expo/vector-icons";
 
-const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
-  const [shouldShow, setShouldShow] = useState(false);
+const Login = ({ signInWithEmail, navigation, loginError }) => {
   const [userEmail, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSignIn = (event) => {
     event && event.preventDefault && event.preventDefault();
-
     signInWithEmail(userEmail, password);
-    setShouldShow(true);
-  };
-  const handleSignInWithGoogle = (event) => {
-    event && event.preventDefault && event.preventDefault();
-    signInWithGoogle();
   };
   const handleNavigation = () => {
     navigation.navigate("signup");
@@ -51,20 +38,20 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
         <Text style={styles.loginsizetxt}>
           Sign in with your {"\n"} email address
         </Text>
-        <View style={styles.ifdontha}>
-          <Text style={styles.cnatxt}>
-            Sorry, we can't find an account with this email address. Please try
-            again or
-            <Text
-              onPress={handleNavigation}
-              style={{ color: "#fff", textDecorationLine: "underline" }}
-            >
-              {" "}
-              create a new account
+        {loginError !== "" && (
+          <View style={styles.ifdontha}>
+            <Text style={styles.cnatxt}>
+              {loginError} Please try again or
+              <Text
+                onPress={handleNavigation}
+                style={{ color: "#fff", textDecorationLine: "underline" }}
+              >
+                {" "}
+                create a new account
+              </Text>
             </Text>
-          </Text>
-        </View>
-
+          </View>
+        )}
         <Form vstyle={styles.form}>
           <Item floatingLabel last style={styles.inputtexts}>
             <Label style={styles.label}>Email Address</Label>
@@ -81,23 +68,6 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
           <Button onPress={handleSignIn} full success style={styles.buttons}>
             <Text style={styles.buttonstxt}>Login</Text>
           </Button>
-
-          {/* <Button
-            onPress={handleSignInWithGoogle}
-            full
-            style={styles.googleBtn}
-          >
-            <Image style={styles.socialIcon} source={googleIcon} />
-            <Text style={styles.socialBtnText}>SignIn with Google</Text>
-          </Button>
-          <Button
-            onPress={handleSignInWithFacebook}
-            full
-            style={styles.facebookBtn}
-          >
-            <Image style={styles.socialIcon} source={facebookIcon} />
-            <Text style={styles.socialBtnText}>SignIn with facebook</Text>
-          </Button> */}
         </Form>
         <View>
           <View
@@ -131,26 +101,22 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
             </Text>
           </View>
         </View>
-
-        {/* <View>
-          <Text style={styles.textinfob}>Not receiving your magic link? </Text>
-          <Text style={styles.signuplink}>Sign Up with password</Text>
-        </View> */}
       </Content>
     </Container>
   );
 };
 
-export default connect("", {
+const mapStateToProps = (state) => {
+  return {
+    loginError: state.Auth.loginError,
+  };
+};
+export default connect(mapStateToProps, {
   signInWithEmail,
-  signInWithGoogle,
   signInWithEmail,
 })(Login);
 
 const styles = StyleSheet.create({
-  wrapper: {
-    // paddingBottom: 300,
-  },
   container: {
     padding: 15,
   },

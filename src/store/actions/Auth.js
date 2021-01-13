@@ -66,11 +66,17 @@ export const signInWithEmail = (email, password) => async (
     .catch((error) => {
       let errorCode = error.code;
       let errorMessage = error.message;
-      if (errorCode == "auth/weak-password") {
-        console.log("weak password");
-      } else {
-        console.log("there is error");
-      }
+      dispatch({
+        type: "LOGIN_ERROR",
+        payload: errorMessage,
+      });
+      // if (
+      //   errorMessage ===
+      //   "There is no user record corresponding to this identifier. The user may have been deleted."
+      // ) {
+
+      //   console.log("No user");
+      // }
     });
 };
 

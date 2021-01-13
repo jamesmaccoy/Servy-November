@@ -1,30 +1,17 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, Text, ImageBackground  } from "react-native";
 import {
-  Container,
-  Content,
-  Form,
-  Item,
-  Input,
-  Label,
-  Button,
-  View,
-} from "native-base";
-import icon from "../../../assets/icon.png";
+  StyleSheet,
+  Image,
+  Text,
+  ImageBackground,
+  ScrollView,
+  Linking,
+} from "react-native";
+import { Button, View } from "native-base";
 import { connect } from "react-redux";
-import { signInWithEmail } from "../../store/actions/Auth";
 import { signInWithGoogle } from "../../store/actions/Auth";
-import googleIcon from "../../../assets/images/google.jpg";
-import facebookIcon from "../../../assets/images/facebook.png";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
-const StartScreen = ({ signInWithEmail, navigation, signInWithGoogle }) => {
-  const [userEmail, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSignIn = (event) => {
-    event && event.preventDefault && event.preventDefault();
-    signInWithEmail(userEmail, password);
-  };
+const StartScreen = ({ navigation, signInWithGoogle }) => {
   const handleSignInWithGoogle = (event) => {
     event && event.preventDefault && event.preventDefault();
     signInWithGoogle();
@@ -34,72 +21,100 @@ const StartScreen = ({ signInWithEmail, navigation, signInWithGoogle }) => {
   };
 
   return (
-
-<ImageBackground source={require('../../../assets/images/StartScreenBg.jpg')} style={{width: '100%', height: '100%'}}>
-     <View style={styles.container}>
-         
-          <View style={styles.centerContentStyle}> 
-          
+    <ScrollView>
+      <ImageBackground
+        source={require("../../../assets/images/StartScreenBg.jpg")}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <View style={styles.container}>
+          <View style={styles.centerContentStyle}>
             <Image
-              source={require( '../../../assets/images/LogoWithText.png')}  resizeMode="contain" 
-              style={styles.logoonscreen} 
+              source={require("../../../assets/images/LogoWithText.png")}
+              resizeMode="contain"
+              style={styles.logoonscreen}
             />
             <Text style={styles.TextStyle}>Home & personal services.</Text>
             <Text style={styles.TextStyle}>instantly available to you.</Text>
 
-          <Button
-            onPress={handleSignInWithGoogle}
-            full
-            style={styles.googleBtn}
-          >
-            <AntDesign name="google" size={35} color={'#fff'} style={styles.socialIcon}/>
-            <Text style={styles.socialBtnText}>Sign in with Google</Text>
-          </Button>
-
             <Button
-            onPress={handleNavigation}
-            full
-            style={styles.emailbtn}
-          >
-           <FontAwesome name="envelope" size={35} color={'#fff'} style={styles.socialIcon}/>
-            <Text style={styles.socialBtnText}>Sign in with Email</Text>
-          </Button>
+              onPress={handleSignInWithGoogle}
+              full
+              style={styles.googleBtn}
+            >
+              <AntDesign
+                name="google"
+                size={35}
+                color={"#fff"}
+                style={styles.socialIcon}
+              />
+              <Text style={styles.socialBtnText}>Sign in with Google</Text>
+            </Button>
 
-           <View style={styles.termsandcondition}>
-                  <Text style={styles.rightstxt}>By creating an account you agree to our</Text>
-                <View style={{display:'flex',flexDirection:'row',justifyContent:'center'}}>
-                  <Text style={styles.rightstxt} onPress={ ()=> Linking.openURL('http://servy.co.za/terms-of-use/') }> Term & Conditions. </Text> 
-                  <Text style={styles.rightstxt}>and</Text> 
-                  <Text style={styles.rightstxt} onPress={ ()=> Linking.openURL('http://servy.co.za/privacy-policy/') }> Privacy policy
-                  </Text>
+            <Button onPress={handleNavigation} full style={styles.emailbtn}>
+              <FontAwesome
+                name="envelope"
+                size={35}
+                color={"#fff"}
+                style={styles.socialIcon}
+              />
+              <Text style={styles.socialBtnText}>Sign in with Email</Text>
+            </Button>
+
+            <View style={styles.termsandcondition}>
+              <Text style={styles.rightstxt}>
+                By creating an account you agree to our
+              </Text>
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                <Text
+                  style={styles.rightstxt}
+                  onPress={() =>
+                    Linking.openURL("http://servy.co.za/terms-of-use/")
+                  }
+                >
+                  Term & Conditions.
+                </Text>
+                <Text style={styles.rightstxt}>and</Text>
+                <Text
+                  style={styles.rightstxt}
+                  onPress={() =>
+                    Linking.openURL("http://servy.co.za/privacy-policy/")
+                  }
+                >
+                  Privacy policy
+                </Text>
               </View>
-          </View>
+            </View>
           </View>
         </View>
-</ImageBackground>
-
+      </ImageBackground>
+    </ScrollView>
   );
 };
 
 export default connect("", {
-  signInWithEmail,
   signInWithGoogle,
-  signInWithEmail,
 })(StartScreen);
 
 const styles = StyleSheet.create({
-
-
-
   container: {
     flex: 1,
   },
 
-  logoonscreen:{flexDirection:'row',alignSelf:'center',marginTop:0,marginBottom:0, height:150, marginBottom:15
-   
-},
+  logoonscreen: {
+    flexDirection: "row",
+    alignSelf: "center",
+    marginTop: 0,
+    marginBottom: 0,
+    height: 150,
+    marginBottom: 15,
+  },
 
-  TextStyle:{color:'#efefef',fontSize:20,textAlign:'center'},
+  TextStyle: { color: "#efefef", fontSize: 20, textAlign: "center" },
   imtxc: {
     display: "flex",
     alignItems: "center",
@@ -107,13 +122,13 @@ const styles = StyleSheet.create({
     width: 90,
     height: 90,
   },
-  rightstxt:{textAlign:'center',color:'#ccc',   fontSize: 16,},
+  rightstxt: { textAlign: "center", color: "#ccc", fontSize: 16 },
   loginsizetxt: {
     fontSize: 18,
     textAlign: "center",
   },
-  centerContentStyle:{padding:12,marginTop:170,},
-  termsandcondition:{marginTop:60},
+  centerContentStyle: { padding: 12, marginTop: 200 },
+  termsandcondition: { marginTop: 70 },
   usernamedetail: {
     display: "flex",
     justifyContent: "space-between",
@@ -144,21 +159,22 @@ const styles = StyleSheet.create({
   googleBtn: {
     backgroundColor: "#5dae7e",
     marginTop: 40,
-    position:'relative',
+    position: "relative",
     paddingLeft: 20,
-    borderRadius:5,
-      height:70
+    borderRadius: 5,
+    height: 70,
   },
 
-  emailbtn:{backgroundColor:'transparent', marginTop: 20,
-    position:'relative',
+  emailbtn: {
+    backgroundColor: "transparent",
+    marginTop: 20,
+    position: "relative",
     paddingLeft: 20,
-    borderRadius:5,
-      height:70,
-      borderWidth:2,
-      borderColor:'#fff'
-
-},
+    borderRadius: 5,
+    height: 70,
+    borderWidth: 2,
+    borderColor: "#fff",
+  },
 
   facebookBtn: {
     backgroundColor: "#3a5592",
@@ -171,8 +187,9 @@ const styles = StyleSheet.create({
   textinfob: { color: "#666", marginTop: 50, textAlign: "center" },
   signuplink: { textAlign: "center", color: "#60ad7f" },
   buttonstxt: { color: "#fff" },
-  socialBtnText: { color: "#fff", textAlign:'center', fontSize:18},
+  socialBtnText: { color: "#fff", textAlign: "center", fontSize: 18 },
   socialIcon: {
-     position:'absolute',left:20
+    position: "absolute",
+    left: 20,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Image, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import {
   Container,
   Content,
@@ -10,9 +10,8 @@ import {
   Button,
   View,
 } from "native-base";
-import icon from "../../../assets/images/icon.png";
-import { connect } from "react-redux";
 import { onSignUp } from "../../store/actions/Auth";
+import { connect } from "react-redux";
 const SignUp = (props) => {
   let onSignUp = props.onSignUp;
   let signUpState = props.signUpState;
@@ -63,7 +62,6 @@ const SignUp = (props) => {
       setUserInfo({ ...userInfo, Email: text });
     }
   };
-
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>
@@ -183,7 +181,7 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 5,
   },
-  buttons: { color: "#fff", marginTop: 20 },
+  buttons: { backgroundColor: "#5dae7e", color: "#fff", marginTop: 20 },
   inputtexts: { paddingBottom: 5 },
   textinfob: { color: "#666", marginTop: 50, textAlign: "center" },
   signuplink: { textAlign: "center", color: "#60ad7f" },

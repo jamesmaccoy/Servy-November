@@ -1,13 +1,12 @@
 import React from "react";
-import {  StyleSheet, View } from "react-native";
-import {ActivityIndicator} from 'react-native-paper'
+import { StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
 const Loader = () => (
   <View style={[styles.container, styles.horizontal]}>
     <ActivityIndicator style={{ fontSize: 25 }} size={50} color="#5dae7e" />
   </View>
 );
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

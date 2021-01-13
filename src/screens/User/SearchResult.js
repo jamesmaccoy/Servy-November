@@ -11,6 +11,7 @@ import {
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
 import { getAdminCategory } from "../../store/actions/Category";
+import MutipleSelect from "../../components/User/Multiple";
 let deviceHeight = Dimensions.get("window").height;
 
 const Services = ({ ...props }) => {
@@ -19,43 +20,45 @@ const Services = ({ ...props }) => {
   let getServicesByCategory = props.getServicesByCategory;
   let getAdminCategory = props.getAdminCategory;
   let services = props.services;
+  let categories = props.categories;
 
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
+  const [filterCategory, setFilterCategory] = useState([]);
+  const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
+    getAdminCategory();
+  }, []);
+  useEffect(() => {
+    setLoading(props.serviceLoader);
+  }, [props.serviceLoader]);
+  useEffect(() => {
     if (filterCategory.length === 0) {
-      console.log("Serrrrr", services.length);
       setNewServices(services);
     }
   }, [services, filterCategory]);
+
   useEffect(() => {
     if (props.route.params.id === 2) {
       if (props.route.params.state !== "") {
-        console.log("ifff");
         getServicesByCategory(
           props.route.params.state,
           props.route.params.attributes
         );
       } else {
-        console.log("elseeee");
         getServices();
       }
     }
     if (props.route.params.id === 3) {
-      console.log("idddd")
       getServices();
     }
   }, [props.route]);
-  useEffect(() => {
-    setLoading(props.serviceLoader);
-  }, [props.serviceLoader]);
+
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
-
-  const [filterCategory, setFilterCategory] = useState([]);
 
   useEffect(() => {
     if (filterCategory.length === 0) {
@@ -71,6 +74,10 @@ const Services = ({ ...props }) => {
         navigation={navigation}
         visible={true}
         handleFilter={handleFilter}
+      />
+      <MutipleSelect
+        setFilterCategory={setFilterCategory}
+        categories={categories}
       />
 
       {loading ? (
@@ -105,15 +112,44 @@ const Services = ({ ...props }) => {
                   <Text style={{ color: "#9c9c9c" }}>Search Results</Text>
                 </View>
                 <View style={{ minHeight: deviceHeight }}>
-                  {services.map((data) => {
-                    return (
-                      <ListingItem
-                        pad={0}
-                        key={data.id}
-                        data={data}
-                        navigation={navigation}
-                      />
-                    );
+                  {newServices.map((data) => {
+                    if (
+                      attributes.length !== 0 &&
+                      data.attributes.includes(attributes)
+                    ) {
+                      if (filterCategory.includes(data.category)) {
+                        return (
+                          <ListingItem
+                            pad={0}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        );
+                      }
+                    }
+                    if (attributes.length === 0) {
+                      if (filterCategory.includes(data.category)) {
+                        return (
+                          <ListingItem
+                            pad={0}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        );
+                      }
+                    }
+                    if (filterCategory.length === 0) {
+                      return (
+                        <ListingItem
+                          pad={0}
+                          key={data.id}
+                          data={data}
+                          navigation={navigation}
+                        />
+                      );
+                    }
                   })}
                 </View>
               </ScrollView>

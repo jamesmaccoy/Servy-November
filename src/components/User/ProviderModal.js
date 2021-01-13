@@ -66,7 +66,7 @@ const ProviderModal = ({
         <TouchableOpacity
           onPress={handleSelect}
           style={{
-            flex: 4,
+            flex: 6,
             width: deviceWidth,
             backgroundColor: "rgba(0,0,0,.5)",
           }}
