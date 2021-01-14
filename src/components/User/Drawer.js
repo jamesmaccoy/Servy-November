@@ -23,15 +23,7 @@ import {
   switchLoader,
 } from "../../store/actions/User";
 import imagebg from "../../../assets/images/hamburger_BG.jpg";
-import firebase from "../../config/config.js";
-const signOutUser = async () => {
-  try {
-    await firebase.auth().signOut();
-    navigate("Auth");
-  } catch (e) {
-    console.log(e);
-  }
-};
+import { Logout } from "../../store/actions/Auth";
 
 const Drawer = ({
   navigation,
@@ -41,7 +33,11 @@ const Drawer = ({
   userStatus,
   checkVisible,
   switchLoader,
+  Logout,
 }) => {
+  const signOutUser = () => {
+    Logout();
+  };
   const [state, setState] = useState({
     update: false,
     photo: "",
@@ -81,6 +77,7 @@ const Drawer = ({
   useEffect(() => {
     userStatus(state.switchValue);
   }, [state.switchValue]);
+
   return (
     <>
       <View style={styles.centeredView}>
@@ -248,4 +245,5 @@ export default connect(mapStateToProps, {
   profileInformation,
   userStatus,
   switchLoader,
+  Logout,
 })(Drawer);

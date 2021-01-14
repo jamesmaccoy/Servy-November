@@ -66,14 +66,14 @@ const UserHome = ({ getCurrentLocation }) => {
             initialParams={{ key: 10 }}
             component={GuestTabs}
           />
-          <Stack.Screen
+          {/* <Stack.Screen
             options={{
               headerShown: false,
             }}
             initialParams={{ key: 20 }}
             name="Provider"
             component={ProviderTab}
-          />
+          /> */}
           <Stack.Screen
             options={{
               headerShown: false,

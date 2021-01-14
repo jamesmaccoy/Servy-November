@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import AddService from "../src/screens/User/AddService";
 import { createStackNavigator } from "@react-navigation/stack";
-import Bookings from "../src/screens/User/Bookings";
+import Services from "../src/screens/User/Services";
 import ListDetail from "../src/screens/User/ListDetail";
 import Notification from "../src/screens/User/Notification";
 import SearchResult from "../src/screens/User/SearchResult";
-import Services from "../src/screens/User/Services";
+import Bookings from "../src/screens/User/Bookings";
 import { connect } from "react-redux";
 const Stack = createStackNavigator();
 
-const ServicesTab = ({ checkVisible }) => {
+const ProviderServices = ({ checkVisible }) => {
   return (
     <Stack.Navigator initialRouteName="Services">
-      {checkVisible ? (
+      <Stack.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="Services"
+        component={Services}
+        initialParams={{ key: 0 }}
+      />
+      {/* {checkVisible ? (
         <Stack.Screen
           options={{
             headerShown: false,
@@ -30,7 +38,7 @@ const ServicesTab = ({ checkVisible }) => {
           component={Bookings}
           initialParams={{ key: 0 }}
         />
-      )}
+      )} */}
       <Stack.Screen
         options={{
           headerShown: false,
@@ -63,4 +71,4 @@ const mapStateToProps = (state) => {
     checkVisible: state.User.status,
   };
 };
-export default connect(mapStateToProps)(ServicesTab);
+export default connect(mapStateToProps)(ProviderServices);

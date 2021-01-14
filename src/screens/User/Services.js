@@ -23,7 +23,9 @@ const Services = (props) => {
   const [providerModal, setProviderModal] = useState(false);
 
   useEffect(() => {
-    getServicesByProvider();
+    if (providerServices.length === 0) {
+      getServicesByProvider();
+    }
   }, []);
 
   return (
@@ -64,7 +66,7 @@ const Services = (props) => {
                 </Text>
               </View>
             ) : (
-              <View style={{ paddingTop: 30 ,paddingBottom: 80 }}>
+              <View style={{ paddingTop: 30, paddingBottom: 80 }}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                   <View style={{ minHeight: deviceHeight }}>
                     {providerServices.map((data) => {
@@ -114,8 +116,9 @@ const styles = StyleSheet.create({
   screen: {
     backgroundColor: "#f7f7f7",
     padding: 15,
-    paddingTop: 35,
+    paddingTop: 20,
     paddingBottom: 80,
+
   },
 
   noService: {
@@ -136,4 +139,3 @@ const styles = StyleSheet.create({
     minHeight: deviceHeight - 100,
   },
 });
-

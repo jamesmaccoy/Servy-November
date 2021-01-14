@@ -47,7 +47,7 @@ const Home = ({ ...props }) => {
   }, [checkVisible]);
 
   useEffect(() => {
-    if (checkVisible === true) {
+    if (checkVisible === true && props.providerServices.length === 0) {
       getServicesByProvider();
     }
   }, [checkVisible]);

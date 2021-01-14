@@ -219,16 +219,24 @@ const AddService = ({ ...props }) => {
         <Animated.ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.create}>
             <KeyboardAvoidingView keyboardVerticalOffset={20}>
-              <Text style={styles.heading}>Profile details</Text>
+              <Text style={styles.heading}>Create a service</Text>
               <Input
                 name="service"
                 head="Give your service a name"
-                placeHolder="e.g Pine Technologies"
+                placeHolder="e.g Hoola Hoop teacher"
                 initialValue={state.serviceName}
                 onChangeText={(serviceName) =>
                   setState({ ...state, serviceName: serviceName })
                 }
               />
+              <Text
+                style={{
+                  color: "#a9a9a9",
+                  paddingTop: 10,
+                }}
+              >
+                Category
+              </Text>
               <CategoryPicker
                 selectedValue={selectedValue}
                 initState={initState}
@@ -256,9 +264,7 @@ const AddService = ({ ...props }) => {
                   }
                 />
               )}
-              <Text style={{ paddingTop: 15, fontSize: 15, color: "#a9a9a9" }}>
-                Assign Features for this category
-              </Text>
+              <Text style={styles.heading}>Features</Text>
               <View style={styles.checkboxList}>
                 {selectedValue.features &&
                   selectedValue.features.map((subValue, index) => {
@@ -354,7 +360,7 @@ const AddService = ({ ...props }) => {
               <Input
                 name="location"
                 initialValue={state.location}
-                head="Friendly Location (suburb)"
+                head="Suburb"
                 placeHolder="eg. Rondebosch"
                 onChangeText={(location) => setState({ ...state, location })}
               />

@@ -10,13 +10,22 @@ import { profileInformation } from "../src/store/actions/User";
 const Stack = createStackNavigator();
 
 const Authority = ({ type, Authorization, authCheck, profileInformation }) => {
+  const [userType, setUserType] = useState("");
   useEffect(() => {
     Authorization();
   }, []);
 
   useEffect(() => {
+    console.log("auysss", authCheck);
+  }, [authCheck]);
+
+  useEffect(() => {
     profileInformation();
   }, [authCheck]);
+
+  useEffect(() => {
+    setUserType(type);
+  }, [type]);
 
   return (
     <>
@@ -24,7 +33,7 @@ const Authority = ({ type, Authorization, authCheck, profileInformation }) => {
         <Loader />
       ) : (
         <>
-          {type == "admin" ? (
+          {userType !== "" && userType == "admin" ? (
             <Stack.Navigator initialRouteName="admin">
               <Stack.Screen
                 options={{

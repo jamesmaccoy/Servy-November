@@ -64,19 +64,11 @@ export const signInWithEmail = (email, password) => async (
     .signInWithEmailAndPassword(email, password)
     .then((res) => {})
     .catch((error) => {
-      let errorCode = error.code;
       let errorMessage = error.message;
       dispatch({
         type: "LOGIN_ERROR",
         payload: errorMessage,
       });
-      // if (
-      //   errorMessage ===
-      //   "There is no user record corresponding to this identifier. The user may have been deleted."
-      // ) {
-
-      //   console.log("No user");
-      // }
     });
 };
 
@@ -201,7 +193,11 @@ export const signInWithGoogle = () => async (
                 }
               })
               .catch(function (error) {
-                // console.log(error, "errrrr");
+                console.log(error, "errrrr");
+                dispatch({
+                  type: "LOADING",
+                  payload: false,
+                });
                 // var errorCode = error.code;
                 // var errorMessage = error.message;
                 // var email = error.email;
@@ -223,6 +219,10 @@ export const signInWithGoogle = () => async (
       onSignIn(result);
       return result.accessToken;
     } else {
+      dispatch({
+        type: "LOADING",
+        payload: false,
+      });
       return { cancelled: true };
     }
   } catch ({ message }) {
@@ -258,5 +258,11 @@ export const Authorization = () => async (
           payload: false,
         });
       }
+    })
+    .catch(() => {
+      dispatch({
+        type: "AUTH_CHECK",
+        payload: false,
+      });
     });
 };

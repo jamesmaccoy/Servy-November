@@ -28,6 +28,7 @@ export const styles = StyleSheet.create({
   heading: {
     paddingTop: 20,
     fontSize: 20,
+    color: "#000",
   },
 
   name: {
@@ -50,7 +51,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   picker: {
-    marginTop: 20,
+    marginTop: 5,
     height: 50,
     paddingLeft: 10,
     flex: 1,

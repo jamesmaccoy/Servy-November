@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { View } from "react-native";
 import { styles } from "../../styles/User/AddServiceStyle";
 import { Picker } from "@react-native-community/picker";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CategoryPicker = ({
   selectedValue,
@@ -16,7 +15,6 @@ const CategoryPicker = ({
   setStateChange,
   categoryInital,
   setCategoryInitial,
-  initState,
 }) => {
   return (
     <View style={styles.picker}>
@@ -41,8 +39,10 @@ const CategoryPicker = ({
             if (itemValue === "other") {
               setSelectedValue({
                 ...selectedValue,
+                other: true,
                 value: "other",
-                features: [],
+                label: "other",
+                features: [...checkboxPicker],
               });
               setSelect(true);
               setVisible(true);
@@ -87,3 +87,44 @@ const CategoryPicker = ({
   );
 };
 export default CategoryPicker;
+
+const checkboxPicker = [
+  {
+    label: "I come to you",
+    id: "ICometoyou",
+    state: true,
+    attributeState: false,
+  },
+  {
+    label: "You come to me",
+    id: "Youcometome",
+    state: true,
+    attributeState: false,
+  },
+  {
+    label: "Imediate Immediately",
+    id: "ImediateImmediately",
+    state: true,
+    attributeState: false,
+  },
+  {
+    label: "Video Streaming",
+    id: "VideoStreaming",
+    state: true,
+    attributeState: false,
+  },
+
+  {
+    label: "Remote Working",
+    id: "RemoteWorking",
+    state: true,
+    attributeState: false,
+  },
+
+  {
+    label: "Delivery Included",
+    id: "DeliveryIncluded",
+    state: true,
+    attributeState: false,
+  },
+];
