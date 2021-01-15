@@ -18,6 +18,7 @@ export const AddNewService = (
     type: "SERVICE_LOADING",
     payload: true,
   });
+
   const res = await images.forEach(async (serviceImage, index) => {
     const ImageResponse = await fetch(serviceImage);
     const blob = await ImageResponse.blob();
@@ -60,7 +61,8 @@ export const AddNewService = (
                       createdAt: new Date(),
                     })
                     .then(async () => {
-                      if (selectedValue === "other") {
+                      if (selectedValue.value === "other") {
+                        console.log("in new  ");
                         await db.collection("categories").add({
                           label: category,
                           value: category.replace(/\s/g, ""),
@@ -445,7 +447,8 @@ export const updateService = (
                 payload: services,
               });
             });
-          if (selectedValue === "other") {
+          if (selectedValue.value === "other") {
+            console.log("in categoryyyyyy");
             await db.collection("categories").add({
               label: category,
               value: category.replace(/\s/g, ""),
