@@ -13,6 +13,7 @@ export const AddNewService = (
   let category = service.category;
   let location = service.location;
   let imageArray = [];
+  let services = [];
 
   dispatch({
     type: "SERVICE_LOADING",
@@ -61,6 +62,18 @@ export const AddNewService = (
                       createdAt: new Date(),
                     })
                     .then(async () => {
+                      db.collection("services")
+                        .where("userId", "==", user.uid)
+                        .get()
+                        .then((response) => {
+                          response.docs.forEach((item, index) => {
+                            services.push({ ...item.data(), id: item.id });
+                          });
+                          dispatch({
+                            type: "USER_SERVICES",
+                            payload: services,
+                          });
+                        });
                       if (selectedValue.value === "other") {
                         console.log("in new  ");
                         await db.collection("categories").add({
@@ -448,7 +461,6 @@ export const updateService = (
               });
             });
           if (selectedValue.value === "other") {
-            console.log("in categoryyyyyy");
             await db.collection("categories").add({
               label: category,
               value: category.replace(/\s/g, ""),
@@ -508,6 +520,7 @@ export const updateService = (
             })
             .then(() => {
               if (selectedValue === "other") {
+                console.log("hewewrewer");
                 db.collection("categories").add({
                   label: category,
                   value: category.replace(/\s/g, ""),
