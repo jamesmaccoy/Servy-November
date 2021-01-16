@@ -40,7 +40,6 @@ const Header = ({ ...props }) => {
   }, [profileInfo]);
 
   useEffect(() => {
-    console.log(checkVisible);
     setCheck(checkVisible);
   }, [checkVisible]);
 

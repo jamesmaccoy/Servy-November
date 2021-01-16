@@ -97,13 +97,6 @@ const ListDetail = ({ ...props }) => {
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
-  const handleEdit = () => {
-    navigation.navigate("AddService", {
-      data: data,
-      key: data.id,
-      navFrom: 2,
-    });
-  };
 
   const renderItem = ({ item }) => {
     return (
@@ -149,13 +142,6 @@ const ListDetail = ({ ...props }) => {
                     style={styles.close}
                     name="filter-variant"
                     onPress={handleFilter}
-                  />
-                )}
-                {user === "Provider" && (
-                  <AntDesign
-                    style={styles.close}
-                    onPress={handleEdit}
-                    name="edit"
                   />
                 )}
                 <Entypo name="share" size={30} color={"#fff"} />

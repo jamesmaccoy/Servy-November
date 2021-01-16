@@ -12,6 +12,7 @@ const initialState = {
   deleteService: false,
   userServices: [],
   optionSelect: "",
+  filterServices: [],
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -80,6 +81,11 @@ export default function ServiceReducer(state = initialState, action) {
       return {
         ...state,
         optionSelect: action.payload,
+      };
+    case "FILTER_SERVICES":
+      return {
+        ...state,
+        filterServices: action.payload,
       };
 
     default:

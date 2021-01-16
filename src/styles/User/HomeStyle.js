@@ -120,14 +120,27 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    color: "#a9a9a9",
   },
   milesdatain: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     marginTop: -4,
-    justifyContent: "flex-end",
+
   },
-  milesdatatxt: { fontSize: 16 },
-  milesdatatxtmi: { fontSize: 16, marginTop: 10, marginLeft: 5 },
+  milesdatatxt: { fontSize: 16, color: "#a9a9a9", alignItems: "center" },
+  milesdatatxtmi: {
+    fontSize: 16,
+    marginTop: 10,
+    marginLeft: 5,
+    color: "#a9a9a9",
+  },
+  milesStyle: {
+    fontSize: 14,
+    display: "flex",
+    alignItems: "center",
+    color: "#a9a9a9",
+    marginTop: 7
+  },
 });

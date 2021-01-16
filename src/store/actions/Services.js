@@ -318,7 +318,7 @@ export const getServicesByCategory = (data, attributes) => async (
     })
     .then(() => {
       dispatch({
-        type: "SERVICES",
+        type: "FILTER_SERVICES",
         payload: newService,
       });
       dispatch({
@@ -327,7 +327,10 @@ export const getServicesByCategory = (data, attributes) => async (
       });
     })
     .catch(() => {
-      console.log("errrrrrrrrrrrrrr");
+      dispatch({
+        type: "SERVICE_LOADER",
+        payload: false,
+      });
     });
 };
 

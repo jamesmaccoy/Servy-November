@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Modal,
@@ -6,8 +6,9 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  StyleSheet,
 } from "react-native";
-import { Entypo, MaterialIcons } from "react-native-vector-icons";
+import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
 import { connect } from "react-redux";
 import { deletesService } from "../../store/actions/Services";
 let deviceWidth = Dimensions.get("window").width;
@@ -29,6 +30,14 @@ const ProviderModal = ({
       data: optionSelect,
       key: optionSelect.id,
       user: "Provider",
+    });
+  };
+  const handleEdit = () => {
+    setProviderModal(false);
+    navigation.navigate("AddService", {
+      data: optionSelect,
+      key: optionSelect.id,
+      navFrom: 2,
     });
   };
   const handleDelete = () => {
@@ -55,39 +64,15 @@ const ProviderModal = ({
   };
   return (
     <Modal visible={visible} transparent={true}>
-      <View
-        style={{
-          height: deviceHeight,
-          width: deviceWidth,
-          flexDirection: "column",
-          justifyContent: "flex-end",
-        }}
-      >
+      <View style={styles.modelStyle}>
         <TouchableOpacity
           onPress={handleSelect}
-          style={{
-            flex: 6,
-            width: deviceWidth,
-            backgroundColor: "rgba(0,0,0,.5)",
-          }}
+          style={styles.wrapper}
         ></TouchableOpacity>
-        <View
-          style={{
-            flex: 2,
-            width: deviceWidth,
-            backgroundColor: "#fff",
-            padding: 20,
-          }}
-        >
+        <View style={styles.innerWrapper}>
           <Text style={{ fontSize: 18 }}>More</Text>
-          <View style={{ paddingTop: 30 }}>
-            <TouchableOpacity
-              onPress={handlePreview}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+          <View>
+            <TouchableOpacity onPress={handlePreview} style={styles.actions}>
               <Entypo
                 size={30}
                 style={{ color: "#000" }}
@@ -95,15 +80,12 @@ const ProviderModal = ({
               />
               <Text style={{ paddingLeft: 30, fontSize: 18 }}>Preview</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleEdit} style={styles.actions}>
+              <AntDesign size={30} style={{ color: "#000" }} name="edit" />
+              <Text style={{ paddingLeft: 30, fontSize: 18 }}>Edit</Text>
+            </TouchableOpacity>
             {optionSelect.serviceName !== "Hoola hoop teacher" && (
-              <TouchableOpacity
-                onPress={handleDelete}
-                style={{
-                  flexDirection: "row",
-                  marginTop: 20,
-                  alignItems: "center",
-                }}
-              >
+              <TouchableOpacity onPress={handleDelete} style={styles.actions}>
                 <MaterialIcons
                   size={30}
                   style={{ color: "#000" }}
@@ -124,3 +106,28 @@ const mapStateToProps = (state) => {
   };
 };
 export default connect(mapStateToProps, { deletesService })(ProviderModal);
+
+export const styles = StyleSheet.create({
+  modelStyle: {
+    height: deviceHeight,
+    width: deviceWidth,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+  },
+  wrapper: {
+    flex: 7,
+    width: deviceWidth,
+    backgroundColor: "rgba(0,0,0,.5)",
+  },
+  innerWrapper: {
+    flex: 4,
+    width: deviceWidth,
+    backgroundColor: "#fff",
+    padding: 20,
+  },
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 20,
+  },
+});

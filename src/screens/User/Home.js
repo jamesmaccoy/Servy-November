@@ -39,6 +39,7 @@ const Home = ({ ...props }) => {
   const [isLoading, setLoading] = useState(true);
   const [providerModal, setProviderModal] = useState(false);
   const [data, setData] = useState([]);
+  const [activeServices, setActiveServices] = useState([]);
   useEffect(() => {
     getServices();
   }, []);
@@ -57,23 +58,29 @@ const Home = ({ ...props }) => {
 
   useEffect(() => {
     setProServices(props.providerServices);
+
+    setActiveServices(
+      props.providerServices.filter((data) => {
+        return data.approve === true;
+      })
+    );
   }, [props.providerServices]);
 
-  useEffect(() => {
-    if (props.route.params.id === 2) {
-      if (props.route.params.state !== "") {
-        getServicesByCategory(
-          props.route.params.state,
-          props.route.params.attributes
-        );
-      } else {
-        getServices();
-      }
-    }
-    if (props.route.params.id === 3) {
-      getServices();
-    }
-  }, [props.route]);
+  // useEffect(() => {
+  //   if (props.route.params.id === 2) {
+  //     if (props.route.params.state !== "") {
+  //       getServicesByCategory(
+  //         props.route.params.state,
+  //         props.route.params.attributes
+  //       );
+  //     } else {
+  //       getServices();
+  //     }
+  //   }
+  //   if (props.route.params.id === 3) {
+  //     getServices();
+  //   }
+  // }, [props.route]);
   useEffect(() => {
     (async () => {
       await fetch("https://webrabbit.in/survey/banner-content.php")
@@ -125,7 +132,7 @@ const Home = ({ ...props }) => {
             ))}
           </ScrollView>
           <View style={styles.categorieslisting}>
-            {checkVisible === false && (
+            {checkVisible === false ? (
               <View style={styles.milesdata}>
                 <Text style={styles.milesdatatxt}>
                   Suggested Servey pro's in your area
@@ -136,9 +143,15 @@ const Home = ({ ...props }) => {
                       style={{ fontSize: 22, paddingTop: 10 }}
                       name="filter-variant"
                     />
-                    <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
+                    <Text style={styles.milesStyle}> 2 Mile</Text>
                   </View>
                 </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.milesdata}>
+                <Text style={styles.milesdatatxt}>
+                  Services({activeServices.length} Active Services)
+                </Text>
               </View>
             )}
             <ScrollView
@@ -154,7 +167,9 @@ const Home = ({ ...props }) => {
                 ) : checkVisible === false ? (
                   newServices.length === 0 ? (
                     <View style={{ paddingLeft: 15 }}>
-                      <Text>No Service Available</Text>
+                      <Text style={{ color: "#9c9c9c" }}>
+                        No Service Available
+                      </Text>
                     </View>
                   ) : (
                     newServices.map((data) => {
@@ -170,7 +185,7 @@ const Home = ({ ...props }) => {
                   )
                 ) : (
                   <>
-                    {proServices.map((data) => {
+                    {proServices.map((data, index) => {
                       return (
                         <ProviderItem
                           setProviderModal={setProviderModal}

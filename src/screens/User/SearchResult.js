@@ -21,24 +21,31 @@ const Services = ({ ...props }) => {
   let getAdminCategory = props.getAdminCategory;
   let services = props.services;
   let categories = props.categories;
+  let filterServices = props.filterServices;
 
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [filterCategory, setFilterCategory] = useState([]);
-  const [attributes, setAttributes] = useState([]);
 
   useEffect(() => {
-    getAdminCategory();
+    if (categories.length !== 0) {
+      getAdminCategory();
+    }
   }, []);
   useEffect(() => {
     setLoading(props.serviceLoader);
   }, [props.serviceLoader]);
   useEffect(() => {
     if (filterCategory.length === 0) {
-      setNewServices(services);
+      if (props.route.params.id === 2) {
+        setNewServices(filterServices);
+      }
+      if (props.route.params.id === 3) {
+        setNewServices(services);
+      }
     }
-  }, [services, filterCategory]);
+  }, [services, filterCategory, filterServices]);
 
   useEffect(() => {
     if (props.route.params.id === 2) {
@@ -65,6 +72,7 @@ const Services = ({ ...props }) => {
       setNewServices(props.services);
     }
   }, [filterCategory]);
+
   return (
     <View style={styles.screen}>
       <Header
@@ -81,15 +89,7 @@ const Services = ({ ...props }) => {
       />
 
       {loading ? (
-        <View
-          style={{
-            backgroundColor: "#f7f7f7",
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: deviceHeight - 100,
-          }}
-        >
+        <View style={styles.loaderStyle}>
           <Loader />
         </View>
       ) : (
@@ -98,8 +98,10 @@ const Services = ({ ...props }) => {
             <View
               style={{
                 backgroundColor: "#f7f7f7",
-                paddingTop: 10,
+                paddingTop: 100,
                 paddingBottom: 20,
+                flexDirection: "row",
+                justifyContent: "center",
                 height: deviceHeight,
               }}
             >
@@ -113,32 +115,15 @@ const Services = ({ ...props }) => {
                 </View>
                 <View style={{ minHeight: deviceHeight }}>
                   {newServices.map((data) => {
-                    if (
-                      attributes.length !== 0 &&
-                      data.attributes.includes(attributes)
-                    ) {
-                      if (filterCategory.includes(data.category)) {
-                        return (
-                          <ListingItem
-                            pad={0}
-                            key={data.id}
-                            data={data}
-                            navigation={navigation}
-                          />
-                        );
-                      }
-                    }
-                    if (attributes.length === 0) {
-                      if (filterCategory.includes(data.category)) {
-                        return (
-                          <ListingItem
-                            pad={0}
-                            key={data.id}
-                            data={data}
-                            navigation={navigation}
-                          />
-                        );
-                      }
+                    if (filterCategory.includes(data.category)) {
+                      return (
+                        <ListingItem
+                          pad={0}
+                          key={data.id}
+                          data={data}
+                          navigation={navigation}
+                        />
+                      );
                     }
                     if (filterCategory.length === 0) {
                       return (
@@ -169,6 +154,7 @@ const Services = ({ ...props }) => {
 const mapStateToProps = (state) => {
   return {
     services: state.Service.services,
+    filterServices: state.Service.filterServices,
     serviceLoader: state.Service.serviceLoader,
     categories: state.category.adminCollection,
   };
@@ -188,5 +174,12 @@ const styles = StyleSheet.create({
   list: {
     marginBottom: 90,
     paddingTop: 20,
+  },
+  loaderStyle: {
+    backgroundColor: "#f7f7f7",
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: deviceHeight - 100,
   },
 });
