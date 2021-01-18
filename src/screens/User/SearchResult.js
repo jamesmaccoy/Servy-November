@@ -55,11 +55,15 @@ const Services = ({ ...props }) => {
           props.route.params.attributes
         );
       } else {
-        getServices();
+        if (services.length === 0) {
+          getServices();
+        }
       }
     }
     if (props.route.params.id === 3) {
-      getServices();
+      if (services.length === 0) {
+        getServices();
+      }
     }
   }, [props.route]);
 

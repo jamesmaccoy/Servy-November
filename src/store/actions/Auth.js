@@ -86,12 +86,12 @@ export const verifyUser = () => async (
   await firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       dispatch({
-        type: "SIGNIN_SUCCESS",
-        payload: true,
-      });
-      dispatch({
         type: "CURRENT_USER",
         payload: user.uid,
+      });
+      dispatch({
+        type: "SIGNIN_SUCCESS",
+        payload: true,
       });
       dispatch({
         type: "LOADING",
@@ -170,7 +170,6 @@ export const signInWithGoogle = () => async (
               googleUser.idToken,
               googleUser.accessToken
             );
-
             firebase
               .auth()
               .signInWithCredential(credential)
@@ -193,7 +192,6 @@ export const signInWithGoogle = () => async (
                 }
               })
               .catch(function (error) {
-                console.log(error, "errrrr");
                 dispatch({
                   type: "LOADING",
                   payload: false,
@@ -211,6 +209,8 @@ export const signInWithGoogle = () => async (
     const result = await Google.logInAsync({
       androidClientId:
         "256539792953-u00leiuuf4odj68p6ephgfneq2r1p7uo.apps.googleusercontent.com",
+      androidStandaloneAppClientId:
+        "256539792953-u00leiuuf4odj68p6ephgfneq2r1p7uo.apps.googleusercontent.com",
       status: true,
       xfbml: true,
       scopes: ["profile", "email"],
@@ -226,7 +226,11 @@ export const signInWithGoogle = () => async (
       return { cancelled: true };
     }
   } catch ({ message }) {
-    alert("login: Error:" + message);
+    dispatch({
+      type: "LOADING",
+      payload: false,
+    });
+    alert("login: Error:" + message + "Please Retry");
   }
 };
 
