@@ -16,10 +16,6 @@ export const onSignUp = (user) => async (
     .createUserWithEmailAndPassword(email, password)
     .then((res) => {
       if (res.additionalUserInfo.isNewUser) {
-        dispatch({
-          type: "SIGNIN_SUCCESS",
-          payload: false,
-        });
         db.collection("users").doc(res.user.uid).set({
           Name: name,
           Email: email,
@@ -34,21 +30,25 @@ export const onSignUp = (user) => async (
           websiteUrl: "",
           facebookUrl: "",
           instagramUrl: "",
-
           cretedAt: Date.now(),
         });
       }
+    })
+    .then(() => {
+      dispatch({
+        type: "SIGNIN_SUCCESS",
+        payload: true,
+      });
     })
     .catch((error) => {
       dispatch({
         type: "SIGNUP_SUCCESS",
         payload: false,
       });
-      let errorCode = error.code;
-      let errorMessage = error.message;
-      if (errorCode == "auth/weak-password") {
-      } else {
-      }
+      dispatch({
+        type: "SIGNUP_FAIL",
+        payload: error.message,
+      });
     });
 };
 export const signInWithEmail = (email, password) => async (
@@ -233,7 +233,6 @@ export const signInWithGoogle = () => async (
     alert("login: Error:" + message + "Please Retry");
   }
 };
-
 export const Authorization = () => async (
   dispatch,
   getState,
@@ -269,4 +268,11 @@ export const Authorization = () => async (
         payload: false,
       });
     });
+};
+
+export const removeErrorMessage = () => async (dispatch) => {
+  dispatch({
+    type: "SIGNUP_FAIL",
+    payload: "",
+  });
 };

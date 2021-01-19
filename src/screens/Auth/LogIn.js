@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Image, Text } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import {
   Container,
   Content,
@@ -25,7 +25,6 @@ const Login = ({ signInWithEmail, navigation, loginError }) => {
   const handleNavigation = () => {
     navigation.navigate("signup");
   };
-
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>

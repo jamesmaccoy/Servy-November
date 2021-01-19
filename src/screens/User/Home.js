@@ -26,7 +26,6 @@ import { styles } from "../../styles/User/HomeStyle";
 const Home = ({ ...props }) => {
   let navigation = props.navigation;
   let getServices = props.getServices;
-  let getServicesByCategory = props.getServicesByCategory;
   let checkVisible = props.checkVisible;
   let serviceLoader = props.serviceLoader;
   let switchLoader = props.switchLoader;
@@ -48,7 +47,7 @@ const Home = ({ ...props }) => {
   }, [checkVisible]);
 
   useEffect(() => {
-    if (checkVisible === true && props.providerServices.length === 0) {
+    if (checkVisible === true) {
       getServicesByProvider();
     }
   }, [checkVisible]);
@@ -58,29 +57,13 @@ const Home = ({ ...props }) => {
 
   useEffect(() => {
     setProServices(props.providerServices);
-
     setActiveServices(
       props.providerServices.filter((data) => {
-        return data.approve === true;
+        return data.approve === true && data.id !== "snmpjSLY6rnMC39rxi9F";
       })
     );
   }, [props.providerServices]);
 
-  // useEffect(() => {
-  //   if (props.route.params.id === 2) {
-  //     if (props.route.params.state !== "") {
-  //       getServicesByCategory(
-  //         props.route.params.state,
-  //         props.route.params.attributes
-  //       );
-  //     } else {
-  //       getServices();
-  //     }
-  //   }
-  //   if (props.route.params.id === 3) {
-  //     getServices();
-  //   }
-  // }, [props.route]);
   useEffect(() => {
     (async () => {
       await fetch("https://webrabbit.in/survey/banner-content.php")

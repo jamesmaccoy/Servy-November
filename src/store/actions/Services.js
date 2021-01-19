@@ -556,7 +556,6 @@ export const getServicesByProvider = () => async (
   const db = getFirestore();
   const firebase = getFirebase();
   var user = await firebase.auth().currentUser;
-
   let services = [];
   let proService = [];
   dispatch({
@@ -571,10 +570,16 @@ export const getServicesByProvider = () => async (
       response.docs.forEach((item, index) => {
         services.push({ ...item.data(), id: item.id });
       });
-      dispatch({
-        type: "USER_SERVICES",
-        payload: services,
-      });
+      if (services.length !== 0) {
+        dispatch({
+          type: "USER_SERVICES",
+          payload: services,
+        });
+        dispatch({
+          type: "SERVICE_LOADER",
+          payload: false,
+        });
+      }
     })
     .then(() => {
       if (services.length === 0) {
@@ -583,7 +588,6 @@ export const getServicesByProvider = () => async (
           .get()
           .then((response) => {
             response.docs.forEach((item, index) => {
-              console.log("iteeeee", item.data());
               proService.push({ ...item.data(), id: item.id });
             });
             dispatch({
@@ -592,6 +596,14 @@ export const getServicesByProvider = () => async (
             });
           });
       }
+    })
+    .then(() => {
+      dispatch({
+        type: "SERVICE_LOADER",
+        payload: false,
+      });
+    })
+    .catch(() => {
       dispatch({
         type: "SERVICE_LOADER",
         payload: false,

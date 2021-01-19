@@ -1,11 +1,11 @@
 const initialState = {
   currentUser: null,
   loading: true,
-  signUpState: false,
   admin: "",
   authCheck: true,
   user: null,
   loginError: "",
+  signUpFailMessage: "",
 };
 
 export default function loginReducer(state = initialState, action) {
@@ -14,11 +14,6 @@ export default function loginReducer(state = initialState, action) {
       return {
         ...state,
         currentUser: action.payload,
-      };
-    case "SIGNUP_SUCCESS":
-      return {
-        ...state,
-        signUpState: action.payload,
       };
     case "LOADING":
       return {
@@ -51,7 +46,11 @@ export default function loginReducer(state = initialState, action) {
         ...state,
         loginError: action.payload,
       };
-
+    case "SIGNUP_FAIL":
+      return {
+        ...state,
+        signUpFailMessage: action.payload,
+      };
     default:
       return state;
   }

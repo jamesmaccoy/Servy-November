@@ -73,7 +73,7 @@ const AddService = ({ ...props }) => {
   useEffect(() => {
     if (props.route.params.key !== 2) {
       let data = props.route.params.data;
-      if (data.serviceName === "Hoola hoop teacher") {
+      if (data.id === "snmpjSLY6rnMC39rxi9F") {
         setSample(true);
       }
       setSaveBtn(true);
@@ -103,7 +103,6 @@ const AddService = ({ ...props }) => {
       setArray(tempArray);
     }
   }, []);
-
   useEffect(() => {
     setCat(categories);
   }, [categories]);

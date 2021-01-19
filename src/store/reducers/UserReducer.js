@@ -15,7 +15,6 @@ export default function UserReducer(state = initialState, action) {
         ...state,
         switchLoader: action.payload,
       };
-
     default:
       return state;
   }
