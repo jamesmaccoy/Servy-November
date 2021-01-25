@@ -2,7 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 import "firebase/storage";
-
+import "firebase/remote-config";
 const firebaseConfig = {
     apiKey: "AIzaSyAFdShW11pxYFmSWkLmQcOLm2QJRHp4A7s",
     authDomain: "servy-a8ef2.firebaseapp.com",
@@ -17,5 +17,5 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.firestore();
 firebase.storage();
-
+firebase.remoteConfig();
 export default firebase;

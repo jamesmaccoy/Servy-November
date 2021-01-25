@@ -11,7 +11,6 @@ import {
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
 import { getAdminCategory } from "../../store/actions/Category";
-import MutipleSelect from "../../components/User/Multiple";
 let deviceHeight = Dimensions.get("window").height;
 
 const Services = ({ ...props }) => {
@@ -20,33 +19,16 @@ const Services = ({ ...props }) => {
   let getServicesByCategory = props.getServicesByCategory;
   let getAdminCategory = props.getAdminCategory;
   let services = props.services;
-  let categories = props.categories;
-  let filterServices = props.filterServices;
 
   const [loading, setLoading] = useState(true);
   const [newServices, setNewServices] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
-  const [filterCategory, setFilterCategory] = useState([]);
 
-  useEffect(() => {
-    if (categories.length !== 0) {
-      getAdminCategory();
-    }
-  }, []);
-  useEffect(() => {
-    setLoading(props.serviceLoader);
-  }, [props.serviceLoader]);
   useEffect(() => {
     if (filterCategory.length === 0) {
-      if (props.route.params.id === 2) {
-        setNewServices(filterServices);
-      }
-      if (props.route.params.id === 3) {
-        setNewServices(services);
-      }
+      setNewServices(services);
     }
-  }, [services, filterCategory, filterServices]);
-
+  }, [services, filterCategory]);
   useEffect(() => {
     if (props.route.params.id === 2) {
       if (props.route.params.state !== "") {
@@ -55,28 +37,27 @@ const Services = ({ ...props }) => {
           props.route.params.attributes
         );
       } else {
-        if (services.length === 0) {
-          getServices();
-        }
-      }
-    }
-    if (props.route.params.id === 3) {
-      if (services.length === 0) {
         getServices();
       }
     }
+    if (props.route.params.id === 3) {
+      getServices();
+    }
   }, [props.route]);
-
+  useEffect(() => {
+    setLoading(props.serviceLoader);
+  }, [props.serviceLoader]);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
+
+  const [filterCategory, setFilterCategory] = useState([]);
 
   useEffect(() => {
     if (filterCategory.length === 0) {
       setNewServices(props.services);
     }
   }, [filterCategory]);
-
   return (
     <View style={styles.screen}>
       <Header
@@ -87,13 +68,17 @@ const Services = ({ ...props }) => {
         visible={true}
         handleFilter={handleFilter}
       />
-      <MutipleSelect
-        setFilterCategory={setFilterCategory}
-        categories={categories}
-      />
 
       {loading ? (
-        <View style={styles.loaderStyle}>
+        <View
+          style={{
+            backgroundColor: "#f7f7f7",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: deviceHeight - 100,
+          }}
+        >
           <Loader />
         </View>
       ) : (
@@ -102,10 +87,8 @@ const Services = ({ ...props }) => {
             <View
               style={{
                 backgroundColor: "#f7f7f7",
-                paddingTop: 100,
+                paddingTop: 10,
                 paddingBottom: 20,
-                flexDirection: "row",
-                justifyContent: "center",
                 height: deviceHeight,
               }}
             >
@@ -118,27 +101,15 @@ const Services = ({ ...props }) => {
                   <Text style={{ color: "#9c9c9c" }}>Search Results</Text>
                 </View>
                 <View style={{ minHeight: deviceHeight }}>
-                  {newServices.map((data) => {
-                    if (filterCategory.includes(data.category)) {
-                      return (
-                        <ListingItem
-                          pad={0}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    }
-                    if (filterCategory.length === 0) {
-                      return (
-                        <ListingItem
-                          pad={0}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    }
+                  {services.map((data) => {
+                    return (
+                      <ListingItem
+                        pad={0}
+                        key={data.id}
+                        data={data}
+                        navigation={navigation}
+                      />
+                    );
                   })}
                 </View>
               </ScrollView>
@@ -158,7 +129,6 @@ const Services = ({ ...props }) => {
 const mapStateToProps = (state) => {
   return {
     services: state.Service.services,
-    filterServices: state.Service.filterServices,
     serviceLoader: state.Service.serviceLoader,
     categories: state.category.adminCollection,
   };
@@ -178,12 +148,5 @@ const styles = StyleSheet.create({
   list: {
     marginBottom: 90,
     paddingTop: 20,
-  },
-  loaderStyle: {
-    backgroundColor: "#f7f7f7",
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: deviceHeight - 100,
   },
 });

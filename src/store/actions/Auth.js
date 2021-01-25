@@ -16,6 +16,10 @@ export const onSignUp = (user) => async (
     .createUserWithEmailAndPassword(email, password)
     .then((res) => {
       if (res.additionalUserInfo.isNewUser) {
+        dispatch({
+          type: "SIGNIN_SUCCESS",
+          payload: false,
+        });
         db.collection("users").doc(res.user.uid).set({
           Name: name,
           Email: email,
@@ -30,25 +34,21 @@ export const onSignUp = (user) => async (
           websiteUrl: "",
           facebookUrl: "",
           instagramUrl: "",
+
           cretedAt: Date.now(),
         });
       }
-    })
-    .then(() => {
-      dispatch({
-        type: "SIGNIN_SUCCESS",
-        payload: true,
-      });
     })
     .catch((error) => {
       dispatch({
         type: "SIGNUP_SUCCESS",
         payload: false,
       });
-      dispatch({
-        type: "SIGNUP_FAIL",
-        payload: error.message,
-      });
+      let errorCode = error.code;
+      let errorMessage = error.message;
+      if (errorCode == "auth/weak-password") {
+      } else {
+      }
     });
 };
 export const signInWithEmail = (email, password) => async (
@@ -64,11 +64,13 @@ export const signInWithEmail = (email, password) => async (
     .signInWithEmailAndPassword(email, password)
     .then((res) => {})
     .catch((error) => {
+      let errorCode = error.code;
       let errorMessage = error.message;
-      dispatch({
-        type: "LOGIN_ERROR",
-        payload: errorMessage,
-      });
+      if (errorCode == "auth/weak-password") {
+        console.log("weak password");
+      } else {
+        console.log("there is error");
+      }
     });
 };
 
@@ -86,12 +88,12 @@ export const verifyUser = () => async (
   await firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       dispatch({
-        type: "CURRENT_USER",
-        payload: user.uid,
-      });
-      dispatch({
         type: "SIGNIN_SUCCESS",
         payload: true,
+      });
+      dispatch({
+        type: "CURRENT_USER",
+        payload: user.uid,
       });
       dispatch({
         type: "LOADING",
@@ -170,6 +172,7 @@ export const signInWithGoogle = () => async (
               googleUser.idToken,
               googleUser.accessToken
             );
+
             firebase
               .auth()
               .signInWithCredential(credential)
@@ -192,14 +195,11 @@ export const signInWithGoogle = () => async (
                 }
               })
               .catch(function (error) {
-                dispatch({
-                  type: "LOADING",
-                  payload: false,
-                });
-                // var errorCode = error.code;
-                // var errorMessage = error.message;
-                // var email = error.email;
-                // var credential = error.credential;
+                console.log(error, "errrrr");
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                var email = error.email;
+                var credential = error.credential;
               });
           } else {
             console.log("User already signed-in Firebase.");
@@ -209,8 +209,6 @@ export const signInWithGoogle = () => async (
     const result = await Google.logInAsync({
       androidClientId:
         "256539792953-u00leiuuf4odj68p6ephgfneq2r1p7uo.apps.googleusercontent.com",
-      androidStandaloneAppClientId:
-        "256539792953-u00leiuuf4odj68p6ephgfneq2r1p7uo.apps.googleusercontent.com",
       status: true,
       xfbml: true,
       scopes: ["profile", "email"],
@@ -219,39 +217,34 @@ export const signInWithGoogle = () => async (
       onSignIn(result);
       return result.accessToken;
     } else {
-      dispatch({
-        type: "LOADING",
-        payload: false,
-      });
       return { cancelled: true };
     }
   } catch ({ message }) {
-    dispatch({
-      type: "LOADING",
-      payload: false,
-    });
-    alert("login: Error:" + message + "Please Retry");
+    alert("login: Error:" + message);
   }
 };
+
 export const Authorization = () => async (
   dispatch,
   getState,
   { getFirestore, getFirebase }
 ) => {
   const db = getFirestore();
+  const firebase = getFirebase();
   const state = getState();
   let currentUser = state.Auth.user;
-
+  let data;
   dispatch({
     type: "AUTH_CHECK",
     payload: true,
   });
-  await db
+
+  const res = await db
     .collection("users")
     .doc(currentUser)
-    .get()
-    .then((response) => {
-      if (response) {
+    .onSnapshot(function (response) {
+      console.log("response data", response.data());
+      if (response.data().type) {
         dispatch({
           type: "ADMIN",
           payload: response.data().type,
@@ -261,18 +254,5 @@ export const Authorization = () => async (
           payload: false,
         });
       }
-    })
-    .catch(() => {
-      dispatch({
-        type: "AUTH_CHECK",
-        payload: false,
-      });
     });
-};
-
-export const removeErrorMessage = () => async (dispatch) => {
-  dispatch({
-    type: "SIGNUP_FAIL",
-    payload: "",
-  });
 };

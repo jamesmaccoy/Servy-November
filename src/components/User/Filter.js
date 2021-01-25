@@ -25,6 +25,7 @@ const Filter = ({ ...props }) => {
   let categories = props.categories;
   let navigation = props.navigation;
 
+  const [key, setKey] = useState(1);
   const [distance, setDistance] = useState(props.initialDistance);
   const [categoriesList, setCategoriesList] = useState([]);
   const [attributes, setAttributes] = useState([]);
@@ -33,9 +34,13 @@ const Filter = ({ ...props }) => {
   useEffect(() => {
     getAdminCategory();
   }, []);
+  useEffect(() => {
+    setKey(navigation.dangerouslyGetState().routes[0].params.key);
+  }, [navigation]);
 
   useEffect(() => {
     setCategoriesList(categories);
+
     categories.forEach((e, index) => {
       if (index === 0) {
         setState(e);
@@ -47,22 +52,49 @@ const Filter = ({ ...props }) => {
     setState(data);
   };
   const handleFilter = () => {
-    setShowFilter(!modalVisible);
-    navigation.navigate("SearchResult", {
-      id: 2,
-      state: state.label,
-      attributes: attributes,
-    });
+    if (key === 1) {
+      navigation.navigate("SearchResult", {
+        id: 2,
+        state: state.label,
+        distance: distance,
+        attributes: attributes,
+      });
+      props.distanceRadius(distance);
+      setShowFilter(!modalVisible);
+    }
+    if (key === 0) {
+      navigation.navigate("SearchResult", {
+        id: 2,
+        state: state.label,
+        distance: distance,
+        attributes: attributes,
+      });
+      props.distanceRadius(distance);
+      setShowFilter(!modalVisible);
+    }
   };
   const handleClear = () => {
-    setShowFilter(!modalVisible);
-    navigation.navigate("SearchResult", {
-      id: 3,
-      state: "",
-      attributes: [],
-    });
+    if (key === 1) {
+      navigation.navigate("SearchResult", {
+        id: 3,
+        state: state,
+        distance: distance,
+        attributes: attributes,
+      });
+      props.distanceRadius(distance);
+      setShowFilter(!modalVisible);
+    }
+    if (key === 0) {
+      navigation.navigate("SearchResult", {
+        id: 3,
+        state: state,
+        distance: distance,
+        attributes: attributes,
+      });
+      props.distanceRadius(distance);
+      setShowFilter(!modalVisible);
+    }
   };
-
   return (
     <KeyboardAvoidingView enabled={true}>
       <View style={styles.centeredView}>
@@ -102,7 +134,6 @@ const Filter = ({ ...props }) => {
                     <Text style={styles.distance}>{distance} Mile </Text>
                   </View>
                   <Slider
-                    onSlidingComplete={() => props.distanceRadius(distance)}
                     onValueChange={(e) => setDistance(e)}
                     style={{ height: 10, paddingTop: 50, flex: 1 }}
                     minimumValue={1}
@@ -122,12 +153,11 @@ const Filter = ({ ...props }) => {
                     handleCategory(itemValue)
                   }
                 >
-                  {categoriesList.map((item, index) => (
+                  {categoriesList.map((item) => (
                     <Picker.Item
                       itemStyle={{ paddingLeft: 100, backgroundColor: "red" }}
                       label={item.label}
                       value={item}
-                      key={index}
                     />
                   ))}
                 </Picker>
@@ -191,20 +221,9 @@ const mapStateToProps = (state) => {
     initialDistance: state.location.initialDistance,
   };
 };
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     handleDistance: (distance) => {
-//       dispatch({
-//         type: "DISTANCE_RADIUS",
-//         payload: distance,
-//       });
-//     },
-//   };
-// };
-export default connect(mapStateToProps, {
-  getAdminCategory,
-  distanceRadius,
-})(Filter);
+export default connect(mapStateToProps, { getAdminCategory, distanceRadius })(
+  Filter
+);
 
 const styles = StyleSheet.create({
   centeredView: {

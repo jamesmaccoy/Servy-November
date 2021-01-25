@@ -1,56 +1,51 @@
 const initialState = {
   currentUser: null,
   loading: true,
-  admin: "",
+  signUpState: false,
+  admin: '',
   authCheck: true,
-  user: null,
-  loginError: "",
-  signUpFailMessage: "",
+  user: null
+
 };
 
 export default function loginReducer(state = initialState, action) {
   switch (action.type) {
     case "SIGNIN_SUCCESS":
-      return {
+      return {   
         ...state,
         currentUser: action.payload,
       };
-    case "LOADING":
-      return {
-        ...state,
-        loading: action.payload,
-      };
-    case "AUTH_CHECK":
-      return {
-        ...state,
-        authCheck: action.payload,
-      };
+      case "SIGNUP_SUCCESS":
+        return {
+          ...state,
+          signUpState: action.payload,
+        };
+      case "LOADING":
+        return {
+          ...state,
+          loading: action.payload,
+        };
+        case "AUTH_CHECK":
+          return {   
+            ...state,
+            authCheck: action.payload,
+          };
     case "SIGNIN_ERROR":
       return {
         ...state,
         loginError: "Login Fail",
       };
-    case "CURRENT_USER":
-      return {
-        ...state,
-        user: action.payload,
-      };
-    case "ADMIN":
-      return {
-        ...state,
-        admin: action.payload,
-      };
+      case "CURRENT_USER":
+        return {
+          ...state,
+          user: action.payload,
+        };
+      case "ADMIN":
+        return {
+          ...state,
+          admin: action.payload,
+        };
 
-    case "LOGIN_ERROR":
-      return {
-        ...state,
-        loginError: action.payload,
-      };
-    case "SIGNUP_FAIL":
-      return {
-        ...state,
-        signUpFailMessage: action.payload,
-      };
     default:
       return state;
   }

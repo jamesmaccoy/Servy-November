@@ -17,13 +17,17 @@ import {
 } from "@expo/vector-icons";
 import { styles } from "../../styles/User/UserHeaderStyle";
 import { connect } from "react-redux";
-import {
-  profileInformation,
-  userStatus,
-  switchLoader,
-} from "../../store/actions/User";
+import { profileInformation, userStatus } from "../../store/actions/User";
 import imagebg from "../../../assets/images/hamburger_BG.jpg";
-import { Logout } from "../../store/actions/Auth";
+import firebase from "../../config/config.js";
+const signOutUser = async () => {
+  try {
+    await firebase.auth().signOut();
+    navigate("Auth");
+  } catch (e) {
+    console.log(e);
+  }
+};
 
 const Drawer = ({
   navigation,
@@ -32,12 +36,7 @@ const Drawer = ({
   setModalVisible,
   userStatus,
   checkVisible,
-  switchLoader,
-  Logout,
 }) => {
-  const signOutUser = () => {
-    Logout();
-  };
   const [state, setState] = useState({
     update: false,
     photo: "",
@@ -72,12 +71,9 @@ const Drawer = ({
   }, [profileInfo]);
   const accountpage = () => {
     navigation.dangerouslyGetParent().navigate("MyAccount");
+
     setModalVisible(!modalVisible);
   };
-  useEffect(() => {
-    userStatus(state.switchValue);
-  }, [state.switchValue]);
-
   return (
     <>
       <View style={styles.centeredView}>
@@ -166,10 +162,9 @@ const Drawer = ({
                       width: 200,
                     }}
                     onValueChange={(switchValue) => {
-                      // console.log("dsfdf");
-                      switchLoader(true);
                       setModalVisible(!modalVisible);
                       setState({ ...state, switchValue });
+                      userStatus(switchValue);
                     }}
                   />
                 </View>
@@ -224,6 +219,7 @@ const Drawer = ({
                       Linking.openURL("http://servy.co.za/privacy-policy/")
                     }
                   >
+                    {" "}
                     Privacy policy
                   </Text>
                 </View>
@@ -241,9 +237,6 @@ const mapStateToProps = (state) => {
     checkVisible: state.User.status,
   };
 };
-export default connect(mapStateToProps, {
-  profileInformation,
-  userStatus,
-  switchLoader,
-  Logout,
-})(Drawer);
+export default connect(mapStateToProps, { profileInformation, userStatus })(
+  Drawer
+);

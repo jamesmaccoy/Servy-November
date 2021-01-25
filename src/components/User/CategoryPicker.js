@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { styles } from "../../styles/User/AddServiceStyle";
 import { Picker } from "@react-native-community/picker";
@@ -12,10 +12,12 @@ const CategoryPicker = ({
   setSelect,
   setVisible,
   stateChange,
-  setStateChange,
-  categoryInital,
-  setCategoryInitial,
 }) => {
+  const [selectCategory, setSelectCateory] = useState("");
+
+  useEffect(() => {
+    setSelectCateory(selectedValue);
+  }, [selectedValue]);
   return (
     <View style={styles.picker}>
       <Picker
@@ -24,8 +26,6 @@ const CategoryPicker = ({
           selectedValue.value !== "other" ? selectedValue : "other"
         }
         onValueChange={(itemValue, itemIndex) => {
-          setStateChange(false);
-          setCategoryInitial(false);
           if (stateChange === false) {
             if (itemValue !== "other") {
               setSelectedValue(itemValue);
@@ -39,10 +39,8 @@ const CategoryPicker = ({
             if (itemValue === "other") {
               setSelectedValue({
                 ...selectedValue,
-                other: true,
                 value: "other",
-                label: "other",
-                features: [...checkboxPicker],
+                features: [],
               });
               setSelect(true);
               setVisible(true);
@@ -52,32 +50,14 @@ const CategoryPicker = ({
         mode="dropdown"
       >
         {stateChange ? (
-          <Picker.Item
-            label={selectedValue.label}
-            key={0}
-            value={selectedValue}
-          />
+          <Picker.Item label={selectedValue.label} key={0} value="0" />
         ) : (
           <Picker.Item label="Select Category" key={1} value="0" />
         )}
         {categories != null ? (
-          categories.map((data, index) => {
-            if (categoryInital === true) {
-              if (data.label !== selectedValue.label) {
-                return (
-                  <Picker.Item
-                    label={data.label}
-                    key={index + 2}
-                    value={data}
-                  />
-                );
-              }
-            } else {
-              return (
-                <Picker.Item label={data.label} key={index + 2} value={data} />
-              );
-            }
-          })
+          categories.map((data, index) => (
+            <Picker.Item label={data.label} key={index + 2} value={data} />
+          ))
         ) : (
           <Picker />
         )}
@@ -87,44 +67,3 @@ const CategoryPicker = ({
   );
 };
 export default CategoryPicker;
-
-const checkboxPicker = [
-  {
-    label: "I come to you",
-    id: "ICometoyou",
-    state: true,
-    attributeState: false,
-  },
-  {
-    label: "You come to me",
-    id: "Youcometome",
-    state: true,
-    attributeState: false,
-  },
-  {
-    label: "Imediate Immediately",
-    id: "ImediateImmediately",
-    state: true,
-    attributeState: false,
-  },
-  {
-    label: "Video Streaming",
-    id: "VideoStreaming",
-    state: true,
-    attributeState: false,
-  },
-
-  {
-    label: "Remote Working",
-    id: "RemoteWorking",
-    state: true,
-    attributeState: false,
-  },
-
-  {
-    label: "Delivery Included",
-    id: "DeliveryIncluded",
-    state: true,
-    attributeState: false,
-  },
-];

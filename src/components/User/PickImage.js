@@ -1,19 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Text, View, Image, ImageBackground } from "react-native";
+import { Text, View, Image } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../../styles/User/AddServiceStyle";
-import { AntDesign, Entypo } from "@expo/vector-icons";
-const getImage = ({
-  images,
-  imgInitial,
-  setImages,
-  pickImages,
-  setPickImages,
-}) => {
+const getImage = ({ images }) => {
   const [imageState, setImageState] = useState(false);
-  const [initialImage, setInitialImage] = useState(false);
-  // const [pickImages, setPickImages] = useState([]);
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -26,11 +17,6 @@ const getImage = ({
       }
     })();
   }, []);
-  useEffect(() => {
-    setInitialImage(true);
-    setImageState(true);
-    setPickImages(images);
-  }, [imgInitial]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -41,19 +27,9 @@ const getImage = ({
     });
     if (!result.cancelled) {
       setImageState(false);
-      // images.push(result.uri);
-      pickImages.push(result.uri);
+      images.push(result.uri);
       setImageState(true);
     }
-  };
-  const handleRemoveImage = async (index) => {
-    setImageState(false);
-    setPickImages(
-      pickImages.filter((x, i) => {
-        return i !== index;
-      })
-    );
-    setImageState(true);
   };
 
   return (
@@ -77,35 +53,13 @@ const getImage = ({
       </View>
       <View style={{ paddingTop: 20, flexDirection: "row", flexWrap: "wrap" }}>
         {imageState &&
-          pickImages.map((url, index) => {
-            return (
-              <ImageBackground
-                source={{ uri: url }}
-                style={{
-                  width: 150,
-                  height: 150,
-                  marginLeft: 5,
-                  marginBottom: 5,
-                }}
-                key={index}
-              >
-                <View
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                  }}
-                >
-                  <TouchableOpacity
-                    activeOpacity={0.7}
-                    onPress={() => handleRemoveImage(index)}
-                  >
-                    <Entypo color="#fff" size={30} name="circle-with-cross" />
-                  </TouchableOpacity>
-                </View>
-              </ImageBackground>
-            );
-          })}
+          images.map((url, index) => (
+            <Image
+              key={index}
+              source={{ uri: url }}
+              style={{ width: 100, height: 100 }}
+            />
+          ))}
       </View>
     </>
   );

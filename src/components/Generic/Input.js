@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
 const Input = (props) => {
@@ -6,13 +6,11 @@ const Input = (props) => {
   let placeHolder = props.placeHolder;
   let setState = props.onChangeText;
 
-  const [initial, setInitial] = useState(false);
 
-  useEffect(() => {
-    if (props.initialValue) {
-      setInitial(true);
-    }
-  }, [props]);
+  const handleText = (text) => {
+    console.log("text", text);
+    setState(text);
+  };
 
   return (
     <View style={styles.inputContainer}>
@@ -21,7 +19,6 @@ const Input = (props) => {
         onChangeText={(text) => setState(text)}
         placeholder={placeHolder}
         style={styles.input}
-        defaultValue={initial ? props.initialValue : ""}
       />
     </View>
   );

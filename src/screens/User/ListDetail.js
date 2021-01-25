@@ -13,12 +13,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "native-base";
-import {
-  Entypo,
-  MaterialCommunityIcons,
-  AntDesign,
-  Octicons,
-} from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
@@ -42,7 +37,6 @@ const ListDetail = ({ ...props }) => {
   let getServiceReview = props.getServiceReview;
   let ReviewsList = props.ReviewsList;
   let dataLoader = props.loader;
-  let user = props.route.params.user;
   const [information, setInformation] = useState({
     about: "",
   });
@@ -137,61 +131,14 @@ const ListDetail = ({ ...props }) => {
 
                   <Text style={styles.title}>{data.category}</Text>
                 </View>
-                {user === "Guest" && (
-                  <MaterialCommunityIcons
-                    style={styles.close}
-                    name="filter-variant"
-                    onPress={handleFilter}
-                  />
-                )}
+                <MaterialCommunityIcons
+                  style={styles.close}
+                  name="filter-variant"
+                  onPress={handleFilter}
+                />
                 <Entypo name="share" size={30} color={"#fff"} />
               </SafeAreaView>
-              <SafeAreaView
-                style={{
-                  bottom: 10,
-                  flex: 1,
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "flex-end",
-                }}
-              >
-                <Text style={styles.categoryTitle}>{data.serviceName} </Text>
-                {user === "Provider" && (
-                  <>
-                    {data.approve === true ? (
-                      <View style={styles.active}>
-                        <Octicons
-                          color="green"
-                          size={25}
-                          name="primitive-dot"
-                        />
-                        <Text
-                          style={{
-                            color: "green",
-                            fontSize: 15,
-                            paddingLeft: 10,
-                          }}
-                        >
-                          Active
-                        </Text>
-                      </View>
-                    ) : (
-                      <View style={styles.active}>
-                        <Octicons color="red" size={25} name="primitive-dot" />
-                        <Text
-                          style={{
-                            color: "red",
-                            fontSize: 15,
-                            paddingLeft: 10,
-                          }}
-                        >
-                          Pending
-                        </Text>
-                      </View>
-                    )}
-                  </>
-                )}
-              </SafeAreaView>
+              <Text style={styles.categoryTitle}>{data.serviceName} </Text>
             </View>
 
             <Carousel
@@ -220,37 +167,33 @@ const ListDetail = ({ ...props }) => {
                   No Features for this service
                 </Text>
               )}
+
               <View style={styles.checkboxList}>
                 {data.attributes.map((item, index) => {
-                  if (item.attributeState === true) {
-                    return (
-                      <View
-                        key={index}
+                  return (
+                    <View
+                      key={index}
+                      style={{
+                        flexDirection: "row",
+                        paddingTop: 10,
+                        paddingLeft: 0,
+                      }}
+                    >
+                      <Image style={{ width: 20, height: 20 }} source={tick} />
+
+                      <Text
                         style={{
-                          flexDirection: "row",
-                          paddingTop: 10,
-                          paddingLeft: 0,
+                          color: "#282828",
+                          fontSize: 16,
+                          width: 150,
+                          textAlign: "left",
+                          paddingLeft: 10,
                         }}
                       >
-                        <Image
-                          style={{ width: 20, height: 20 }}
-                          source={tick}
-                        />
-
-                        <Text
-                          style={{
-                            color: "#282828",
-                            fontSize: 16,
-                            width: 150,
-                            textAlign: "left",
-                            paddingLeft: 10,
-                          }}
-                        >
-                          {item.label}
-                        </Text>
-                      </View>
-                    );
-                  }
+                        {item.label}
+                      </Text>
+                    </View>
+                  );
                 })}
               </View>
               <View></View>

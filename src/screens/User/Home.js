@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  StyleSheet,
   ScrollView,
   View,
   Image,
@@ -14,246 +15,10 @@ import { connect } from "react-redux";
 import {
   getServices,
   getServicesByCategory,
-  getServicesByProvider,
 } from "../../store/actions/Services";
 import Filter from "../../components/User/Filter";
-import ProviderItem from "../../components/User/ProviderItem";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
-import { switchLoader } from "../../store/actions/User";
-import ProviderModal from "../../components/User/ProviderModal";
-import { styles } from "../../styles/User/HomeStyle";
 
-const Home = ({ ...props }) => {
-  let navigation = props.navigation;
-  let getServices = props.getServices;
-  let checkVisible = props.checkVisible;
-  let serviceLoader = props.serviceLoader;
-  let switchLoader = props.switchLoader;
-  let switchLoading = props.switchLoading;
-  let getServicesByProvider = props.getServicesByProvider;
-
-  const [showFilter, setShowFilter] = useState(false);
-  const [newServices, setNewServices] = useState([]);
-  const [proServices, setProServices] = useState([]);
-  const [isLoading, setLoading] = useState(true);
-  const [providerModal, setProviderModal] = useState(false);
-  const [data, setData] = useState([]);
-  const [activeServices, setActiveServices] = useState([]);
-  useEffect(() => {
-    getServices();
-  }, []);
-  useEffect(() => {
-    switchLoader(false);
-  }, [checkVisible]);
-
-  useEffect(() => {
-    if (checkVisible === true) {
-      getServicesByProvider();
-    }
-  }, [checkVisible]);
-  useEffect(() => {
-    setNewServices(props.services);
-  }, [props.services]);
-
-  useEffect(() => {
-    setProServices(props.providerServices);
-    setActiveServices(
-      props.providerServices.filter((data) => {
-        return data.approve === true && data.id !== "snmpjSLY6rnMC39rxi9F";
-      })
-    );
-  }, [props.providerServices]);
-
-  useEffect(() => {
-    (async () => {
-      await fetch("https://webrabbit.in/survey/banner-content.php")
-        .then((response) => response.json())
-        .then((json) => setData(json.content))
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
-    })();
-  }, []);
-  const handleFilter = () => {
-    setShowFilter(!showFilter);
-  };
-
-  return (
-    <View>
-      {switchLoading && (
-        <View style={styles.loading}>
-          <Text>Switching...</Text>
-        </View>
-      )}
-      <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
-        <View style={styles.header}>
-          <Header
-            navigation={navigation}
-            name="Home"
-            visible={true}
-            notificationButton={true}
-            filterButton={false}
-          />
-        </View>
-        <ScrollView style={styles.screenitemcontainer}>
-          <ScrollView
-            style={styles.screenitem}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
-          >
-            {items.map((item) => (
-              <View
-                style={[styles.listoption, { backgroundColor: item.bgcolor }]}
-                key={item.key}
-              >
-                <FontAwesome
-                  style={[styles.listimg, { fontSize: 30, paddingTop: 10 }]}
-                  name={item.ico}
-                />
-
-                <Text style={styles.listtxt}>{item.label}</Text>
-              </View>
-            ))}
-          </ScrollView>
-          <View style={styles.categorieslisting}>
-            {checkVisible === false ? (
-              <View style={styles.milesdata}>
-                <Text style={styles.milesdatatxt}>
-                  Suggested Servey pro's in your area
-                </Text>
-                <TouchableOpacity activeOpacity={0.7} onPress={handleFilter}>
-                  <View style={styles.milesdatain}>
-                    <MaterialCommunityIcons
-                      style={{ fontSize: 22, paddingTop: 10 }}
-                      name="filter-variant"
-                    />
-                    <Text style={styles.milesStyle}> 2 Mile</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.milesdata}>
-                <Text style={styles.milesdatatxt}>
-                  Services({activeServices.length} Active Services)
-                </Text>
-              </View>
-            )}
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-            >
-              <>
-                {serviceLoader || switchLoading ? (
-                  <View style={styles.dummyContent}>
-                    <View style={styles.innerDummy}></View>
-                    <View style={styles.innerDummy2}></View>
-                  </View>
-                ) : checkVisible === false ? (
-                  newServices.length === 0 ? (
-                    <View style={{ paddingLeft: 15 }}>
-                      <Text style={{ color: "#9c9c9c" }}>
-                        No Service Available
-                      </Text>
-                    </View>
-                  ) : (
-                    newServices.map((data) => {
-                      return (
-                        <ListingItem
-                          pad={15}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    })
-                  )
-                ) : (
-                  <>
-                    {proServices.map((data, index) => {
-                      return (
-                        <ProviderItem
-                          setProviderModal={setProviderModal}
-                          pad={15}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </>
-            </ScrollView>
-          </View>
-          <View style={styles.bannercont}>
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <FlatList
-                data={data}
-                keyExtractor={({ id }, index) => id}
-                renderItem={({ item }) => (
-                  <View style={styles.bannerdetail}>
-                    <Text style={styles.bannertitle}>{item.title}</Text>
-
-                    <Text style={styles.bannerdescription}>{item.content}</Text>
-                    <View style={styles.bannerbuttontok}>
-                      <TouchableOpacity
-                        style={styles.loginScreenButton}
-                        underlayColor="#fff"
-                      >
-                        <FontAwesome
-                          style={{ fontSize: 30, color: "#62ad80" }}
-                          name="code-fork"
-                        />
-                        <Text style={styles.bannerbutton}>Button</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                )}
-              />
-            )}
-            <Image
-              style={styles.bannerimg}
-              source={require("../../../assets/images/13.png")}
-            />
-          </View>
-          {providerModal && (
-            <ProviderModal
-              navigation={navigation}
-              setProviderModal={setProviderModal}
-              visible={providerModal}
-            />
-          )}
-          {showFilter && (
-            <Filter
-              navigation={navigation}
-              setShowFilter={setShowFilter}
-              modalVisible={showFilter}
-              route={props.route}
-            />
-          )}
-        </ScrollView>
-      </View>
-    </View>
-  );
-};
-const mapStateToProps = (state) => {
-  return {
-    services: state.Service.services,
-    userLocation: state.location.userLocation,
-    serviceLoader: state.Service.serviceLoader,
-    checkVisible: state.User.status,
-    currentUser: state.Auth.user,
-    switchLoading: state.User.switchLoader,
-    providerServices: state.Service.userServices,
-  };
-};
-export default connect(mapStateToProps, {
-  getServices,
-  getServicesByCategory,
-  switchLoader,
-  getServicesByProvider,
-})(Home);
 
 const items = [
   {
@@ -281,3 +46,301 @@ const items = [
     bgcolor: "#999",
   },
 ];
+const Home = ({ ...props }) => {
+  let navigation = props.navigation;
+  let getServices = props.getServices;
+  let getServicesByCategory = props.getServicesByCategory;
+  let checkVisible = props.checkVisible;
+  let serviceLoader = props.serviceLoader;
+
+  const [showFilter, setShowFilter] = useState(false);
+  const [newServices, setNewServices] = useState([]);
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    getServices();
+  }, []);
+  useEffect(() => {
+    console.log("visible", checkVisible);
+  }, [checkVisible]);
+
+  useEffect(() => {
+    setNewServices(props.services);
+  }, [props.services]);
+  useEffect(() => {
+    if (props.route.params.id === 2) {
+      if (props.route.params.state !== "") {
+        getServicesByCategory(
+          props.route.params.state,
+          props.route.params.attributes
+        );
+      } else {
+        getServices();
+      }
+    }
+    if (props.route.params.id === 3) {
+      getServices();
+    }
+  }, [props.route]);
+
+  const handleFilter = () => {
+    setShowFilter(!showFilter);
+  };
+
+  return (
+    <TouchableOpacity onPress={() => setShowFilter(false)} activeOpacity={1}>
+      <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
+        <View style={styles.header}>
+          <Header
+            navigation={navigation}
+            name="Home"
+            visible={true}
+            notificationButton={true}
+            filterButton={false}
+          />
+        </View>
+        <ScrollView style={styles.screenitemcontainer}>
+          <View>
+            <ScrollView
+              style={styles.screenitem}
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+            >
+              {items.map((item) => (
+                <View
+                  style={[styles.listoption, { backgroundColor: item.bgcolor }]}
+                  key={item.key}
+                >
+                  <FontAwesome
+                    style={[styles.listimg, { fontSize: 30, paddingTop: 10 }]}
+                    name={item.ico}
+                  />
+
+                  <Text style={styles.listtxt}>{item.label}</Text>
+                </View>
+              ))}
+            </ScrollView>
+          </View>
+          <View style={styles.categorieslisting}>
+            <View style={styles.milesdata}>
+              <Text style={styles.milesdatatxt}>
+                Suggested Servey pro's in your area
+              </Text>
+              <TouchableOpacity activeOpacity={0.7} onPress={handleFilter}>
+                <View style={styles.milesdatain}>
+                  <MaterialCommunityIcons
+                    style={{ fontSize: 22, paddingTop: 10 }}
+                    name="filter-variant"
+                  />
+                  <Text style={styles.milesdatatxtmi}> 2 Mile</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal={true}
+            >
+              <>
+                {serviceLoader ? (
+                  <View
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <View
+                      style={{
+                        marginLeft: 15,
+
+                        flex: 1,
+                        width: 260,
+                        backgroundColor: "#eee",
+                        height: 280,
+                      }}
+                    ></View>
+                    <View
+                      style={{
+                        marginLeft: 15,
+                        flex: 1,
+                        width: 260,
+                        backgroundColor: "#eee",
+                        height: 280,
+                      }}
+                    ></View>
+                  </View>
+                ) : (
+                  checkVisible === false && (
+                    <>
+                      {newServices.length === 0 ? (
+                        <View style={{ paddingLeft: 15 }}>
+                          <Text>No Service Available</Text>
+                        </View>
+                      ) : (
+                        newServices.map((data) => (
+                          <ListingItem
+                            pad={15}
+                            key={data.id}
+                            data={data}
+                            navigation={navigation}
+                          />
+                        ))
+                      )}
+                    </>
+                  )
+                )}
+              </>
+            </ScrollView>
+          </View>
+
+          <View style={styles.bannercont}>
+        
+                  <View style={styles.bannerdetail}>
+                    <Text style={styles.bannertitle}>Title here</Text>
+
+                    <Text style={styles.bannerdescription}>Lorem ipsum is a dummy text</Text>
+                    <View style={styles.bannerbuttontok}>
+                      <TouchableOpacity
+                        style={styles.loginScreenButton}
+                        underlayColor="#fff"
+                      
+                      >
+                        <FontAwesome
+                          style={{ fontSize: 30, color: "#62ad80" }}
+                          name="code-fork"
+                        />
+                        <Text style={styles.bannerbutton}>Button</Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+               
+            <Image
+              style={styles.bannerimg}
+              source={require("../../../assets/images/13.png")}
+            />
+          </View>
+        </ScrollView>
+      </View>
+      <Filter
+        navigation={navigation}
+        setShowFilter={setShowFilter}
+        modalVisible={showFilter}
+        route={props.route}
+      />
+    </TouchableOpacity>
+  );
+};
+const mapStateToProps = (state) => {
+  return {
+    services: state.Service.services,
+    userLocation: state.location.userLocation,
+    serviceLoader: state.Service.serviceLoader,
+    checkVisible: state.User.status,
+  };
+};
+export default connect(mapStateToProps, { getServices, getServicesByCategory })(
+  Home
+);
+
+const styles = StyleSheet.create({
+  screen: {
+    backgroundColor: "#f7f7f7",
+    paddingBottom: 110,
+    paddingTop: 35,
+  },
+  header: { paddingLeft: 15, paddingRight: 15 },
+  list: {
+    paddingTop: 20,
+    paddingBottom: 0,
+  },
+  screenitem: { paddingTop: 20, paddingLeft: 0 },
+  screenitemcontainer: {},
+
+  listoption: {
+    alignItems: "center",
+    flexDirection: "row",
+    width: 140,
+    height: 80,
+    marginRight: 0,
+    marginLeft: 15,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+  },
+
+  listimg: {
+    width: 50,
+    height: 50,
+    color: "#fff",
+  },
+  listtxt: {
+    flex: 1,
+    flexWrap: "wrap",
+    fontSize: 14,
+    color: "#fff",
+  },
+  bannercont: {
+    backgroundColor: "#ededed",
+    marginTop: 10,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 15,
+    paddingBottom: 15,
+    paddingLeft: 15,
+    paddingRight: 15,
+  },
+
+  bannerdetail: { flex: 1 },
+
+  bannertitle: { color: "#62ad80", fontSize: 19, fontWeight: "bold" },
+
+  bannerdescription: { color: "#999", fontSize: 16, marginBottom: 20 },
+  bannerimg: { width: 90, height: 90 },
+
+  loginScreenButton: {
+    textAlign: "center",
+    paddingTop: 8,
+    padding: 10,
+    paddingBottom: 8,
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  bannerbuttontok: {
+    borderColor: "#62ad80",
+    borderWidth: 2,
+    width: 200,
+    textAlign: "center",
+    borderColor: "#62ad80",
+    borderWidth: 2,
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  bannerbutton: {
+    color: "#62ad80",
+    marginLeft: 60,
+  },
+  categorieslisting: {
+    marginTop: 20,
+  },
+  milesdata: {
+    marginBottom: 18,
+    marginTop: 6,
+    paddingLeft: 10,
+    paddingRight: 15,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  milesdatain: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: -4,
+    justifyContent: "flex-end",
+  },
+  milesdatatxt: { fontSize: 16 },
+  milesdatatxtmi: { fontSize: 16, marginTop: 10, marginLeft: 5 },
+});
