@@ -56,6 +56,10 @@ const Account = ({ ...props }) => {
   const handleAccountInfo = () => {
     updateInformation(state);
   };
+const navigationHandler = () => {
+    navigation.goBack();
+  };
+
   const [imageUrl, setImageUrl] = useState("");
   const [check, setCheck] = useState(false);
   useEffect(() => {
@@ -72,14 +76,18 @@ const Account = ({ ...props }) => {
     <>
       {check ? (
         <ScrollView style={styles.screen}>
+         
+         <View style={styles.header}>
+                          <TouchableOpacity onPress={navigationHandler}>
+                            <AntDesign name="arrowleft" size={25} color="#000" />
+                          </TouchableOpacity>
+
+                            <TouchableOpacity  style={styles.btn}>
+                              <Text>Save & Exit</Text>
+                            </TouchableOpacity>
+          </View>
           <View>
-            <Header
-              filterButton={false}
-              notificationButton={true}
-              navigation={navigation}
-              visible={true}
-              name="My Accounnt"
-            />
+                
             <View>
               <View style={styles.content}>
                 <View>

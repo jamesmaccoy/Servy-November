@@ -90,7 +90,22 @@ export const styles = StyleSheet.create({
         fontSize:24,
         bottom:11,
       },
-      topfunacc:{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'}
+      topfunacc:{display:'flex',flexDirection:'row',alignItems:'center',justifyContent:'space-between'},
+      header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    position: "absolute",
+    top: 0,
+    alignSelf: "stretch",
+    right: 0,
+    left: 0,
+    zIndex: 2,
+    backgroundColor: "#f7f7f7",
+  },
+  btn: {
+    color: "#000",
+    backgroundColor: "#f7f7f7",
+  },
 
 
  

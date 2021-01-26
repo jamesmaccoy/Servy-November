@@ -52,7 +52,9 @@ const Header = ({ ...props }) => {
   }, [checkVisible]);
 
   const navigationHanlder = () => {
-    navigation.navigate("AddService");
+    navigation.navigate("AddService", {
+      key:2,
+    });
   };
 
   const handleNotification = () => {
@@ -87,7 +89,6 @@ const Header = ({ ...props }) => {
               <Entypo
                 onPress={navigationHanlder}
                 name="plus"
-                onPress={navigationHanlder}
                 size={25}
                 color={"#000"}
                 style={{ paddingRight: 12 }}

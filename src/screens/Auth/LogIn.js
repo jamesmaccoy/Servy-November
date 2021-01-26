@@ -19,7 +19,7 @@ const Login = ({ signInWithEmail, navigation, signInWithGoogle }) => {
     event && event.preventDefault && event.preventDefault();
     
       signInWithEmail(userEmail, password);
-      setShouldShow(true);
+     // setShouldShow(true);
   };
   const handleSignInWithGoogle = (event) => {
     event && event.preventDefault && event.preventDefault();
