@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Image, Text } from "react-native";
 import {
   Container,
   Content,
@@ -10,20 +10,27 @@ import {
   Button,
   View,
 } from "native-base";
-import { onSignUp, removeErrorMessage } from "../../store/actions/Auth";
+import icon from "../../../assets/images/icon.png";
 import { connect } from "react-redux";
+import { onSignUp } from "../../store/actions/Auth";
 const SignUp = (props) => {
   let onSignUp = props.onSignUp;
   let signUpState = props.signUpState;
-  let signUpFailMessage = props.signUpFailMessage;
-  let removeErrorMessage = props.removeErrorMessage;
-  const [error, setError] = useState(false);
-  const [emailError, setEmailError] = useState(true);
-  const [message, setMessage] = useState({
-    description: "",
-    status: false,
-    color: false,
-  });
+  useEffect(() => {
+    
+
+      setError(false);
+   
+  }, []);
+  useEffect(() => {
+    if (signUpState == true) {
+      setMessage({ ...message, description: "SignUp Sucessfully" });
+      setError(false);
+    } else {
+      setMessage({ ...message, description: "SignUp Failed" });
+    }
+  }, [signUpState]);
+
   const [userInfo, setUserInfo] = useState({
     Name: "",
     Email: "",
@@ -31,21 +38,19 @@ const SignUp = (props) => {
     password2: "",
     phoneNumber: "",
   });
-  const [signUpError, setSignUpError] = useState(false);
-  useEffect(() => {
-    removeErrorMessage();
-    setError(false);
-    setSignUpError(false);
-  }, []);
-  useEffect(() => {
-    if (signUpFailMessage !== "") {
-      setSignUpError(true);
-    }
-  }, [signUpFailMessage]);
+
+  const [error, setError] = useState(false);
+  const [emailError, setEmailError] = useState(true);
+  const [message, setMessage] = useState({
+    description: "",
+    status: false,
+    color: false,
+  });
 
   const handleSignUp = (event) => {
     event && event.preventDefault && event.preventDefault();
     if (userInfo.password1 === userInfo.password2 && emailError === false) {
+      // setError(false);
       onSignUp(userInfo);
     } else {
       setError(true);
@@ -56,11 +61,13 @@ const SignUp = (props) => {
     if (reg.test(text) == false) {
       setMessage({ ...message, status: true });
       setEmailError(false);
+      setError(true);
       return false;
     } else {
       setUserInfo({ ...userInfo, Email: text });
     }
   };
+
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>
@@ -71,18 +78,15 @@ const SignUp = (props) => {
               onChangeText={(text) => setUserInfo({ ...userInfo, Name: text })}
             />
           </Item>
+
           <Item floatingLabel last style={styles.inputtexts}>
             <Label>Email Address</Label>
-            <Input
-              keyboardType="email-address"
-              onChangeText={(text) => handleEmail(text)}
-            />
+            <Input onChangeText={(text) => handleEmail(text)} />
           </Item>
 
           <Item floatingLabel last style={styles.inputtexts}>
             <Label>Phone Number</Label>
             <Input
-              keyboardType="phone-pad"
               onChangeText={(text) =>
                 setUserInfo({ ...userInfo, phoneNumber: text })
               }
@@ -125,15 +129,7 @@ const SignUp = (props) => {
               </Text>
             </View>
           )}
-          {signUpError !== "" && (
-            <View style={{ padding: 0 }}>
-              <Text
-                style={{ color: "red", paddingTop: 10, textAlign: "center" }}
-              >
-                {signUpFailMessage}
-              </Text>
-            </View>
-          )}
+
           <Button onPress={handleSignUp} full success style={styles.buttons}>
             <Text style={styles.buttonstxt}>SignUp</Text>
           </Button>
@@ -144,12 +140,10 @@ const SignUp = (props) => {
 };
 const mapStateToProps = (state) => {
   return {
-    signUpFailMessage: state.Auth.signUpFailMessage,
+    signUpState: state.Auth.signUpState,
   };
 };
-export default connect(mapStateToProps, { onSignUp, removeErrorMessage })(
-  SignUp
-);
+export default connect(mapStateToProps, { onSignUp })(SignUp);
 
 const styles = StyleSheet.create({
   container: {
@@ -193,8 +187,8 @@ const styles = StyleSheet.create({
   form: {
     marginTop: 5,
   },
-  buttons: { backgroundColor: "#5dae7e", color: "#fff", marginTop: 20 },
-  inputtexts: { paddingBottom: 5, borderWidth: 1 },
+  buttons: { color: "#fff", marginTop: 20 },
+  inputtexts: { paddingBottom: 5 },
   textinfob: { color: "#666", marginTop: 50, textAlign: "center" },
   signuplink: { textAlign: "center", color: "#60ad7f" },
   buttonstxt: { color: "#fff" },

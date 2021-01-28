@@ -74,6 +74,7 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
           margin: 2,
           marginBottom: 2,
           height: 30,
+          fontSize: 12,
           borderWidth: 0,
           backgroundColor: "#eee",
         }}

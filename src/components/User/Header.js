@@ -20,6 +20,13 @@ const Header = ({ ...props }) => {
   const [userName, setUserName] = useState("");
   const [check, setCheck] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  useEffect(() => {
+    profileInfo.map((data) => {
+      if (data.photoURL !== "") {
+        setState({ ...state, update: true, photo: data.photoURL });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     profileInfo.map((data) => {
@@ -40,14 +47,16 @@ const Header = ({ ...props }) => {
   }, [profileInfo]);
 
   useEffect(() => {
+    console.log(checkVisible);
     setCheck(checkVisible);
   }, [checkVisible]);
 
   const navigationHanlder = () => {
     navigation.navigate("AddService", {
-      key: 2,
+      key:2,
     });
   };
+
   const handleNotification = () => {
     navigation.navigate("Notification");
   };
@@ -80,7 +89,6 @@ const Header = ({ ...props }) => {
               <Entypo
                 onPress={navigationHanlder}
                 name="plus"
-                onPress={navigationHanlder}
                 size={25}
                 color={"#000"}
                 style={{ paddingRight: 12 }}

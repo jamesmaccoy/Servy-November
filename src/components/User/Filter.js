@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { getAdminCategory } from "../../store/actions/Category";
 import FeaturesSelect from "./Features";
 import { distanceRadius } from "../../store/actions/Location";
-import {Picker} from '@react-native-community/picker';
+import { Picker } from "@react-native-community/picker";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
@@ -159,27 +159,6 @@ const Filter = ({ ...props }) => {
               </View>
             </View>
           </View>
-          {/* <ScrollView
-            style={{
-              position: "absolute",
-              alignSelf: "center",
-              top: deviceHeight / 25,
-              backgroundColor: "#fff",
-              zIndex: 1,
-              height: 300,
-            }}
-          >
-            {categoriesList.map((data) => (
-              <View style={{ flexDirection: "row" }}>
-                <RadioButton
-                  value="first"
-                  status={checked === "first" ? "checked" : "unchecked"}
-                  onPress={() => setChecked("first")}
-                />
-                <Text>{data.label} </Text>
-              </View>
-            ))}
-          </ScrollView> */}
         </Modal>
       </View>
     </KeyboardAvoidingView>
@@ -191,16 +170,7 @@ const mapStateToProps = (state) => {
     initialDistance: state.location.initialDistance,
   };
 };
-// const mapDispatchToProps = (dispatch) => {
-//   return {
-//     handleDistance: (distance) => {
-//       dispatch({
-//         type: "DISTANCE_RADIUS",
-//         payload: distance,
-//       });
-//     },
-//   };
-// };
+
 export default connect(mapStateToProps, {
   getAdminCategory,
   distanceRadius,

@@ -47,6 +47,17 @@ const CategoryPicker = ({
               setSelect(true);
               setVisible(true);
             }
+            if (itemValue === "select") {
+              setSelectedValue({
+                ...selectedValue,
+                other: true,
+                value: "select",
+                label: "select",
+                features: [],
+              });
+              setSelect(true);
+              setVisible(true);
+            }
           }
         }}
         mode="dropdown"
@@ -58,9 +69,9 @@ const CategoryPicker = ({
             value={selectedValue}
           />
         ) : (
-          <Picker.Item label="Select Category" key={1} value="0" />
+          <Picker.Item label="Select Category" key={1} value="select" />
         )}
-        {categories != null ? (
+        {categories.length !== 0 ? (
           categories.map((data, index) => {
             if (categoryInital === true) {
               if (data.label !== selectedValue.label) {

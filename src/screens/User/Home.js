@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  ScrollView,
-  View,
-  Image,
-  ActivityIndicator,
-  FlatList,
-  TouchableOpacity,
-} from "react-native";
+import { ScrollView, View, Image, TouchableOpacity } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
 import { Text } from "native-base";
@@ -35,9 +28,7 @@ const Home = ({ ...props }) => {
   const [showFilter, setShowFilter] = useState(false);
   const [newServices, setNewServices] = useState([]);
   const [proServices, setProServices] = useState([]);
-  const [isLoading, setLoading] = useState(true);
   const [providerModal, setProviderModal] = useState(false);
-  const [data, setData] = useState([]);
   const [activeServices, setActiveServices] = useState([]);
   useEffect(() => {
     getServices();

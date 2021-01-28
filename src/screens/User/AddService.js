@@ -48,7 +48,7 @@ const AddService = ({ ...props }) => {
   const [images, setImages] = useState([]);
   const [imgInitial, setImgInitial] = useState(false);
   const [selectedValue, setSelectedValue] = useState({
-    other: false,
+    other: true,
     label: "",
     value: "",
     features: "",
@@ -61,12 +61,13 @@ const AddService = ({ ...props }) => {
   const [newFeature, setNewFeature] = useState({
     label: "",
     state: false,
-    id: "",
     attributeState: false,
+    id: "",
   });
   const [featureVisible, setFeatureVisible] = useState(false);
   const [visible, setVisible] = useState(false);
   const [categoryInital, setCategoryInitial] = useState(false);
+  const [addfeatureVisible, setAddFeatureVisible] = useState(false);
   useEffect(() => {
     getAdminCategory();
     setGoBack(false);
@@ -77,10 +78,7 @@ const AddService = ({ ...props }) => {
   useEffect(() => {
     if (props.route.params.key !== 2) {
       let data = props.route.params.data;
-      if (
-        data.id === "snmpjSLY6rnMC39rxi9F" &&
-        data.serviceName === "Hoola hoop teacher"
-      ) {
+      if (data.id === "snmpjSLY6rnMC39rxi9F") {
         setSample(true);
       }
       setSaveBtn(true);
@@ -148,7 +146,7 @@ const AddService = ({ ...props }) => {
     setFeatureVisible(!featureVisible);
   };
   const AddFeature = () => {
-    if (newFeature.label !== "") {
+    if (newFeature.label !== "" && selectedValue.value !== "") {
       setStateChange(true);
       setCategoryInitial(true);
       setSelectedValue({
@@ -196,7 +194,11 @@ const AddService = ({ ...props }) => {
     }
   };
   useEffect(() => {
-    console.log("selecteddd", selectedValue);
+    if (selectedValue.value === "") {
+      setAddFeatureVisible(false);
+    } else {
+      setAddFeatureVisible(true);
+    }
   }, [selectedValue]);
   return (
     <View>
@@ -213,6 +215,7 @@ const AddService = ({ ...props }) => {
           {errorMessage && (
             <Text style={{ color: "red" }}>Provide All Information</Text>
           )}
+
           {saveBtn ? (
             <TouchableOpacity onPress={handleUpdateInfo} style={styles.btn}>
               <Text>Save & Exit</Text>
@@ -271,66 +274,42 @@ const AddService = ({ ...props }) => {
                   }
                 />
               )}
-              <Text style={styles.heading}>Features</Text>
-              <View style={styles.checkboxList}>
-                {selectedValue.features.length !== 0 &&
-                  selectedValue.features.map((subValue, index) => {
-                    if (subValue.state) {
+
+              <View>
+                <Text style={styles.heading}>Features</Text>
+                <View style={styles.checkboxList}>
+                  {selectedValue.value !== "select" &&
+                    selectedValue.features.length !== 0 &&
+                    selectedValue.features.map((subValue, index) => {
                       return (
-                        <CheckBoxList
-                          select={select}
-                          index={index}
-                          head={subValue.label}
-                          key={index}
-                          array={array}
-                          setArray={setArray}
-                          label={subValue.label}
-                          subValue={selectedValue.features}
-                          state={subValue.state}
-                          id={subValue.id}
-                          initialArray={selectedValue.features}
-                          initialValue={subValue}
-                        />
+                        <>
+                          {subValue.state && (
+                            <CheckBoxList
+                              select={select}
+                              index={index}
+                              head={subValue.label}
+                              key={index}
+                              array={array}
+                              setArray={setArray}
+                              label={subValue.label}
+                              subValue={selectedValue.features}
+                              state={subValue.state}
+                              id={subValue.id}
+                              initialArray={selectedValue.features}
+                              initialValue={subValue}
+                            />
+                          )}
+                        </>
                       );
-                    }
-                  })}
+                    })}
+                </View>
               </View>
               <View>
-                <View style={styles.nfbtn}>
-                  <Text
-                    style={{
-                      textAlign: "left",
-                      paddingTop: 10,
-                      paddingLeft: 5,
-                      color: "#000",
-                      fontSize: 15,
-                    }}
-                  >
-                    New Features
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.showFeatures}
-                    onPress={showFeature}
-                    full
-                  >
-                    <Entypo name="plus" color={"#000"} size={20} />
-                    <Text
-                      style={{
-                        textAlign: "center",
-                        paddingLeft: 8,
-                        color: "#000",
-                        fontSize: 15,
-                      }}
-                    >
-                      Add
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                {featureVisible && (
-                  <View>
+                {addfeatureVisible && (
+                  <View style={styles.nfbtn}>
                     <Input
                       name="Feature"
-                      head="Feature"
+                      head=""
                       placeHolder="eg. DeliveryIncluded"
                       onChangeText={(values) =>
                         setNewFeature({
@@ -342,22 +321,29 @@ const AddService = ({ ...props }) => {
                         })
                       }
                     />
-                    <View style={{ flexDirection: "row", paddingTop: 20 }}>
-                      <TouchableOpacity
-                        style={styles.addFeatures}
-                        onPress={AddFeature}
+
+                    <TouchableOpacity
+                      style={styles.showFeatures}
+                      onPress={AddFeature}
+                      full
+                    >
+                      <Entypo
+                        name="plus"
+                        color={"#000"}
+                        style={styles.btnupr}
+                        size={20}
+                      />
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          paddingLeft: 8,
+                          color: "#000",
+                          fontSize: 15,
+                        }}
                       >
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            color: "#000",
-                            fontSize: 12,
-                          }}
-                        >
-                          Add Feature
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
+                        Add
+                      </Text>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -375,6 +361,7 @@ const AddService = ({ ...props }) => {
                 state={state}
                 initialValue={state.maps}
               />
+
               <Text style={styles.heading}>Gallery</Text>
               <PickImage
                 pickImages={pickImages}

@@ -21,14 +21,13 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
   },
   create: {
-    paddingBottom: 0,
+    paddingBottom: 100,
     paddingTop: 50,
   },
 
   heading: {
     paddingTop: 20,
     fontSize: 20,
-    color: "#000",
   },
 
   name: {
@@ -37,7 +36,7 @@ export const styles = StyleSheet.create({
   },
   checkboxList: {
     flexDirection: "row",
-
+ 
     flexWrap: "wrap",
   },
   image: {
@@ -51,7 +50,7 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   picker: {
-    marginTop: 5,
+    marginTop: 20,
     height: 50,
     paddingLeft: 10,
     flex: 1,
@@ -71,14 +70,15 @@ export const styles = StyleSheet.create({
     paddingTop: 10,
     color: "#a9a9a9",
   },
-  inputfml: {
+   inputfml: {
     height: 50,
     paddingLeft: 10,
     flex: 1,
-    color: "#000",
+    color:'#000',
 
     textAlign: "center",
     paddingTop: 14,
+
   },
   inputContainer: {
     borderWidth: 1,
@@ -90,40 +90,32 @@ export const styles = StyleSheet.create({
     borderBottomRightRadius: 5,
   },
   showFeatures: {
-    width: 100,
-    borderTopLeftRadius: 5,
+  
+     width:100,
+     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
-    justifyContent: "center",
+    justifyContent:'center',
     backgroundColor: "#efefef",
-    padding: 8,
-    marginRight: 10,
-    paddingTop: 10,
-    paddingBottom: 10,
-    elevation: 5,
-    flexDirection: "row",
-    alignItems: "center",
+    position:'relative',
+    padding:8,
+    position:'absolute',
+    right:4,
+    top:38,
   },
   addFeatures: {
     flex: 1,
     borderColor: "#a9a9a9",
     elevation: 0,
-    paddingTop: 10,
-    paddingBottom: 10,
     borderWidth: 1,
     borderTopLeftRadius: 5,
     borderTopRightRadius: 5,
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    backgroundColor: "red",
     backgroundColor: "#f7f7f7",
   },
-  nfbtn: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderColor: "#a9a9a9",
-    alignItems: "flex-start",
-    marginTop: 10,
-  },
-  btnupr: { position: "absolute", left: 8 },
+  nfbtn:{  borderColor: "#a9a9a9",},
+  btnupr:{position:'absolute',left:8}
 });
