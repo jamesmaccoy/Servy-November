@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, Text, Modal, Dimensions } from "react-native";
+import {
+  ImageBackground,
+  Text,
+  Modal,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { View } from "react-native";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Rating from "../Generic/Rating";
 import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
@@ -36,80 +42,87 @@ const ProviderItem = ({
 
   const [visiblePreview, seVisiblePreview] = useState(true);
 
-  const handlePreview = () => {
+  const handlePreview = (e) => {
     setProviderModal(true);
     selectOption(data);
   };
 
   return (
-    // <TouchableOpacity
-    //   activeOpacity={1}
-    //   onPress={() => {
-    //     navigation.navigate("ListDetail", {
-    //       data: data,
-    //       key: data.id,
-    //       user: "Provider",
-    //     });
-    //   }}
-    // >
-    <View>
-      <View style={{ paddingBottom: 20, paddingLeft: pad, paddingRight: pad }}>
-        <Card style={{ height: 280 }}>
-          <ImageBackground
-            style={{ flex: 1 }}
-            source={
-              serviceImage.state === true ? { uri: serviceImage.image } : bg
-            }
-          >
-            <LinearGradient
-              colors={["rgba(0,0,0,0.5)", "transparent"]}
-              style={{
-                height: 300,
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
+    <TouchableWithoutFeedback
+      activeOpacity={1}
+      onPress={() => {
+        navigation.navigate("AddService", {
+          data: data,
+          key: data.id,
+          user: "Provider",
+        });
+      }}
+    >
+      <View>
+        <View
+          style={{ paddingBottom: 20, paddingLeft: pad, paddingRight: pad }}
+        >
+          <Card style={{ height: 280 }}>
+            <ImageBackground
+              style={{ flex: 1 }}
+              source={
+                serviceImage.state === true ? { uri: serviceImage.image } : bg
+              }
             >
-              <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
-                {data.serviceName}
-              </Text>
-              <View style={{ paddingTop: 20, paddingRight: 5 }}>
-                <TouchableOpacity onPress={handlePreview}>
-                  <Entypo size={20} color="#fff" name="dots-three-vertical" />
-                </TouchableOpacity>
-              </View>
-            </LinearGradient>
-          </ImageBackground>
-          <Card.Content style={{ flexDirection: "row", padding: 20 }}>
-            <FontAwesome
-              style={{ fontSize: 30, paddingTop: 10 }}
-              name="briefcase"
-            />
-            <Card.Content style={{ fontSize: 20 }}>
-              <Paragraph>{data.category} </Paragraph>
-              <Card.Content style={{ paddingLeft: 0, flexDirection: "row" }}>
-                <View style={{ flexDirection: "row" }}>
-                  {stars.map((x, index) => (
-                    <TouchableOpacity key={x}>
-                      <Rating
-                        filled={x <= data.averageRating ? true : false}
-                        name="Service"
-                        size={16}
-                        key={x}
+              <LinearGradient
+                colors={["rgba(0,0,0,0.5)", "transparent"]}
+                style={{
+                  height: 300,
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
+                  {data.serviceName}
+                </Text>
+                <View style={{ paddingTop: 20, paddingRight: 5 }}>
+                  <TouchableWithoutFeedback>
+                    <TouchableOpacity onPress={handlePreview}>
+                      <Entypo
+                        size={20}
+                        color="#fff"
+                        name="dots-three-vertical"
                       />
                     </TouchableOpacity>
-                  ))}
+                  </TouchableWithoutFeedback>
                 </View>
-                <Paragraph style={{ paddingLeft: 5 }}>
-                  Reviews ({data.totalReviews})
-                </Paragraph>
+              </LinearGradient>
+            </ImageBackground>
+            <Card.Content style={{ flexDirection: "row", padding: 20 }}>
+              <FontAwesome
+                style={{ fontSize: 30, paddingTop: 10 }}
+                name="briefcase"
+              />
+              <Card.Content style={{ fontSize: 20 }}>
+                <Paragraph>{data.category} </Paragraph>
+                <Card.Content style={{ paddingLeft: 0, flexDirection: "row" }}>
+                  <View style={{ flexDirection: "row" }}>
+                    {stars.map((x, index) => (
+                      <TouchableOpacity key={x}>
+                        <Rating
+                          filled={x <= data.averageRating ? true : false}
+                          name="Service"
+                          size={16}
+                          key={x}
+                        />
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                  <Paragraph style={{ paddingLeft: 5 }}>
+                    Reviews ({data.totalReviews})
+                  </Paragraph>
+                </Card.Content>
               </Card.Content>
             </Card.Content>
-          </Card.Content>
-        </Card>
+          </Card>
+        </View>
       </View>
-
-      {/* </TouchableOpacity> */}
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 const mapStateToProps = (state) => {

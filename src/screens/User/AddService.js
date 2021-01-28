@@ -48,8 +48,10 @@ const AddService = ({ ...props }) => {
   const [images, setImages] = useState([]);
   const [imgInitial, setImgInitial] = useState(false);
   const [selectedValue, setSelectedValue] = useState({
+    other: false,
+    label: "",
     value: "",
-    features: [],
+    features: "",
   });
   const [userLocation, setUserLocation] = useState({
     errorMessage: "",
@@ -59,6 +61,8 @@ const AddService = ({ ...props }) => {
   const [newFeature, setNewFeature] = useState({
     label: "",
     state: false,
+    id: "",
+    attributeState: false,
   });
   const [featureVisible, setFeatureVisible] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -73,7 +77,10 @@ const AddService = ({ ...props }) => {
   useEffect(() => {
     if (props.route.params.key !== 2) {
       let data = props.route.params.data;
-      if (data.id === "snmpjSLY6rnMC39rxi9F") {
+      if (
+        data.id === "snmpjSLY6rnMC39rxi9F" &&
+        data.serviceName === "Hoola hoop teacher"
+      ) {
         setSample(true);
       }
       setSaveBtn(true);
@@ -188,7 +195,9 @@ const AddService = ({ ...props }) => {
       setMessage(false);
     }
   };
-
+  useEffect(() => {
+    console.log("selecteddd", selectedValue);
+  }, [selectedValue]);
   return (
     <View>
       <PleaseWait
@@ -204,7 +213,6 @@ const AddService = ({ ...props }) => {
           {errorMessage && (
             <Text style={{ color: "red" }}>Provide All Information</Text>
           )}
-
           {saveBtn ? (
             <TouchableOpacity onPress={handleUpdateInfo} style={styles.btn}>
               <Text>Save & Exit</Text>
@@ -265,28 +273,26 @@ const AddService = ({ ...props }) => {
               )}
               <Text style={styles.heading}>Features</Text>
               <View style={styles.checkboxList}>
-                {selectedValue.features &&
+                {selectedValue.features.length !== 0 &&
                   selectedValue.features.map((subValue, index) => {
-                    return (
-                      <>
-                        {subValue.state && (
-                          <CheckBoxList
-                            select={select}
-                            index={index}
-                            head={subValue.label}
-                            key={index}
-                            array={array}
-                            setArray={setArray}
-                            label={subValue.label}
-                            subValue={selectedValue.features}
-                            state={subValue.state}
-                            id={subValue.id}
-                            initialArray={selectedValue.features}
-                            initialValue={subValue}
-                          />
-                        )}
-                      </>
-                    );
+                    if (subValue.state) {
+                      return (
+                        <CheckBoxList
+                          select={select}
+                          index={index}
+                          head={subValue.label}
+                          key={index}
+                          array={array}
+                          setArray={setArray}
+                          label={subValue.label}
+                          subValue={selectedValue.features}
+                          state={subValue.state}
+                          id={subValue.id}
+                          initialArray={selectedValue.features}
+                          initialValue={subValue}
+                        />
+                      );
+                    }
                   })}
               </View>
               <View>
@@ -369,7 +375,6 @@ const AddService = ({ ...props }) => {
                 state={state}
                 initialValue={state.maps}
               />
-
               <Text style={styles.heading}>Gallery</Text>
               <PickImage
                 pickImages={pickImages}

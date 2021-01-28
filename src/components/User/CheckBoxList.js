@@ -4,15 +4,12 @@ import CheckBox from "@react-native-community/checkbox";
 const CheckBoxList = ({
   head,
   array,
-  setArray,
   label,
   select,
   index,
   state,
   id,
   initialValue,
-  subValue,
-  initialArray,
 }) => {
   const [check, setCheck] = useState(false);
   useEffect(() => {
@@ -40,7 +37,7 @@ const CheckBoxList = ({
   };
 
   return (
-    <View key={index} style={styles.checkboxList}>
+    <View style={styles.checkboxList}>
       <View style={styles.checkboxContainer}>
         <CheckBox
           value={check}

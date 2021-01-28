@@ -80,10 +80,6 @@ const ProviderModal = ({
               />
               <Text style={{ paddingLeft: 30, fontSize: 18 }}>Preview</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={handleEdit} style={styles.actions}>
-              <AntDesign size={30} style={{ color: "#000" }} name="edit" />
-              <Text style={{ paddingLeft: 30, fontSize: 18 }}>Edit</Text>
-            </TouchableOpacity>
             {optionSelect.serviceName !== "Hoola hoop teacher" && (
               <TouchableOpacity onPress={handleDelete} style={styles.actions}>
                 <MaterialIcons
@@ -115,12 +111,12 @@ export const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   wrapper: {
-    flex: 7,
+    flex: 8,
     width: deviceWidth,
     backgroundColor: "rgba(0,0,0,.5)",
   },
   innerWrapper: {
-    flex: 4,
+    flex: 2.5,
     width: deviceWidth,
     backgroundColor: "#fff",
     padding: 20,

@@ -64,15 +64,6 @@ const Home = ({ ...props }) => {
     );
   }, [props.providerServices]);
 
-  useEffect(() => {
-    (async () => {
-      await fetch("https://webrabbit.in/survey/banner-content.php")
-        .then((response) => response.json())
-        .then((json) => setData(json.content))
-        .catch((error) => console.error(error))
-        .finally(() => setLoading(false));
-    })();
-  }, []);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
@@ -185,33 +176,23 @@ const Home = ({ ...props }) => {
             </ScrollView>
           </View>
           <View style={styles.bannercont}>
-            {isLoading ? (
-              <ActivityIndicator />
-            ) : (
-              <FlatList
-                data={data}
-                keyExtractor={({ id }, index) => id}
-                renderItem={({ item }) => (
-                  <View style={styles.bannerdetail}>
-                    <Text style={styles.bannertitle}>{item.title}</Text>
+            <View style={styles.bannerdetail}>
+              <Text style={styles.bannertitle}>Title Here</Text>
+              <Text style={styles.bannerdescription}>Content Here</Text>
+              <View style={styles.bannerbuttontok}>
+                <TouchableOpacity
+                  style={styles.loginScreenButton}
+                  underlayColor="#fff"
+                >
+                  <FontAwesome
+                    style={{ fontSize: 30, color: "#62ad80" }}
+                    name="code-fork"
+                  />
+                  <Text style={styles.bannerbutton}>Button</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
 
-                    <Text style={styles.bannerdescription}>{item.content}</Text>
-                    <View style={styles.bannerbuttontok}>
-                      <TouchableOpacity
-                        style={styles.loginScreenButton}
-                        underlayColor="#fff"
-                      >
-                        <FontAwesome
-                          style={{ fontSize: 30, color: "#62ad80" }}
-                          name="code-fork"
-                        />
-                        <Text style={styles.bannerbutton}>Button</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </View>
-                )}
-              />
-            )}
             <Image
               style={styles.bannerimg}
               source={require("../../../assets/images/13.png")}
