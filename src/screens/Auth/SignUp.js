@@ -17,10 +17,7 @@ const SignUp = (props) => {
   let onSignUp = props.onSignUp;
   let signUpState = props.signUpState;
   useEffect(() => {
-    
-
-      setError(false);
-   
+    setError(false);
   }, []);
   useEffect(() => {
     if (signUpState == true) {

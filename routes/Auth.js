@@ -15,6 +15,7 @@ const AuthTab = () => {
         options={{
           headerShown: false,
         }}
+        
         name="startscreen"
         component={StartScreen}
       />
