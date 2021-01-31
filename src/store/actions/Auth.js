@@ -1,4 +1,64 @@
 import * as Google from "expo-google-app-auth";
+import Constants from "expo-constants";
+import * as Notifications from "expo-notifications";
+import axios from "axios";
+
+// q2YWBdsO0WVUOr7qqTJaIa_nTZvCgI1A4EvyGgV9
+
+export const sendPushNotification = (id) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  let experienceId = Constants.manifest.id;
+
+  const providerInfo = await db.collection("users").doc(id).get();
+  const dt = providerInfo.data().deviceToken;
+
+  const { data: token } = await Notifications.getExpoPushTokenAsync();
+  const res = await axios({
+    method: "post",
+    url: "https://fcm.googleapis.com/fcm/send",
+    headers: {
+      "Content-Type": "application/json",
+     " Authorization": `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
+    },
+    body: JSON.stringify({
+      to: token,
+      data: {
+        title: "\uD83D\uDCE7 You've got mail",
+        message: "Hello world! \uD83C\uDF10",
+        experienceId: experienceId,
+      },
+    }),
+  });
+  console.log("hello");
+
+  console.log("ressss", res.data);
+};
+
+// export async function registerForPushNotificationsAsync(userId: string) {
+//   let experienceId = undefined;
+//   if (!Constants.manifest) {
+//     // Absence of the manifest means we're in bare workflow
+//     experienceId = "@username/example";
+//   }
+//   const expoPushToken = await Notifications.getExpoPushTokenAsync({
+//     experienceId,
+//   });
+//   await fetch("https://example.com/", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       userId,
+//       expoPushToken,
+//     }),
+//   });
+// }
+
 export const onSignUp = (user) => async (
   dispatch,
   getState,
@@ -83,6 +143,7 @@ export const verifyUser = () => async (
     type: "LOADING",
     payload: true,
   });
+
   await firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
       dispatch({
@@ -188,6 +249,7 @@ export const signInWithGoogle = () => async (
                     websiteUrl: "",
                     facebookUrl: "",
                     instagramUrl: "",
+                    deviceToken: "",
                   });
                 }
               })
@@ -196,10 +258,6 @@ export const signInWithGoogle = () => async (
                   type: "LOADING",
                   payload: false,
                 });
-                // var errorCode = error.code;
-                // var errorMessage = error.message;
-                // var email = error.email;
-                // var credential = error.credential;
               });
           } else {
             console.log("User already signed-in Firebase.");
@@ -260,6 +318,20 @@ export const Authorization = () => async (
           type: "AUTH_CHECK",
           payload: false,
         });
+      }
+    })
+    .then(async () => {
+      try {
+        const settings = await Notifications.getPermissionsAsync();
+        const { data: token } = await Notifications.getDevicePushTokenAsync();
+
+        var docRef = await db.collection("users").doc(currentUser);
+
+        docRef.update({
+          deviceToken: token,
+        });
+      } catch (err) {
+        console.log("ERROR", err);
       }
     })
     .catch(() => {

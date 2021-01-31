@@ -36,6 +36,8 @@
     },
     "description": "",
     "android": {
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi": true,
       "package": "com.rameezraja.serveys",
       "config": {
         "googleMaps": {

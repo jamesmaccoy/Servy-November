@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  ImageBackground,
-  Text,
-  Modal,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { ImageBackground, Text, Modal, Dimensions } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { View } from "react-native";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
-import { TouchableWithoutFeedback } from "react-native-gesture-handler";
+import {
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+} from "react-native-gesture-handler";
 import Rating from "../Generic/Rating";
 import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
 import { connect } from "react-redux";
 import { selectOption } from "../../store/actions/Services";
-let deviceWidth = Dimensions.get("window").width;
-let deviceHeight = Dimensions.get("window").height;
+
 const stars = [1, 2, 3, 4, 5];
 const ProviderItem = ({
   data,
@@ -42,7 +38,7 @@ const ProviderItem = ({
 
   const [visiblePreview, seVisiblePreview] = useState(true);
 
-  const handlePreview = (e) => {
+  const handlePreview = (ev) => {
     setProviderModal(true);
     selectOption(data);
   };
@@ -81,7 +77,7 @@ const ProviderItem = ({
                   {data.serviceName}
                 </Text>
                 <View style={{ paddingTop: 20, paddingRight: 5 }}>
-                  <TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback activeOpacity={1}>
                     <TouchableOpacity onPress={handlePreview}>
                       <Entypo
                         size={20}

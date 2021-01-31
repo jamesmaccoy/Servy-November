@@ -15,6 +15,7 @@ const CategoryPicker = ({
   setStateChange,
   categoryInital,
   setCategoryInitial,
+  setAddFeatureVisible,
 }) => {
   return (
     <View style={styles.picker}>
@@ -28,6 +29,7 @@ const CategoryPicker = ({
           setCategoryInitial(false);
           if (stateChange === false) {
             if (itemValue !== "other") {
+              setAddFeatureVisible(true);
               setSelectedValue(itemValue);
               setState({
                 ...state,
@@ -37,6 +39,7 @@ const CategoryPicker = ({
               setVisible(false);
             }
             if (itemValue === "other") {
+              setAddFeatureVisible(true);
               setSelectedValue({
                 ...selectedValue,
                 other: true,
@@ -48,6 +51,7 @@ const CategoryPicker = ({
               setVisible(true);
             }
             if (itemValue === "select") {
+              setAddFeatureVisible(false);
               setSelectedValue({
                 ...selectedValue,
                 other: true,
@@ -55,8 +59,6 @@ const CategoryPicker = ({
                 label: "select",
                 features: [],
               });
-              setSelect(true);
-              setVisible(true);
             }
           }
         }}

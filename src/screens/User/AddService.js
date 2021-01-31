@@ -193,13 +193,6 @@ const AddService = ({ ...props }) => {
       setMessage(false);
     }
   };
-  useEffect(() => {
-    if (selectedValue.value === "") {
-      setAddFeatureVisible(false);
-    } else {
-      setAddFeatureVisible(true);
-    }
-  }, [selectedValue]);
   return (
     <View>
       <PleaseWait
@@ -263,6 +256,7 @@ const AddService = ({ ...props }) => {
                 stateChange={stateChange}
                 array={array}
                 setStateChange={setStateChange}
+                setAddFeatureVisible={setAddFeatureVisible}
               />
               {visible && (
                 <Input

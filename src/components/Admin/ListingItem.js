@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { Avatar, Button, Card, Paragraph } from "react-native-paper";
-import {
-  View,
-  Text,
-  ImageBackground,
-} from "react-native";
+import { View, Text, ImageBackground } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "../../styles/Admin/listingItemStyle";
 import { Approve } from "../../store/actions/Admin";
+import { sendPushNotification } from "../../store/actions/Auth";
 import { connect } from "react-redux";
 const DATE_OPTIONS = {
   weekday: "short",
@@ -15,7 +12,7 @@ const DATE_OPTIONS = {
   month: "short",
   day: "numeric",
 };
-const ListingItem = ({ data, Approve }) => {
+const ListingItem = ({ data, Approve, sendPushNotification }) => {
   const [approveFalg, setApproveFlag] = useState(false);
   const [cloneFalg, setCloneFlag] = useState(false);
   const handleClone = () => {
@@ -26,22 +23,27 @@ const ListingItem = ({ data, Approve }) => {
     }, 100);
   };
   const handleApprove = () => {
-    Approve(true, data.userId, data.id);
-    setApproveFlag(!approveFalg);
-    const timer = setTimeout(() => {
-      setApproveFlag(false);
-    }, 100);
+    sendPushNotification(data.userId);
+
+    // Approve(true, data.userId, data.id);
+    // setApproveFlag(!approveFalg);
+    // const timer = setTimeout(() => {
+    //   setApproveFlag(false);
+    // }, 100);
   };
 
   return (
     <View style={{ paddingBottom: 20 }}>
       <Card style={{ height: 280 }}>
-        <ImageBackground style={{ flex: 1 }} source={{ uri: data.imagesUrl[0] }}>
+        <ImageBackground
+          style={{ flex: 1 }}
+          source={{ uri: data.imagesUrl[0] }}
+        >
           <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
             {data.serviceName}
           </Text>
         </ImageBackground>
-        <View style={{flexDirection: "row" , justifyContent: "space-between"}}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Card.Content style={styles.left}>
             <Card.Content style={{ paddingLeft: 0, paddingRight: 0 }}>
               <MaterialCommunityIcons style={styles.updateIcon} name="update" />
@@ -62,7 +64,7 @@ const ListingItem = ({ data, Approve }) => {
           <Card.Content style={styles.rightContent}>
             <Button
               onPress={handleApprove}
-              style={{ marginTop: 10 , height: 50}}
+              style={{ marginTop: 10, height: 50 }}
               mode={approveFalg && "contained"}
               color="#eee"
             >
@@ -70,7 +72,7 @@ const ListingItem = ({ data, Approve }) => {
             </Button>
             <Button
               onPress={handleClone}
-              style={{  marginTop: 10 , height: 50 }}
+              style={{ marginTop: 10, height: 50 }}
               mode={cloneFalg && "contained"}
               color="#eee"
               compact={true}
@@ -84,4 +86,4 @@ const ListingItem = ({ data, Approve }) => {
   );
 };
 
-export default connect("", { Approve })(ListingItem);
+export default connect("", { Approve, sendPushNotification })(ListingItem);
