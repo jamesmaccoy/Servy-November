@@ -19,49 +19,39 @@ const Services = ({ ...props }) => {
   let getServices = props.getServices;
   let getServicesByCategory = props.getServicesByCategory;
   let getAdminCategory = props.getAdminCategory;
-  let services = props.services;
   let categories = props.categories;
   let filterServices = props.filterServices;
+  let services = props.services;
 
   const [loading, setLoading] = useState(true);
-  const [newServices, setNewServices] = useState([]);
   const [showFilter, setShowFilter] = useState(false);
   const [filterCategory, setFilterCategory] = useState([]);
+  const [newServices, setNewServices] = useState([]);
+  const [getAgain, setGetAgain] = useState(false);
 
   useEffect(() => {
-    if (categories.length !== 0) {
-      getAdminCategory();
-    }
+    getAdminCategory();
+    setGetAgain(false);
   }, []);
   useEffect(() => {
     setLoading(props.serviceLoader);
   }, [props.serviceLoader]);
-  useEffect(() => {
-    if (filterCategory.length === 0) {
-      if (props.route.params.id === 2) {
-        setNewServices(filterServices);
-      }
-      if (props.route.params.id === 3) {
-        setNewServices(services);
-      }
-    }
-  }, [services, filterCategory, filterServices]);
 
   useEffect(() => {
     if (props.route.params.id === 2) {
-      if (props.route.params.state !== "") {
+      if (props.route.params.state) {
         getServicesByCategory(
           props.route.params.state,
           props.route.params.attributes
         );
       } else {
-        if (services.length === 0) {
+        if (services.length !== 0) {
           getServices();
         }
       }
     }
     if (props.route.params.id === 3) {
-      if (services.length === 0) {
+      if (services.length !== 0) {
         getServices();
       }
     }
@@ -72,10 +62,20 @@ const Services = ({ ...props }) => {
   };
 
   useEffect(() => {
-    if (filterCategory.length === 0) {
-      setNewServices(props.services);
+    if (props.route.params.id === 2) {
+      setGetAgain(false);
+      setNewServices(filterServices);
     }
-  }, [filterCategory]);
+    if (props.route.params.id === 3) {
+      setNewServices(services);
+    }
+    if (filterCategory.length !== 0) {
+      setNewServices(services);
+    }
+    if (getAgain) {
+      setNewServices(services);
+    }
+  }, [filterCategory, filterServices, services]);
 
   return (
     <View style={styles.screen}>
@@ -90,6 +90,7 @@ const Services = ({ ...props }) => {
       <MutipleSelect
         setFilterCategory={setFilterCategory}
         categories={categories}
+        setGetAgain={setGetAgain}
       />
 
       {loading ? (
@@ -157,10 +158,10 @@ const Services = ({ ...props }) => {
 };
 const mapStateToProps = (state) => {
   return {
-    services: state.Service.services,
     filterServices: state.Service.filterServices,
     serviceLoader: state.Service.serviceLoader,
     categories: state.category.adminCollection,
+    services: state.Service.services,
   };
 };
 export default connect(mapStateToProps, {

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Avatar, Button, Card, Paragraph } from "react-native-paper";
 import { View, Text, ImageBackground } from "react-native";
+import {TouchableOpacity} from 'react-native-gesture-handler'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { styles } from "../../styles/Admin/listingItemStyle";
 import { Approve } from "../../store/actions/Admin";
@@ -23,13 +24,7 @@ const ListingItem = ({ data, Approve, sendPushNotification }) => {
     }, 100);
   };
   const handleApprove = () => {
-    sendPushNotification(data.userId);
-
-    // Approve(true, data.userId, data.id);
-    // setApproveFlag(!approveFalg);
-    // const timer = setTimeout(() => {
-    //   setApproveFlag(false);
-    // }, 100);
+    sendPushNotification(data.userId , data.serviceName , data.id);
   };
 
   return (
@@ -56,30 +51,26 @@ const ListingItem = ({ data, Approve, sendPushNotification }) => {
               style={{ fontSize: 20, paddingLeft: 15, paddingTop: 10 }}
             >
               <Paragraph style={styles.center}>{data.providerName}</Paragraph>
-              <Paragraph style={{ color: "#a9a9a9" }}>
+              <Paragraph style={{ color: "#a9a9a9" , maxWidth: 90 }}>
                 {data.location}
               </Paragraph>
             </Card.Content>
           </Card.Content>
-          <Card.Content style={styles.rightContent}>
-            <Button
+          <View style={styles.rightContent}>
+            <TouchableOpacity
+            activeOpacity={0.7}
               onPress={handleApprove}
               style={{ marginTop: 10, height: 50 }}
-              mode={approveFalg && "contained"}
-              color="#eee"
             >
               <Text style={styles.right}>Approve</Text>
-            </Button>
-            <Button
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={handleClone}
               style={{ marginTop: 10, height: 50 }}
-              mode={cloneFalg && "contained"}
-              color="#eee"
-              compact={true}
             >
               <Text style={styles.right}>Clone</Text>
-            </Button>
-          </Card.Content>
+            </TouchableOpacity>
+          </View>
         </View>
       </Card>
     </View>

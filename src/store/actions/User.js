@@ -74,7 +74,6 @@ export const updateInformation = (information) => async (
         userType: userType,
       })
       .then(() => {
-        console.log("sucessss");
         dispatch({
           type: "ACCOUNT_ADDED_INFO",
           payload: true,
@@ -111,4 +110,77 @@ export const serviceProviderInformation = (id) => async (
         payload: userInformation,
       });
     });
+};
+
+export const userNotifications = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  let notifications = [];
+
+  var user = await firebase.auth().currentUser;
+
+  const res = await db
+    .collection("users")
+    .doc(user.uid)
+    .collection("notifications")
+    .get();
+  const array = res.docs.forEach((doc) => {
+    notifications.push({ ...doc.data(), id: doc.id });
+  });
+
+  dispatch({
+    type: "USER_NOTIFICATIONS",
+    payload: notifications,
+  });
+};
+
+export const handleRemoveNotification = (id) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  var user = await firebase.auth().currentUser;
+  let notifications = [];
+  await db
+    .collection("users")
+    .doc(user.uid)
+    .collection("notifications")
+    .doc(id)
+    .delete();
+
+  const res = await db
+    .collection("users")
+    .doc(user.uid)
+    .collection("notifications")
+    .get();
+  res.docs.forEach((doc) => {
+    notifications.push({ ...doc.data(), id: doc.id });
+  });
+
+  dispatch({
+    type: "USER_NOTIFICATIONS",
+    payload: notifications,
+  });
+};
+
+export const bannerInfo = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  const remoteConfig = firebase.remoteConfig();
+
+  remoteConfig.settings = {
+    minimumFetchIntervalMillis: 3600000,
+  };
+
+  console.log("herree");
 };

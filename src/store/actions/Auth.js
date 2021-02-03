@@ -3,61 +3,49 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import axios from "axios";
 
-// q2YWBdsO0WVUOr7qqTJaIa_nTZvCgI1A4EvyGgV9
-
-export const sendPushNotification = (id) => async (
+export const sendPushNotification = (id, data, documentId) => async (
   dispatch,
   getState,
   { getFirestore, getFirebase }
 ) => {
   const db = getFirestore();
-  let experienceId = Constants.manifest.id;
 
   const providerInfo = await db.collection("users").doc(id).get();
   const dt = providerInfo.data().deviceToken;
+  const docRef = await db.collection("services").doc(documentId);
 
-  const { data: token } = await Notifications.getExpoPushTokenAsync();
-  const res = await axios({
+  docRef.update({
+    approve: true,
+  });
+
+  await axios({
     method: "post",
     url: "https://fcm.googleapis.com/fcm/send",
     headers: {
       "Content-Type": "application/json",
-     " Authorization": `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
+      Authorization: `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
     },
     body: JSON.stringify({
-      to: token,
+      to: dt.data,
+      priority: "normal",
       data: {
-        title: "\uD83D\uDCE7 You've got mail",
-        message: "Hello world! \uD83C\uDF10",
-        experienceId: experienceId,
+        experienceId: "@numansafi97/servys",
+        title: "Congratulations",
+        message: `your Listing has been published- [ ${data} ] `,
       },
     }),
   });
-  console.log("hello");
 
-  console.log("ressss", res.data);
+  await db
+    .collection("users")
+    .doc(id)
+    .collection("notifications")
+    .add({
+      message: `your Listing has been published- [ ${data}] `,
+      cretedAt: Date.now(),
+      listingId: documentId,
+    });
 };
-
-// export async function registerForPushNotificationsAsync(userId: string) {
-//   let experienceId = undefined;
-//   if (!Constants.manifest) {
-//     // Absence of the manifest means we're in bare workflow
-//     experienceId = "@username/example";
-//   }
-//   const expoPushToken = await Notifications.getExpoPushTokenAsync({
-//     experienceId,
-//   });
-//   await fetch("https://example.com/", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify({
-//       userId,
-//       expoPushToken,
-//     }),
-//   });
-// }
 
 export const onSignUp = (user) => async (
   dispatch,
@@ -323,13 +311,14 @@ export const Authorization = () => async (
     .then(async () => {
       try {
         const settings = await Notifications.getPermissionsAsync();
-        const { data: token } = await Notifications.getDevicePushTokenAsync();
-
-        var docRef = await db.collection("users").doc(currentUser);
-
-        docRef.update({
-          deviceToken: token,
-        });
+        if (settings.status === "granted") {
+          const token = await Notifications.getDevicePushTokenAsync();
+          console.log("stetttings", token);
+          var docRef = await db.collection("users").doc(currentUser);
+          docRef.update({
+            deviceToken: token,
+          });
+        }
       } catch (err) {
         console.log("ERROR", err);
       }

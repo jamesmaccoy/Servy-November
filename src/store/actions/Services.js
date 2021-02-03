@@ -135,6 +135,10 @@ export const getServices = () => async (
         type: "SERVICES",
         payload: services,
       });
+      dispatch({
+        type: "FILTER_SERVICES",
+        payload: services,
+      });
     })
     .then(() => {
       dispatch({
@@ -616,4 +620,49 @@ export const selectOption = (data) => async (dispatch, getState) => {
     type: "PREVIEW_LISTING",
     payload: data,
   });
+};
+
+export const getServicesBySearch = (data) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  console.log("Hereeeeeee");
+  const db = getFirestore();
+  let services = [];
+  dispatch({
+    type: "SERVICE_LOADER",
+    payload: true,
+  });
+
+  if (data.length !== 0) {
+    const res = await db
+      .collection("services")
+      .where("category", "in", [data])
+      .get();
+    res.docs.forEach((item) => {
+      services.push({ ...item.data(), id: item.id });
+    });
+    dispatch({
+      type: "FILTER_SERVICES",
+      payload: services,
+    });
+    dispatch({
+      type: "SERVICE_LOADER",
+      payload: false,
+    });
+  } else {
+    const res = await db.collection("services").get();
+    res.docs.forEach((item) => {
+      services.push({ ...item.data(), id: item.id });
+    });
+    dispatch({
+      type: "FILTER_SERVICES",
+      payload: services,
+    });
+    dispatch({
+      type: "SERVICE_LOADER",
+      payload: false,
+    });
+  }
 };

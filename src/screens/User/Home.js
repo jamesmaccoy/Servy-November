@@ -9,6 +9,7 @@ import {
   getServicesByCategory,
   getServicesByProvider,
 } from "../../store/actions/Services";
+import { bannerInfo } from "../../store/actions/User";
 import Filter from "../../components/User/Filter";
 import ProviderItem from "../../components/User/ProviderItem";
 import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -24,6 +25,7 @@ const Home = ({ ...props }) => {
   let switchLoader = props.switchLoader;
   let switchLoading = props.switchLoading;
   let getServicesByProvider = props.getServicesByProvider;
+  let bannerInfo = props.bannerInfo;
 
   const [showFilter, setShowFilter] = useState(false);
   const [newServices, setNewServices] = useState([]);
@@ -32,6 +34,7 @@ const Home = ({ ...props }) => {
   const [activeServices, setActiveServices] = useState([]);
   useEffect(() => {
     getServices();
+    bannerInfo()
   }, []);
   useEffect(() => {
     switchLoader(false);
@@ -225,6 +228,7 @@ export default connect(mapStateToProps, {
   getServicesByCategory,
   switchLoader,
   getServicesByProvider,
+  bannerInfo,
 })(Home);
 
 const items = [

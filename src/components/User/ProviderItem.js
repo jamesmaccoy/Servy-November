@@ -36,17 +36,16 @@ const ProviderItem = ({
     }
   }, [data]);
 
-  const [visiblePreview, seVisiblePreview] = useState(true);
-
-  const handlePreview = (ev) => {
+  const handlePreview = (e) => {
     setProviderModal(true);
     selectOption(data);
+    // e.stopPropagation();
+    // e.nativeEvent.stopImmediatePropagation();
   };
 
   return (
     <TouchableWithoutFeedback
-      activeOpacity={1}
-      onPress={() => {
+      onPressOut={() => {
         navigation.navigate("AddService", {
           data: data,
           key: data.id,
@@ -77,8 +76,20 @@ const ProviderItem = ({
                   {data.serviceName}
                 </Text>
                 <View style={{ paddingTop: 20, paddingRight: 5 }}>
-                  <TouchableWithoutFeedback activeOpacity={1}>
-                    <TouchableOpacity onPress={handlePreview}>
+                  <TouchableWithoutFeedback
+                    activeOpacity={1}
+                    // onPress={(e) => {
+                    //   e.preventDefault();
+                    //   e.stopPropagation();
+                    //   e.nativeEvent.stopImmediatePropagation();
+                    // }}
+                  >
+                    <TouchableOpacity
+                      // activeOpacity={1}
+                      onPressIn={(e) => {
+                        handlePreview(e);
+                      }}
+                    >
                       <Entypo
                         size={20}
                         color="#fff"

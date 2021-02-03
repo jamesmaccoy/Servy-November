@@ -3148,6 +3148,11 @@ expo-constants@*, expo-constants@9.2.0, expo-constants@~9.2.0:
     fbjs "1.0.0"
     uuid "^3.3.2"
 
+expo-core@~2.0.0:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/expo-core/-/expo-core-2.0.2.tgz#61e1e5cc6c4341a834a0d7f37c68887cee8d971f"
+  integrity sha512-QKkICJ06m/J1PxTJqtVu03+fUXwjLqb2YPF5J9DT7W4EknPq1sHY3ZKJgAr1PhK24fzvVoxWOKqiIstliZdBOA==
+
 expo-device@*:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/expo-device/-/expo-device-2.3.0.tgz#ed97c5a46f020f06ea18ad6bc7e248ddb7aee158"
@@ -3170,6 +3175,13 @@ expo-file-system@~9.2.0:
   dependencies:
     uuid "^3.4.0"
 
+expo-firebase-app@~2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-firebase-app/-/expo-firebase-app-2.0.0.tgz#1c2158c6423cd2a1bdb7749b96cc52b678126866"
+  integrity sha512-rhKErhQybgL5Vbv8HndYVzwoXikL62iCd5e8k5cZZhs6S0TiWEx0anKhALvI2eCGBzQmYHM2sIzbi8DeUemuCw==
+  dependencies:
+    expo-core "~2.0.0"
+
 expo-firebase-core@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/expo-firebase-core/-/expo-firebase-core-1.2.0.tgz#1f41d777cb04e19f495d27491b1596bdeb233f95"
@@ -3181,6 +3193,14 @@ expo-firebase-recaptcha@^1.2.0:
   integrity sha512-GeOXoJq9gdnl5hPidU+HFlifNJkzIfnRLU+qspdkLEdrU7DImrNuFleHt93iT9TXa+NyL+XtgTnSlVx91kXuxA==
   dependencies:
     expo-firebase-core "~1.2.0"
+
+expo-firebase-remote-config@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/expo-firebase-remote-config/-/expo-firebase-remote-config-2.0.0.tgz#990e2734f098721f92c1a4357777756180f386bc"
+  integrity sha512-/hjX5sb7JjtuYwj4ZrDyhm77y+GwXWqgIUP3T3ak31ixazN4uKyS6FOm1+Eeacc3b9PPlJVjg6VR2ow3z5vc0g==
+  dependencies:
+    expo-core "~2.0.0"
+    expo-firebase-app "~2.0.0"
 
 expo-font@~8.3.0:
   version "8.3.0"

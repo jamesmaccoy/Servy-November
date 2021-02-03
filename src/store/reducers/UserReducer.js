@@ -1,6 +1,7 @@
 const initialState = {
   status: false,
   switchLoader: false,
+  notifications: [],
 };
 
 export default function UserReducer(state = initialState, action) {
@@ -14,6 +15,11 @@ export default function UserReducer(state = initialState, action) {
       return {
         ...state,
         switchLoader: action.payload,
+      };
+    case "USER_NOTIFICATIONS":
+      return {
+        ...state,
+        notifications: action.payload,
       };
     default:
       return state;

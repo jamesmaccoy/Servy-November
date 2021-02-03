@@ -1,25 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
 import MultiSelect from "react-native-multiple-select";
+import { connect } from "react-redux";
 let deviceWidth = Dimensions.get("window").width;
 
-const MutipleSelect = ({ categories, setFilterCategory }) => {
-  const [newCataegories, setNewCategories] = useState([]);
-  useEffect(() => {
-    setNewCategories(categories);
-  }, [categories]);
+const MutipleSelect = ({ categories, setFilterCategory, setGetAgain }) => {
   const [state, setState] = useState([]);
+
+  useEffect(() => {
+    setGetAgain(false);
+  }, []);
 
   const onSelectedItemsChange = (selectedItems) => {
     setState(selectedItems);
   };
-  const onSubmit = () => {
-    setFilterCategory(state);
-  };
 
   useEffect(() => {
     setFilterCategory(state);
+    if (state.length === 0) {
+      setGetAgain(true);
+    }
   }, [state]);
+
   return (
     <View
       style={{
@@ -42,13 +44,12 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
         }}
       ></View>
       <MultiSelect
-        items={newCataegories}
+        items={categories}
         uniqueKey="label"
         onSelectedItemsChange={(text) => onSelectedItemsChange(text)}
         selectedItems={state}
         selectText="Search"
         searchInputPlaceholderText="Search Items.."
-        onToggleList={onSubmit}
         tagRemoveIconColor="#000"
         tagBorderColor="#CCC"
         tagTextColor="#000"
@@ -65,8 +66,7 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
           height: 200,
         }}
         fixedHeight={true}
-        hideSubmitButton={true}
-        onAddItem={onSubmit}
+        hideSubmitButton={false}
         styleTextDropdown={{ paddingLeft: 20 }}
         styleTextTag={{ padding: 0 }}
         tagContainerStyle={{
@@ -74,7 +74,6 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
           margin: 2,
           marginBottom: 2,
           height: 30,
-          fontSize: 12,
           borderWidth: 0,
           backgroundColor: "#eee",
         }}
@@ -94,7 +93,7 @@ const MutipleSelect = ({ categories, setFilterCategory }) => {
         styleSelectorContainer={{
           elevation: 0,
         }}
-        // searchInputPlaceholderText={{ backgroundColor: "red" }}
+        submitButtonColor="#5dae7e"
         styleDropdownMenu={{ backgroundColor: "#f7f7f7", margin: 0 }}
         styleMainWrapper={{ backgroundColor: "#f7f7f7" }}
       />

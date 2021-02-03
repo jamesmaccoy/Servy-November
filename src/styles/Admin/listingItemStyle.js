@@ -21,19 +21,20 @@ export const styles = StyleSheet.create({
   center: {
     fontSize: 13,
     fontWeight: "bold",
+    maxWidth: 80
   },
   right: {
     paddingLeft: 0,
     paddingRight: 10,
     color: "green",
-    fontSize: 11,
+    fontSize: 15,
   },
   rightContent: {
     fontSize: 20,
     flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingTop: 20,
-    paddingRight: 0,
+    justifyContent: "space-between",
+    paddingTop: 30,
+    paddingRight: 10,
     paddingLeft: 0,
   },
 });
