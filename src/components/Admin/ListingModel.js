@@ -1,60 +1,34 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Modal,
   Text,
   Dimensions,
   TouchableOpacity,
-  Alert,
   StyleSheet,
 } from "react-native";
-import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
+import { Entypo } from "react-native-vector-icons";
 import { connect } from "react-redux";
-import { deletesService } from "../../store/actions/Services";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
-const ProviderModal = ({
+const ListingModal = ({
   visible,
   setProviderModal,
-  optionSelect,
   navigation,
-  deletesService,
+  currentData,
 }) => {
   const handleSelect = () => {
     setProviderModal(false);
   };
   const handlePreview = () => {
     setProviderModal(false);
-    navigation.navigate("ListDetail", {
-      data: optionSelect,
-      key: optionSelect.id,
-      user: "Provider",
-    });
+  };
+  const handleEdit = () => {
+    setProviderModal(false);
   };
 
-  const handleDelete = () => {
-    console.log("herreee");
-    Alert.alert(
-      "Are You Sure You Want to Delete? ",
-      ``,
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel",
-        },
-        {
-          text: "OK",
-          onPress: () => {
-            setProviderModal(false);
-            deletesService(optionSelect.id);
-          },
-        },
-      ],
-      { cancelable: false }
-    );
-  };
+
   return (
     <Modal visible={visible} transparent={true}>
       <View style={styles.modelStyle}>
@@ -71,18 +45,10 @@ const ProviderModal = ({
                 style={{ color: "#000" }}
                 name="controller-play"
               />
-              <Text style={{ paddingLeft: 30, fontSize: 18 }}>Preview</Text>
+              <Text style={{ paddingLeft: 30, fontSize: 18 }}>
+                {currentData.serviceName}
+              </Text>
             </TouchableOpacity>
-            {optionSelect.serviceName !== "Hoola hoop teacher" && (
-              <TouchableOpacity onPress={handleDelete} style={styles.actions}>
-                <MaterialIcons
-                  size={30}
-                  style={{ color: "#000" }}
-                  name="delete"
-                />
-                <Text style={{ paddingLeft: 30, fontSize: 18 }}>Delete</Text>
-              </TouchableOpacity>
-            )}
           </View>
         </View>
       </View>
@@ -92,9 +58,10 @@ const ProviderModal = ({
 const mapStateToProps = (state) => {
   return {
     optionSelect: state.Service.optionSelect,
+    currentData: state.Admin.currentData,
   };
 };
-export default connect(mapStateToProps, { deletesService })(ProviderModal);
+export default connect(mapStateToProps)(ListingModal);
 
 export const styles = StyleSheet.create({
   modelStyle: {

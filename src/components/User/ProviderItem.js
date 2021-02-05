@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { ImageBackground, Text, Modal, Dimensions } from "react-native";
+import { ImageBackground, Text, TouchableOpacity } from "react-native";
 import { Card, Paragraph } from "react-native-paper";
 import { View } from "react-native";
 import { Entypo, FontAwesome } from "@expo/vector-icons";
-import {
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Rating from "../Generic/Rating";
 import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
@@ -39,13 +36,11 @@ const ProviderItem = ({
   const handlePreview = (e) => {
     setProviderModal(true);
     selectOption(data);
-    // e.stopPropagation();
-    // e.nativeEvent.stopImmediatePropagation();
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPressOut={() => {
+    <TouchableOpacity
+      onPress={() => {
         navigation.navigate("AddService", {
           data: data,
           key: data.id,
@@ -76,17 +71,9 @@ const ProviderItem = ({
                   {data.serviceName}
                 </Text>
                 <View style={{ paddingTop: 20, paddingRight: 5 }}>
-                  <TouchableWithoutFeedback
-                    activeOpacity={1}
-                    // onPress={(e) => {
-                    //   e.preventDefault();
-                    //   e.stopPropagation();
-                    //   e.nativeEvent.stopImmediatePropagation();
-                    // }}
-                  >
+                  <TouchableWithoutFeedback activeOpacity={1}>
                     <TouchableOpacity
-                      // activeOpacity={1}
-                      onPressIn={(e) => {
+                      onPress={(e) => {
                         handlePreview(e);
                       }}
                     >
@@ -129,7 +116,7 @@ const ProviderItem = ({
           </Card>
         </View>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 const mapStateToProps = (state) => {

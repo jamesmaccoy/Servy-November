@@ -1,6 +1,7 @@
 const initialState = {
   servicesList: [],
-  users: []
+  users: [],
+  currentData: null,
 };
 
 export default function AdminReducer(state = initialState, action) {
@@ -10,12 +11,16 @@ export default function AdminReducer(state = initialState, action) {
         ...state,
         servicesList: action.payload,
       };
-      case "GET_USERS":
-        return {
-          ...state,
-          users: action.payload,
-        };
-  
+    case "GET_USERS":
+      return {
+        ...state,
+        users: action.payload,
+      };
+    case "CURRENT_USER_LISTING":
+      return {
+        ...state,
+        currentData: action.payload,
+      };
 
     default:
       return state;

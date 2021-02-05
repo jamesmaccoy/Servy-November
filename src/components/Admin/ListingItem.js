@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 import { Avatar, Button, Card, Paragraph } from "react-native-paper";
 import { View, Text, ImageBackground } from "react-native";
-import {TouchableOpacity} from 'react-native-gesture-handler'
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  MaterialCommunityIcons,
+  Entypo,
+  FontAwesome,
+} from "@expo/vector-icons";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { styles } from "../../styles/Admin/listingItemStyle";
 import { Approve } from "../../store/actions/Admin";
 import { sendPushNotification } from "../../store/actions/Auth";
+import { currentOption } from "../../store/actions/Admin";
 import { connect } from "react-redux";
 const DATE_OPTIONS = {
   weekday: "short",
@@ -13,18 +19,28 @@ const DATE_OPTIONS = {
   month: "short",
   day: "numeric",
 };
-const ListingItem = ({ data, Approve, sendPushNotification }) => {
-  const [approveFalg, setApproveFlag] = useState(false);
-  const [cloneFalg, setCloneFlag] = useState(false);
+const ListingItem = ({
+  data,
+  Approve,
+  sendPushNotification,
+  setProviderModal,
+  currentOption,
+}) => {
+  // const [approveFalg, setApproveFlag] = useState(false);
+  // const [cloneFalg, setCloneFlag] = useState(false);
   const handleClone = () => {
     Approve(false, data.userId);
-    setCloneFlag(!cloneFalg);
-    const timer = setTimeout(() => {
-      setCloneFlag(false);
-    }, 100);
+    // setCloneFlag(!cloneFalg);
+    // const timer = setTimeout(() => {
+    //   setCloneFlag(false);
+    // }, 100);
+  };
+  const handlePreview = () => {
+    currentOption(data);
+    setProviderModal(true);
   };
   const handleApprove = () => {
-    sendPushNotification(data.userId , data.serviceName , data.id);
+    sendPushNotification(data.userId, data.serviceName, data.id);
   };
 
   return (
@@ -34,10 +50,30 @@ const ListingItem = ({ data, Approve, sendPushNotification }) => {
           style={{ flex: 1 }}
           source={{ uri: data.imagesUrl[0] }}
         >
-          <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
-            {data.serviceName}
-          </Text>
+          <View
+            style={{
+              height: 300,
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ padding: 20, color: "#fff", fontSize: 18 }}>
+              {data.serviceName}
+            </Text>
+            <View style={{ paddingTop: 20, paddingRight: 5 }}>
+              <TouchableWithoutFeedback activeOpacity={1}>
+                <TouchableOpacity
+                  onPress={(e) => {
+                    handlePreview(e);
+                  }}
+                >
+                  <Entypo size={20} color="#fff" name="dots-three-vertical" />
+                </TouchableOpacity>
+              </TouchableWithoutFeedback>
+            </View>
+          </View>
         </ImageBackground>
+
         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
           <Card.Content style={styles.left}>
             <Card.Content style={{ paddingLeft: 0, paddingRight: 0 }}>
@@ -51,14 +87,14 @@ const ListingItem = ({ data, Approve, sendPushNotification }) => {
               style={{ fontSize: 20, paddingLeft: 15, paddingTop: 10 }}
             >
               <Paragraph style={styles.center}>{data.providerName}</Paragraph>
-              <Paragraph style={{ color: "#a9a9a9" , maxWidth: 90 }}>
+              <Paragraph style={{ color: "#a9a9a9", maxWidth: 90 }}>
                 {data.location}
               </Paragraph>
             </Card.Content>
           </Card.Content>
           <View style={styles.rightContent}>
             <TouchableOpacity
-            activeOpacity={0.7}
+              activeOpacity={0.7}
               onPress={handleApprove}
               style={{ marginTop: 10, height: 50 }}
             >
@@ -77,4 +113,6 @@ const ListingItem = ({ data, Approve, sendPushNotification }) => {
   );
 };
 
-export default connect("", { Approve, sendPushNotification })(ListingItem);
+export default connect("", { Approve, sendPushNotification, currentOption })(
+  ListingItem
+);

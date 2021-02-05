@@ -62,3 +62,10 @@ export const Approve = (state, userId, documentId) => async (
     approve: state,
   });
 };
+
+export const currentOption = (data) => async (dispatch) => {
+  dispatch({
+    type: "CURRENT_USER_LISTING",
+    payload: data,
+  });
+};
