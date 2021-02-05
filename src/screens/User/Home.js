@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, Image, TouchableOpacity } from "react-native";
+import { ScrollView, View, Image, TouchableOpacity,  ActivityIndicator,
+  FlatList, } from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
 import { Text } from "native-base";
@@ -57,7 +58,15 @@ const Home = ({ ...props }) => {
       })
     );
   }, [props.providerServices]);
-
+   const [isLoading, setLoading] = useState(true);
+   const [data, setData] = useState([]);
+ useEffect(() => {
+    fetch('https://thanks.digital/survey/banner-content.php')
+      .then((response) => response.json())
+       .then((json) => setData(json.content))
+      .catch((error) => console.error(error))
+      .finally(() => setLoading(false));
+  }, []);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
@@ -169,10 +178,16 @@ const Home = ({ ...props }) => {
               </>
             </ScrollView>
           </View>
-          <View style={styles.bannercont}>
+           <View style={styles.bannercont}>
+           {isLoading ? <ActivityIndicator/> : (
+                <FlatList
+                  data={data}
+                  keyExtractor={({ id }, index) => id}
+                  renderItem={({ item }) => (
             <View style={styles.bannerdetail}>
-              <Text style={styles.bannertitle}>Title Here</Text>
-              <Text style={styles.bannerdescription}>Content Here</Text>
+              <Text style={styles.bannertitle}>{item.title}</Text>
+
+              <Text style={styles.bannerdescription}>{item.content}</Text>
               <View style={styles.bannerbuttontok}>
                 <TouchableOpacity
                   style={styles.loginScreenButton}
@@ -186,7 +201,9 @@ const Home = ({ ...props }) => {
                 </TouchableOpacity>
               </View>
             </View>
-
+  )}
+                />
+              )}
             <Image
               style={styles.bannerimg}
               source={require("../../../assets/images/13.png")}
