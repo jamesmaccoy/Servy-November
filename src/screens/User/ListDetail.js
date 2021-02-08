@@ -226,9 +226,34 @@ const ListDetail = ({ ...props }) => {
                       >
                         Add
                       </Text>
+
+
                     </View>
                   </TouchableOpacity>
                 </View>
+                <View>
+                      <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true);
+                    }}
+                  >
+                    <View style={styles.buttonbook}>
+                      <MaterialCommunityIcons name={"calendar"} size={30} color={'#fff'} />
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          paddingLeft: 5,
+                          color: "#ffffff",
+                        }}
+                      >
+                        Book
+                      </Text>
+
+
+                    </View>
+                  </TouchableOpacity>
+              </View>
+
                 <View style={styles.review}>
                   <View style={styles.reviewsList}>
                     {ReviewsList.map((data, index) => (

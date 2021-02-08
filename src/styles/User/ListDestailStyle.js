@@ -155,6 +155,10 @@ export const styles = StyleSheet.create({
     buttonaddr:{borderWidth:2, width:100,paddingTop:6,paddingRight:20,paddingLeft:12,paddingBottom:6,marginTop:20, borderColor:'#5c9b84',
      flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',  },
 
+buttonbook:{ width:'100%',paddingTop:10,paddingRight:20,paddingLeft:12,paddingBottom:10,marginTop:20, backgroundColor:'#5c9b84',
+     flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'center',  },
+     
+
   titlereviewbtn:{flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',borderBottomWidth:1,
   paddingBottom:10}, 
 
