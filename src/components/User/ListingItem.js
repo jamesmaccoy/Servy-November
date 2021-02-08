@@ -8,7 +8,7 @@ import Rating from "../Generic/Rating";
 import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
 import { connect } from "react-redux";
-import { getDistance, getPreciseDistance } from "geolib";
+import { getPreciseDistance } from "geolib";
 const stars = [1, 2, 3, 4, 5];
 const ListingItem = ({
   data,

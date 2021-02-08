@@ -8,7 +8,6 @@ import * as Location from "expo-location";
 import { Button } from "react-native-paper";
 import { getCurrentLocation } from "../src/store/actions/Location";
 import { connect } from "react-redux";
-import ProviderTab from "./Provider";
 import Loader from "../src/screens/Auth/Loader";
 
 const Stack = createStackNavigator();
@@ -66,14 +65,6 @@ const UserHome = ({ getCurrentLocation }) => {
             initialParams={{ key: 10 }}
             component={GuestTabs}
           />
-          {/* <Stack.Screen
-            options={{
-              headerShown: false,
-            }}
-            initialParams={{ key: 20 }}
-            name="Provider"
-            component={ProviderTab}
-          /> */}
           <Stack.Screen
             options={{
               headerShown: false,
@@ -113,7 +104,7 @@ const UserHome = ({ getCurrentLocation }) => {
               </View>
             </View>
           ) : (
-            <View style={{ backgroundColor: "#fff" , flex: 1}}>
+            <View style={{ backgroundColor: "#fff", flex: 1 }}>
               <Loader />
             </View>
           )}

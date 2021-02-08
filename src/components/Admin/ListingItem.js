@@ -1,46 +1,17 @@
-import React, { useState } from "react";
-import { Avatar, Button, Card, Paragraph } from "react-native-paper";
+import React  from "react";
+import { Card, Paragraph } from "react-native-paper";
 import { View, Text, ImageBackground } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import {
-  MaterialCommunityIcons,
-  Entypo,
-  FontAwesome,
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo } from "@expo/vector-icons";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import { styles } from "../../styles/Admin/listingItemStyle";
-import { Approve } from "../../store/actions/Admin";
-import { sendPushNotification } from "../../store/actions/Auth";
 import { currentOption } from "../../store/actions/Admin";
 import { connect } from "react-redux";
-const DATE_OPTIONS = {
-  weekday: "short",
-  year: "numeric",
-  month: "short",
-  day: "numeric",
-};
-const ListingItem = ({
-  data,
-  Approve,
-  sendPushNotification,
-  setProviderModal,
-  currentOption,
-}) => {
-  // const [approveFalg, setApproveFlag] = useState(false);
-  // const [cloneFalg, setCloneFlag] = useState(false);
-  const handleClone = () => {
-    Approve(false, data.userId);
-    // setCloneFlag(!cloneFalg);
-    // const timer = setTimeout(() => {
-    //   setCloneFlag(false);
-    // }, 100);
-  };
+
+const ListingItem = ({ data, setProviderModal, currentOption }) => {
   const handlePreview = () => {
     currentOption(data);
     setProviderModal(true);
-  };
-  const handleApprove = () => {
-    sendPushNotification(data.userId, data.serviceName, data.id);
   };
 
   return (
@@ -92,27 +63,10 @@ const ListingItem = ({
               </Paragraph>
             </Card.Content>
           </Card.Content>
-          <View style={styles.rightContent}>
-            <TouchableOpacity
-              activeOpacity={0.7}
-              onPress={handleApprove}
-              style={{ marginTop: 10, height: 50 }}
-            >
-              <Text style={styles.right}>Approve</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleClone}
-              style={{ marginTop: 10, height: 50 }}
-            >
-              <Text style={styles.right}>Clone</Text>
-            </TouchableOpacity>
-          </View>
         </View>
       </Card>
     </View>
   );
 };
 
-export default connect("", { Approve, sendPushNotification, currentOption })(
-  ListingItem
-);
+export default connect("", { currentOption })(ListingItem);

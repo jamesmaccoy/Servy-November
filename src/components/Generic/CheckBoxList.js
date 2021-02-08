@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, Image, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 
 const CheckBoxList = ({ text, value, checkboxPicker, index, id }) => {

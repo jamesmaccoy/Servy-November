@@ -27,11 +27,6 @@ const Header = ({ ...props }) => {
   const [modalVisible, setModalVisible] = useState(false);
   useEffect(() => {
     userNotifications();
-    // profileInfo.map((data) => {
-    //   if (data.photoURL !== "") {
-    //     setState({ ...state, update: true, photo: data.photoURL });
-    //   }
-    // });
   }, []);
 
   useEffect(() => {
@@ -126,10 +121,10 @@ const Header = ({ ...props }) => {
                       borderBottomLeftRadius: 10,
                       borderBottomRightRadius: 10,
                       color: "#fff",
-                      zIndex: 1
+                      zIndex: 1,
                     }}
                   >
-                   { notifications.length}
+                    {notifications.length}
                   </Text>
                 )}
                 <Ionicons name={"ios-notifications"} size={25} color={"#000"} />

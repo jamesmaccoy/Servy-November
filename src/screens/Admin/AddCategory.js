@@ -25,7 +25,6 @@ const AddNewCategory = ({ ...props }) => {
   let AddCategory = props.AddCategory;
   let updateCategory = props.updateCategory;
   let deleteCategory = props.deleteCategory;
-  // let deleteMessage = props.deleteMessage;
 
   const [state, setState] = useState({
     id: null,

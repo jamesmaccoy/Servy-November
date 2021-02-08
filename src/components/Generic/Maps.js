@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MapView from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 const Maps = ({ userLocation, companyName, locationName }) => {
   const [state, setState] = useState({

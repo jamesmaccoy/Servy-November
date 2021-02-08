@@ -1,18 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, View, TextInput } from "react-native";
 
 const Input = (props) => {
   let head = props.head;
   let placeHolder = props.placeHolder;
   let setState = props.onChangeText;
-  let value = props.value
-  let defaultValue = props.defaultValue
-
-
-  const handleText = (text) => {
-    console.log("text", text);
-    setState(text);
-  };
+  let defaultValue = props.defaultValue;
 
   return (
     <View style={styles.inputContainer}>

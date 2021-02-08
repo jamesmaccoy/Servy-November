@@ -1,18 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Dimensions } from "react-native";
 import MultiSelect from "react-native-multiple-select";
-let deviceWidth = Dimensions.get("window").width;
 import { connect } from "react-redux";
 
-const FeaturesSelect = ({
-  setAttributes,
-  categories,
-  attributes,
-  featuresSelect,
-}) => {
-  const [state, setState] = useState([]);
-  const [newCataegories, setNewCategories] = useState([]);
-
+const FeaturesSelect = ({ setAttributes, attributes, featuresSelect }) => {
   const onSelectedItemsChange = (selectedItems) => {
     setAttributes(selectedItems);
   };

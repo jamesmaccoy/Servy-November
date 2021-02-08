@@ -17,7 +17,6 @@ const CheckBoxList = ({
   }, [select]);
   useEffect(() => {
     if (array === []) {
-      console.log("hello");
       setCheck(false);
     }
   }, []);

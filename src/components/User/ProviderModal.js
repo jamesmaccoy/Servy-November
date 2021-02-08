@@ -8,7 +8,7 @@ import {
   Alert,
   StyleSheet,
 } from "react-native";
-import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
+import { Entypo, MaterialIcons } from "react-native-vector-icons";
 import { connect } from "react-redux";
 import { deletesService } from "../../store/actions/Services";
 let deviceWidth = Dimensions.get("window").width;

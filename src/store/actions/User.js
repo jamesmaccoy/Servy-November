@@ -18,7 +18,6 @@ export const profileInformation = () => async (
   const db = getFirestore();
   const firebase = getFirebase();
   var user = await firebase.auth().currentUser;
-  const state = getState();
   let userInformation = [];
 
   if (user) {
@@ -57,7 +56,7 @@ export const updateInformation = (information) => async (
   let instagramUrl = information.instagramUrl;
   let facebookUrl = information.facebookUrl;
   let userType = information.userType;
-  let userId = information.userId;
+  let userInformation = [];
 
   if (user) {
     const accountRef = await db.collection("users").doc(user.uid);
@@ -74,6 +73,22 @@ export const updateInformation = (information) => async (
         userType: userType,
       })
       .then(() => {
+        db.collection("users")
+          .doc(user.uid)
+          .get()
+          .then((providerInfo) => {
+            userInformation.push({
+              ...providerInfo.data(),
+              id: providerInfo.id,
+            });
+          })
+          .then(() => {
+            dispatch({
+              type: "PROFILE_INFO",
+              payload: userInformation,
+            });
+          });
+
         dispatch({
           type: "ACCOUNT_ADDED_INFO",
           payload: true,
@@ -181,6 +196,4 @@ export const bannerInfo = () => async (
   remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,
   };
-
-  console.log("herree");
 };

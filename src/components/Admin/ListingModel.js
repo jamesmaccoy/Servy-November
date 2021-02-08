@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Modal,
@@ -7,27 +7,39 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { Entypo } from "react-native-vector-icons";
+import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { connect } from "react-redux";
+import { sendPushNotification } from "../../store/actions/Auth";
+import { duplicateListing } from "../../store/actions/Admin";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
 const ListingModal = ({
   visible,
   setProviderModal,
-  navigation,
   currentData,
+  sendPushNotification,
+  duplicateListing,
+  setSelect,
 }) => {
   const handleSelect = () => {
     setProviderModal(false);
   };
-  const handlePreview = () => {
+  const handleApprove = () => {
+    sendPushNotification(
+      currentData.userId,
+      currentData.serviceName,
+      currentData.id
+    );
     setProviderModal(false);
   };
-  const handleEdit = () => {
-    setProviderModal(false);
+  const handleAssign = () => {
+    setSelect(true);
   };
-
+  const handleDuplicate = () => {
+    setProviderModal(false);
+    duplicateListing(currentData);
+  };
 
   return (
     <Modal visible={visible} transparent={true}>
@@ -37,17 +49,44 @@ const ListingModal = ({
           style={styles.wrapper}
         ></TouchableOpacity>
         <View style={styles.innerWrapper}>
-          <Text style={{ fontSize: 18 }}>More</Text>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: "#eee" }}>
+            <Text style={{ fontSize: 18, paddingBottom: 20 }}>
+              More Options
+            </Text>
+          </View>
           <View>
-            <TouchableOpacity onPress={handlePreview} style={styles.actions}>
-              <Entypo
+            <TouchableOpacity onPress={handleApprove} style={styles.actions}>
+              <MaterialCommunityIcons
                 size={30}
                 style={{ color: "#000" }}
-                name="controller-play"
+                name="hand"
               />
-              <Text style={{ paddingLeft: 30, fontSize: 18 }}>
-                {currentData.serviceName}
-              </Text>
+              <Text style={{ paddingLeft: 20, fontSize: 18 }}>Approve</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleDuplicate} style={styles.actions}>
+              <MaterialCommunityIcons
+                size={30}
+                style={{ color: "#000" }}
+                name="hand"
+              />
+              <Text style={{ paddingLeft: 20, fontSize: 18 }}>Duplicate</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={handleAssign} style={styles.actions}>
+              <MaterialCommunityIcons
+                size={30}
+                style={{ color: "#000" }}
+                name="hand"
+              />
+              <View
+                style={{
+                  paddingLeft: 20,
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text style={{ fontSize: 18 }}>Assign</Text>
+              </View>
             </TouchableOpacity>
           </View>
         </View>
@@ -61,7 +100,10 @@ const mapStateToProps = (state) => {
     currentData: state.Admin.currentData,
   };
 };
-export default connect(mapStateToProps)(ListingModal);
+export default connect(mapStateToProps, {
+  sendPushNotification,
+  duplicateListing,
+})(ListingModal);
 
 export const styles = StyleSheet.create({
   modelStyle: {
@@ -76,7 +118,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,.5)",
   },
   innerWrapper: {
-    flex: 2.5,
+    flex: 5,
     width: deviceWidth,
     backgroundColor: "#fff",
     padding: 20,

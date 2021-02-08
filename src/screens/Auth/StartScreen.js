@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   StyleSheet,
   Image,
@@ -7,20 +7,11 @@ import {
   ScrollView,
 } from "react-native";
 import { Button, View } from "native-base";
-import icon from "../../../assets/icon.png";
 import { connect } from "react-redux";
-import { signInWithEmail } from "../../store/actions/Auth";
 import { signInWithGoogle } from "../../store/actions/Auth";
 import { AntDesign, FontAwesome } from "@expo/vector-icons";
 
-const StartScreen = ({ signInWithEmail, navigation, signInWithGoogle }) => {
-  const [userEmail, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleSignIn = (event) => {
-    event && event.preventDefault && event.preventDefault();
-    signInWithEmail(userEmail, password);
-  };
+const StartScreen = ({ navigation, signInWithGoogle }) => {
   const handleSignInWithGoogle = (event) => {
     event && event.preventDefault && event.preventDefault();
     signInWithGoogle();
@@ -107,9 +98,7 @@ const StartScreen = ({ signInWithEmail, navigation, signInWithGoogle }) => {
 };
 
 export default connect("", {
-  signInWithEmail,
   signInWithGoogle,
-  signInWithEmail,
 })(StartScreen);
 
 const styles = StyleSheet.create({

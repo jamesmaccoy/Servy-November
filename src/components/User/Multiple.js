@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Dimensions } from "react-native";
 import MultiSelect from "react-native-multiple-select";
-import { connect } from "react-redux";
 let deviceWidth = Dimensions.get("window").width;
 
 const MutipleSelect = ({ categories, setFilterCategory, setGetAgain }) => {

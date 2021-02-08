@@ -26,9 +26,6 @@ const Login = ({ signInWithEmail, navigation, loginError }) => {
     navigation.navigate("signup");
   };
 
-  useEffect(() => {
-    console.log("logggg", loginError);
-  }, [loginError]);
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>

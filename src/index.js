@@ -7,9 +7,6 @@ import { verifyUser } from "../src/store/actions/Auth";
 import Authority from "../routes/Authority";
 import { profileInformation } from "../src/store/actions/User";
 import { LogBox } from "react-native";
-// import * as Location from "expo-location";
-import { View, Text, BackHandler } from "react-native";
-import { Button } from "react-native-paper";
 
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();

@@ -1,5 +1,4 @@
 import * as Google from "expo-google-app-auth";
-import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import axios from "axios";
 
@@ -26,7 +25,7 @@ export const sendPushNotification = (id, data, documentId) => async (
       Authorization: `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
     },
     body: JSON.stringify({
-      to: dt.data,
+      to: dt,
       priority: "normal",
       data: {
         experienceId: "@numansafi97/servys",
@@ -174,9 +173,7 @@ export const Logout = () => async (
         payload: false,
       });
     })
-    .catch(function (error) {
-      console.log("signout error", error);
-    });
+    .catch(function (error) {});
 };
 
 export const signInWithGoogle = () => async (
@@ -248,7 +245,6 @@ export const signInWithGoogle = () => async (
                 });
               });
           } else {
-            console.log("User already signed-in Firebase.");
           }
         });
     };

@@ -3,17 +3,15 @@ import { Text, View, Image, ImageBackground } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../../styles/User/AddServiceStyle";
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 const getImage = ({
   images,
   imgInitial,
-  setImages,
   pickImages,
   setPickImages,
 }) => {
   const [imageState, setImageState] = useState(false);
-  const [initialImage, setInitialImage] = useState(false);
-  // const [pickImages, setPickImages] = useState([]);
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== "web") {
@@ -27,7 +25,6 @@ const getImage = ({
     })();
   }, []);
   useEffect(() => {
-    setInitialImage(true);
     setImageState(true);
     setPickImages(images);
   }, [imgInitial]);
@@ -41,7 +38,6 @@ const getImage = ({
     });
     if (!result.cancelled) {
       setImageState(false);
-      // images.push(result.uri);
       pickImages.push(result.uri);
       setImageState(true);
     }

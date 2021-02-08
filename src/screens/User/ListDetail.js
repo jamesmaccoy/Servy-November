@@ -153,7 +153,6 @@ const ListDetail = ({ ...props }) => {
               activeSlideAlignment={"start"}
               inactiveSlideScale={1}
               inactiveSlideOpacity={1}
-              loop={"enableSnap"}
               activeSlideOffset={0}
             />
 

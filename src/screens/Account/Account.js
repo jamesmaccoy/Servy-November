@@ -1,13 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  ScrollView,
-  TextInput,
-} from "react-native";
-import Header from "../../components/User/Header";
+import { View, Image, Text, ScrollView, TextInput } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../../styles/Account/AccountStyle";
 import Input from "../../components/Generic/AccountInput";
 import { FontAwesome5, AntDesign, Entypo } from "react-native-vector-icons";
@@ -23,79 +16,84 @@ const Account = ({ ...props }) => {
   let profileInformation = props.profileInformation;
   let profileInfo = props.profileInfo;
   let updateInformation = props.updateInformation;
+  const [Edit, setEdit] = useState(false);
+  const [check, setCheck] = useState(false);
+  const [state, setState] = useState({
+    about: "",
+    userType: "",
+    firstName: "",
+    lastName: "",
+    Email: "",
+    PhoneNumber: "",
+    websiteUrl: "",
+    facebookUrl: "",
+    instagramUrl: "",
+    userId: "",
+    imageUrl: "",
+  });
 
-  let profile = profileInfo[0];
   const handleNavigation = () => {
     navigation.navigate("EditImage");
   };
   useEffect(() => {
     profileInformation();
-    profileInfo.map((data) => {
-      if (data !== null) {
-        setCheck(true);
-      }
-      setImageUrl(data.photoURL);
-    });
     setEdit(false);
-    console.log("Propsss", props.route);
   }, []);
 
-  const [Edit, setEdit] = useState(false);
-  const [state, setState] = useState({
-    about: profile.about,
-    userType: profile.userType,
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    Email: profile.Email,
-    PhoneNumber: profile.PhoneNumber,
-    websiteUrl: profile.websiteUrl,
-    facebookUrl: profile.websiteUrl,
-    instagramUrl: profile.instagramUrl,
-    userId: profile.id,
-  });
+  useEffect(() => {
+    profileInfo.map((profile) => {
+      setState({
+        ...state,
+        about: profile.about,
+        userType: profile.userType,
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        Email: profile.Email,
+        PhoneNumber: profile.PhoneNumber,
+        websiteUrl: profile.websiteUrl,
+        facebookUrl: profile.websiteUrl,
+        instagramUrl: profile.instagramUrl,
+        userId: profile.id,
+        imageUrl: profile.photoURL,
+      });
+    });
+
+    setCheck(true);
+  }, [profileInfo]);
+
   const handleAccountInfo = () => {
     updateInformation(state);
   };
-const navigationHandler = () => {
+  const navigationHandler = () => {
     navigation.goBack();
   };
 
-  const [imageUrl, setImageUrl] = useState("");
-  const [check, setCheck] = useState(false);
   useEffect(() => {
-    profileInfo.map((data) => {
-      if (data !== null) {
-        setCheck(true);
-      }
-      setImageUrl(data.photoURL);
-    });
-    profileInformation();
-  }, [updateInformation]);
+    console.log("stateeee", state);
+  }, [state]);
 
   return (
     <>
       {check ? (
         <ScrollView style={styles.screen}>
-         
-         <View style={styles.header}>
-                          <TouchableOpacity onPress={navigationHandler}>
-                            <AntDesign name="arrowleft" size={25} color="#000" />
-                          </TouchableOpacity>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={navigationHandler}>
+              <AntDesign name="arrowleft" size={25} color="#000" />
+            </TouchableOpacity>
 
-                            <TouchableOpacity  style={styles.btn}>
-                              <Text>Save & Exit</Text>
-                            </TouchableOpacity>
+            <TouchableOpacity style={styles.btn}>
+              <Text>Save & Exit</Text>
+            </TouchableOpacity>
           </View>
           <View>
-                
             <View>
               <View style={styles.content}>
                 <View>
                   <TouchableOpacity style={styles.imageComponent}>
-                    {imageUrl !== "" ? (
+                    {state.imageUrl !== "" ? (
                       <Image
                         style={{ height: 100, width: 100, borderRadius: 200 }}
-                        source={{ uri: imageUrl }}
+                        source={{ uri: state.imageUrl }}
                       />
                     ) : (
                       <Image
@@ -115,10 +113,11 @@ const navigationHandler = () => {
                       </TouchableOpacity>
                     </View>
                   </TouchableOpacity>
-                  <Text style={styles.text}>{profile.Name}</Text>
+                  <Text style={styles.text}>{state.Name}</Text>
                 </View>
                 {Edit ? (
                   <TouchableOpacity
+                    activeOpacity={0.5}
                     onPress={handleAccountInfo}
                     style={{
                       paddingTop: 20,
@@ -142,7 +141,7 @@ const navigationHandler = () => {
                     minHeight={100}
                     multiline={true}
                     numberOfLines={20}
-                    defaultValue={profile.about}
+                    defaultValue={state.about}
                     maxLength={300}
                     placeholder="Give your clients a short bio about yourself, and the service you offer?  Tell them what do you like about your service, and remember honesty goes a long way in the online world 💫"
                     style={styles.input}
@@ -157,7 +156,7 @@ const navigationHandler = () => {
                 <Input
                   head="User Type"
                   editable={true}
-                  defaultValue={profile.userType}
+                  defaultValue={state.userType}
                   placeHolder=""
                   onChangeText={(text) => {
                     setEdit(true);
@@ -166,7 +165,7 @@ const navigationHandler = () => {
                 />
                 <Input
                   head="First Name"
-                  defaultValue={profile.firstName}
+                  defaultValue={state.firstName}
                   editable={true}
                   placeHolder=""
                   onChangeText={(text) => {
@@ -176,7 +175,7 @@ const navigationHandler = () => {
                 />
                 <Input
                   head="Last Name"
-                  defaultValue={profile.lastName}
+                  defaultValue={state.lastName}
                   editable={true}
                   placeHolder=""
                   onChangeText={(text) => {
@@ -186,7 +185,7 @@ const navigationHandler = () => {
                 />
                 <Input
                   head="Email"
-                  defaultValue={profile.Email}
+                  defaultValue={state.Email}
                   editable={true}
                   placeHolder=""
                   onChangeText={(text) => {
@@ -196,7 +195,7 @@ const navigationHandler = () => {
                 />
                 <Input
                   head="Phone "
-                  defaultValue={profile.PhoneNumber}
+                  defaultValue={state.PhoneNumber}
                   editable={true}
                   placeHolder=""
                   onChangeText={(text) => {
@@ -209,7 +208,7 @@ const navigationHandler = () => {
                   <Entypo name="globe" style={styles.texticon} />
                   <Input
                     head="Website"
-                    defaultValue={profile.websiteUrl}
+                    defaultValue={state.websiteUrl}
                     editable={true}
                     placeHolder="enter url"
                     onChangeText={(text) => {
@@ -222,7 +221,7 @@ const navigationHandler = () => {
                   <Entypo name="facebook" style={styles.texticon} />
                   <Input
                     head="Facebook"
-                    defaultValue={profile.facebookUrl}
+                    defaultValue={state.facebookUrl}
                     editable={true}
                     placeHolder="enter url"
                     onChangeText={(text) => {
@@ -235,7 +234,7 @@ const navigationHandler = () => {
                   <AntDesign name="instagram" style={styles.texticon} />
                   <Input
                     head="Instagram"
-                    defaultValue={profile.instagramUrl}
+                    defaultValue={state.instagramUrl}
                     editable={true}
                     placeHolder="enter url"
                     onChangeText={(text) => {

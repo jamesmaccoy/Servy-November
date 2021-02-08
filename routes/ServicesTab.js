@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import AddService from "../src/screens/User/AddService";
 import { createStackNavigator } from "@react-navigation/stack";
 import Bookings from "../src/screens/User/Bookings";

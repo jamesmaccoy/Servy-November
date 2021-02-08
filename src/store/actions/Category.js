@@ -113,7 +113,6 @@ export const deleteCategory = (id) => async (
         .get()
         .then((docRef) => {
           docRef.docs.forEach((value, index) => {
-            console.log("valueee", value.id);
             parentCategory.push({ ...value.data(), id: value.id });
           });
         })
