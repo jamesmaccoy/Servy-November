@@ -527,7 +527,6 @@ export const updateService = (
             })
             .then(() => {
               if (selectedValue === "other") {
-                console.log("hewewrewer");
                 db.collection("categories").add({
                   label: category,
                   value: category.replace(/\s/g, ""),
@@ -627,7 +626,6 @@ export const getServicesBySearch = (data) => async (
   getState,
   { getFirestore, getFirebase }
 ) => {
-  console.log("Hereeeeeee");
   const db = getFirestore();
   let services = [];
   dispatch({

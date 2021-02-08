@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { getAdminCategory } from "../../store/actions/Category";
 import FeaturesSelect from "./Features";
 import { distanceRadius } from "../../store/actions/Location";
-import { Picker } from "@react-native-community/picker";
+import { Picker } from "@react-native-picker/picker";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, Modal, StyleSheet } from "react-native";
-import { Picker } from "@react-native-community/picker";
+import { Picker } from "@react-native-picker/picker";
 import { Button } from "react-native-paper";
 import { connect } from "react-redux";
 import { assignListing } from "../../store/actions/Admin";
