@@ -25,7 +25,7 @@ export const sendPushNotification = (id, data, documentId) => async (
       Authorization: `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
     },
     body: JSON.stringify({
-      to: dt.token,
+      to: dt.data,
       priority: "normal",
       data: {
         experienceId: "@numansafi97/servys",
