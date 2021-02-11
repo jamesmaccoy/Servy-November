@@ -2,7 +2,7 @@ import * as Google from "expo-google-app-auth";
 import * as Notifications from "expo-notifications";
 import axios from "axios";
 
-export const sendPushNotification = (id, data, documentId) => async (
+export const sendPushNotification = (id, dataa, documentId) => async (
   dispatch,
   getState,
   { getFirestore, getFirebase }
@@ -12,35 +12,39 @@ export const sendPushNotification = (id, data, documentId) => async (
   const providerInfo = await db.collection("users").doc(id).get();
   const dt = providerInfo.data().deviceToken;
   const docRef = await db.collection("services").doc(documentId);
+  console.log("daataaaa", dt.data);
 
   docRef.update({
     approve: true,
   });
 
-  await axios({
+  const res = await axios({
     method: "post",
     url: "https://fcm.googleapis.com/fcm/send",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `key=AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ`,
+      Authorization:
+        "Bearer AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ",
     },
-    body: JSON.stringify({
-      to: dt.data,
+    data: JSON.stringify({
+      to:
+        "d7ZDoWMIS-KPCnzdMauQXH:APA91bE8RmG0Uu2ZNPxbmXHFOUYatd6uD6Q8HpFBjjkXzOhCs4uXeLrUiXDwnxkZDMT48djXBuX2UhzAYotwq3OdWRrmLamJbzyUByCwf4KoaIhwgK8rDVjSKMfEtdzhfDtIIWd3GKk0",
       priority: "normal",
       data: {
         experienceId: "@numansafi97/servys",
         title: "Congratulations",
-        message: `your Listing has been published- [ ${data} ] `,
+        message: `Your LIsting has been Approved - [ ${dataa} ]`,
       },
     }),
   });
+  console.log("hererererwerwerwe", res);
 
   await db
     .collection("users")
     .doc(id)
     .collection("notifications")
     .add({
-      message: `your Listing has been published- [ ${data}] `,
+      message: `your Listing has been published- [ ${dataa}] `,
       cretedAt: Date.now(),
       listingId: documentId,
     });
