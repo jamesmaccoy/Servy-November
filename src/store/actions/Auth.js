@@ -27,9 +27,7 @@ export const sendPushNotification = (id, dataa, documentId) => async (
         "Bearer AAAA1F4uasE:APA91bGNhUMh9-eQT5M-f7bv5M0y7Y8aDlSqpOxPqKiQgwYa0nSLIVVKq1-GNpWxj3K2UMJzz06kRBbu8Kp0kj8Zkh2ThxzJWtPh1JVpd-rF8rctp8Jr-r_7ptnTp7Nz5DO7Uy1-3IuZ",
     },
     data: JSON.stringify({
-      to:
-        "d7ZDoWMIS-KPCnzdMauQXH:APA91bE8RmG0Uu2ZNPxbmXHFOUYatd6uD6Q8HpFBjjkXzOhCs4uXeLrUiXDwnxkZDMT48djXBuX2UhzAYotwq3OdWRrmLamJbzyUByCwf4KoaIhwgK8rDVjSKMfEtdzhfDtIIWd3GKk0",
-      priority: "normal",
+      to: dt.data,
       data: {
         experienceId: "@numansafi97/servys",
         title: "Congratulations",
