@@ -12,7 +12,7 @@ import {
 } from "native-base";
 import { connect } from "react-redux";
 import { signInWithEmail } from "../../store/actions/Auth";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 const Login = ({ signInWithEmail, navigation, loginError }) => {
   const [userEmail, setEmail] = useState("");
@@ -29,17 +29,14 @@ const Login = ({ signInWithEmail, navigation, loginError }) => {
   return (
     <Container style={styles.wrapper}>
       <Content style={styles.container}>
-        <FontAwesome
-          name="envelope"
-          size={50}
-          color={"#000"}
-          style={styles.topenvicon}
-        />
-        <Text style={styles.loginsizetxt}>
-          Sign in with your {"\n"} email address
-        </Text>
-        {loginError !== "" && (
+      {loginError !== "" && (
           <View style={styles.ifdontha}>
+            <MaterialIcons
+            name="error"
+            size={20}
+            color={"#fff"}
+            style={styles.topenvicofn}
+          />
             <Text style={styles.cnatxt}>
               {loginError} Please try again or
               <Text
@@ -52,6 +49,16 @@ const Login = ({ signInWithEmail, navigation, loginError }) => {
             </Text>
           </View>
         )}
+        <FontAwesome
+          name="envelope"
+          size={50}
+          color={"#000"}
+          style={styles.topenvicon}
+        />
+        <Text style={styles.loginsizetxt}>
+          Sign in with your {"\n"} email address
+        </Text>
+        
         <Form vstyle={styles.form}>
           <Item floatingLabel last style={styles.inputtexts}>
             <Label style={styles.label}>Email Address</Label>
@@ -119,19 +126,24 @@ export default connect(mapStateToProps, {
 const styles = StyleSheet.create({
   container: {
     padding: 15,
+    paddingTop:0,
   },
-  topenvicon: { alignSelf: "center", marginBottom: 20 },
+  topenvicon: { alignSelf: "center", marginBottom: 10,  marginTop: 10 },
 
   ifdontha: {
-    backgroundColor: "#5dae7e",
+    backgroundColor: "#f00",
     paddingTop: 15,
-    borderRadius: 5,
+    borderRadius: 15,
     paddingBottom: 15,
-    paddingRight: 5,
-    paddingLeft: 5,
+    paddingRight: 25,
+    paddingLeft: 25,
     marginTop: 25,
+    display:'flex',
+    alignItems:'center', alignSelf: "center",
+    flexDirection:'row',
   },
-  cnatxt: { color: "#fff", textAlign: "center", fontSize: 15, lineHeight: 25 },
+  topenvicofn:{marginTop:0,},
+  cnatxt: { color: "#fff", textAlign: "center", paddingLeft:15, fontSize: 15, lineHeight: 25 },
   imtxc: {
     display: "flex",
     alignItems: "center",
