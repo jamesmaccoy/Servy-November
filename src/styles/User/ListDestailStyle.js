@@ -155,8 +155,15 @@ export const styles = StyleSheet.create({
     buttonaddr:{borderWidth:2, width:100,paddingTop:6,paddingRight:20,paddingLeft:12,paddingBottom:6,marginTop:20, borderColor:'#5c9b84',
      flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',  },
 
-buttonbook:{ width:'100%',paddingTop:10,paddingRight:20,paddingLeft:12,paddingBottom:10,marginTop:20, backgroundColor:'#5c9b84',
-     flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'center',  },
+buttonbook:{display:'flex',position:'absolute',right:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
+shadowOffset: {
+  width: 0,
+  height: 2,
+},
+shadowOpacity: 0.25,
+shadowRadius: 3.84,
+
+elevation: 5,},
      
 
   titlereviewbtn:{flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',borderBottomWidth:1,
