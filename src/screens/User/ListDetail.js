@@ -13,7 +13,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "native-base";
-import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
@@ -344,6 +344,32 @@ const ListDetail = ({ ...props }) => {
                     ))}
                   </View>
                 </View>
+                 <View>
+                      <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(true);
+
+                    }}
+                     style={{paddingBottom:100,position:'relative',width:'100%'}}
+                  >
+                    <View style={styles.buttonbook}>
+                     <Ionicons name="ios-hand"  size={30} color={'#fff'}/>
+                      
+                      <Text
+                        style={{
+                          fontSize: 20,
+                          paddingLeft: 5,
+                          color: "#ffffff",
+                        }}
+                      >
+                        Book
+                      </Text>
+
+
+                    </View>
+                  </TouchableOpacity>
+              </View>
+
               </View>
             </View>
 
