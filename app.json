@@ -2,6 +2,7 @@
   "expo": {
     "name": "servys",
     "slug": "servys",
+    "scheme": "servys",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -47,8 +48,23 @@
           "apiKey" : "AIzaSyDIMee6Qk_MK3zr14cv_b3B3PE7HTnfQA8",
           "certificateHash": "F6578CFB17FF092FDE791601D51D7750F975A642"
         }
-      }
-      
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "https://serveys.page.link/iho8",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+    ]
     }
   }
 }

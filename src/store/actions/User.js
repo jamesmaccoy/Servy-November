@@ -1,3 +1,4 @@
+import axios from "axios";
 export const userStatus = (state) => async (dispatch) => {
   dispatch({
     type: "USER_STATUS",
@@ -196,4 +197,32 @@ export const bannerInfo = () => async (
   remoteConfig.settings = {
     minimumFetchIntervalMillis: 3600000,
   };
+};
+export const shareDynamicLinks = (id) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  const firebase = getFirebase();
+  const res = await axios({
+    method: "post",
+    url:
+      "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyAFdShW11pxYFmSWkLmQcOLm2QJRHp4A7s",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: JSON.stringify({
+      dynamicLinkInfo: {
+        domainUriPrefix: "https://serveys.page.link",
+        link: `https://www.serveys.page.link/${id}`,
+        androidInfo: { androidPackageName: "com.rameezraja.serveys" },
+      },
+    }),
+  });
+  const response = res.data.shortLink;
+  dispatch({
+    type: "DYNAMIC-LINK",
+    payload: response,
+  });
 };

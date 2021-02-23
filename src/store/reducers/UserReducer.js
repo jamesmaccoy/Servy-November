@@ -2,6 +2,7 @@ const initialState = {
   status: false,
   switchLoader: false,
   notifications: [],
+  dynamicLink: "",
 };
 
 export default function UserReducer(state = initialState, action) {
@@ -20,6 +21,11 @@ export default function UserReducer(state = initialState, action) {
       return {
         ...state,
         notifications: action.payload,
+      };
+    case "DYNAMIC-LINK":
+      return {
+        ...state,
+        dynamicLink: action.payload,
       };
     default:
       return state;

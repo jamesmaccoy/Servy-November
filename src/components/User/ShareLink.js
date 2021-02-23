@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Share, View } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import { styles } from "../../styles/User/ListDestailStyle";
-const ShareLink = ({url}) => {
-  
+import { connect } from "react-redux";
+const ShareLink = ({ dynamicLink, name }) => {
+
   const onShare = async () => {
     try {
       const result = await Share.share({
-        message:
-          "React Native | A framework for building native apps using React",
-          urls: url
+        title: `${name}`,
+        message: dynamicLink,
+        url: dynamicLink,
       });
       if (result.action === Share.sharedAction) {
         if (result.activityType) {
@@ -21,11 +22,11 @@ const ShareLink = ({url}) => {
       alert(error.message);
     }
   };
-  return (
-    <View>
-      <Entypo onPress={onShare} style={styles.close} name="share" />
-    </View>
-  );
+  return <Entypo onPress={onShare} style={styles.close} name="share" />;
 };
-
-export default ShareLink;
+const mapStateToProps = (state) => {
+  return {
+    dynamicLink: state.User.dynamicLink,
+  };
+};
+export default connect(mapStateToProps)(ShareLink);

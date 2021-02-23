@@ -61,10 +61,6 @@ const Header = ({ ...props }) => {
     navigation.navigate("Notification");
   };
 
-  useEffect(() => {
-    console.log("Notifications", notifications);
-  }, [notifications]);
-
   return (
     <>
       <View style={styles.container}>

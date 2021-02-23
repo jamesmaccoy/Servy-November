@@ -4,7 +4,6 @@ export const providerService = () => async (
   { getFirestore, getFirebase }
 ) => {
   const db = getFirestore();
-  const firebase = getFirebase();
   let services = [];
   dispatch({
     type: "ADMIN_LISTING_LOADING",
@@ -98,7 +97,6 @@ export const duplicateListing = (document) => async (
         .get()
         .then((res) => {
           res.docs.forEach((data) => {
-            console.log("dataaa", data.id);
             services.push({ ...data.data(), id: data.id });
           });
           dispatch({

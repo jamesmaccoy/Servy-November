@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, Image, TouchableOpacity,  ActivityIndicator,
-  FlatList, } from "react-native";
+import {
+  ScrollView,
+  View,
+  Image,
+  TouchableOpacity,
+  ActivityIndicator,
+  FlatList,
+  Modal,
+  Dimensions,
+} from "react-native";
 import Header from "../../components/User/Header";
 import ListingItem from "../../components/User/ListingItem";
 import { Text } from "native-base";
@@ -9,6 +17,8 @@ import {
   getServices,
   getServicesByCategory,
   getServicesByProvider,
+  getDynamicLinkId,
+  resetDynamicLoader,
 } from "../../store/actions/Services";
 import { bannerInfo } from "../../store/actions/User";
 import Filter from "../../components/User/Filter";
@@ -17,6 +27,7 @@ import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
 import { switchLoader } from "../../store/actions/User";
 import ProviderModal from "../../components/User/ProviderModal";
 import { styles } from "../../styles/User/HomeStyle";
+import Loader from "../Auth/Loader";
 
 const Home = ({ ...props }) => {
   let navigation = props.navigation;
@@ -27,16 +38,44 @@ const Home = ({ ...props }) => {
   let switchLoading = props.switchLoading;
   let getServicesByProvider = props.getServicesByProvider;
   let bannerInfo = props.bannerInfo;
+  let dynamicId = props.dynamicId;
+  let dynamicLoader = props.dynamicLoader;
+  let resetDynamicLoader = props.resetDynamicLoader;
 
   const [showFilter, setShowFilter] = useState(false);
   const [newServices, setNewServices] = useState([]);
   const [proServices, setProServices] = useState([]);
   const [providerModal, setProviderModal] = useState(false);
   const [activeServices, setActiveServices] = useState([]);
+  const [dynamicLoading, setDynamicLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
   useEffect(() => {
     getServices();
-    bannerInfo()
+    bannerInfo();
   }, []);
+
+  const chnageScreen = () => {
+    navigation.navigate("ListDetail", {
+      data: {},
+      key: dynamicId,
+    });
+  };
+
+  useEffect(() => {
+    if (dynamicId !== "") {
+      setTimeout(() => {
+        chnageScreen();
+      }, 200);
+      setTimeout(() => {
+        resetDynamicLoader();
+      }, 1000);
+    }
+    if (dynamicId === "") {
+      resetDynamicLoader();
+    }
+  }, [dynamicId]);
+
   useEffect(() => {
     switchLoader(false);
   }, [checkVisible]);
@@ -58,174 +97,200 @@ const Home = ({ ...props }) => {
       })
     );
   }, [props.providerServices]);
-   const [isLoading, setLoading] = useState(true);
-   const [data, setData] = useState([]);
- useEffect(() => {
-    fetch('https://thanks.digital/survey/banner-content.php')
+
+  useEffect(() => {
+    fetch("https://thanks.digital/survey/banner-content.php")
       .then((response) => response.json())
-       .then((json) => setData(json.content))
+      .then((json) => setData(json.content))
       .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   }, []);
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
-
   return (
     <View>
-      {switchLoading && (
-        <View style={styles.loading}>
-          <Text>Switching...</Text>
-        </View>
-      )}
-      <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
-        <View style={styles.header}>
-          <Header
-            navigation={navigation}
-            name="Home"
-            visible={true}
-            notificationButton={true}
-            filterButton={false}
-          />
-        </View>
-        <ScrollView style={styles.screenitemcontainer}>
-          <ScrollView
-            style={styles.screenitem}
-            showsHorizontalScrollIndicator={false}
-            horizontal={true}
+      {dynamicLoader ? (
+        <Modal transparent={true} visible={true}>
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "#fff",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            {items.map((item) => (
-              <View
-                style={[styles.listoption, { backgroundColor: item.bgcolor }]}
-                key={item.key}
-              >
-                <FontAwesome
-                  style={[styles.listimg, { fontSize: 30, paddingTop: 10 }]}
-                  name={item.ico}
-                />
-
-                <Text style={styles.listtxt}>{item.label}</Text>
-              </View>
-            ))}
-          </ScrollView>
-          <View style={styles.categorieslisting}>
-            {checkVisible === false ? (
-              <View style={styles.milesdata}>
-                <Text style={styles.milesdatatxt}>
-                  Suggested Servey pro's in your area
-                </Text>
-                <TouchableOpacity activeOpacity={0.7} onPress={handleFilter}>
-                  <View style={styles.milesdatain}>
-                    <MaterialCommunityIcons
-                      style={{ fontSize: 22, paddingTop: 10 }}
-                      name="filter-variant"
-                    />
-                    <Text style={styles.milesStyle}> 2 Mile</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View style={styles.milesdata}>
-                <Text style={styles.milesdatatxt}>
-                  Services({activeServices.length} Active Services)
-                </Text>
-              </View>
-            )}
-            <ScrollView
-              showsHorizontalScrollIndicator={false}
-              horizontal={true}
-            >
-              <>
-                {serviceLoader || switchLoading ? (
-                  <View style={styles.dummyContent}>
-                    <View style={styles.innerDummy}></View>
-                    <View style={styles.innerDummy2}></View>
-                  </View>
-                ) : checkVisible === false ? (
-                  newServices.length === 0 ? (
-                    <View style={{ paddingLeft: 15 }}>
-                      <Text style={{ color: "#9c9c9c" }}>
-                        No Service Available
-                      </Text>
-                    </View>
-                  ) : (
-                    newServices.map((data) => {
-                      return (
-                        <ListingItem
-                          pad={15}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    })
-                  )
-                ) : (
-                  <>
-                    {proServices.map((data, index) => {
-                      return (
-                        <ProviderItem
-                          setProviderModal={setProviderModal}
-                          pad={15}
-                          key={data.id}
-                          data={data}
-                          navigation={navigation}
-                        />
-                      );
-                    })}
-                  </>
-                )}
-              </>
-            </ScrollView>
+            <Loader />
           </View>
-           <View style={styles.bannercont}>
-           {isLoading ? <ActivityIndicator/> : (
-                <FlatList
-                  data={data}
-                  keyExtractor={({ id }, index) => id}
-                  renderItem={({ item }) => (
-            <View style={styles.bannerdetail}>
-              <Text style={styles.bannertitle}>{item.title}</Text>
-
-              <Text style={styles.bannerdescription}>{item.content}</Text>
-              <View style={styles.bannerbuttontok}>
-                <TouchableOpacity
-                  style={styles.loginScreenButton}
-                  underlayColor="#fff"
-                >
-                  <FontAwesome
-                    style={{ fontSize: 30, color: "#62ad80" }}
-                    name="code-fork"
-                  />
-                  <Text style={styles.bannerbutton}>Button</Text>
-                </TouchableOpacity>
-              </View>
+        </Modal>
+      ) : (
+        <View>
+          {switchLoading && (
+            <View style={styles.loading}>
+              <Text>Switching...</Text>
             </View>
-  )}
+          )}
+          <View opacity={showFilter ? 0.7 : 1} style={styles.screen}>
+            <View style={styles.header}>
+              <Header
+                navigation={navigation}
+                name="Home"
+                visible={true}
+                notificationButton={true}
+                filterButton={false}
+              />
+            </View>
+            <ScrollView style={styles.screenitemcontainer}>
+              <ScrollView
+                style={styles.screenitem}
+                showsHorizontalScrollIndicator={false}
+                horizontal={true}
+              >
+                {items.map((item) => (
+                  <View
+                    style={[
+                      styles.listoption,
+                      { backgroundColor: item.bgcolor },
+                    ]}
+                    key={item.key}
+                  >
+                    <FontAwesome
+                      style={[styles.listimg, { fontSize: 30, paddingTop: 10 }]}
+                      name={item.ico}
+                    />
+
+                    <Text style={styles.listtxt}>{item.label}</Text>
+                  </View>
+                ))}
+              </ScrollView>
+              <View style={styles.categorieslisting}>
+                {checkVisible === false ? (
+                  <View style={styles.milesdata}>
+                    <Text style={styles.milesdatatxt}>
+                      Suggested Servey pro's in your area
+                    </Text>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={handleFilter}
+                    >
+                      <View style={styles.milesdatain}>
+                        <MaterialCommunityIcons
+                          style={{ fontSize: 22, paddingTop: 10 }}
+                          name="filter-variant"
+                        />
+                        <Text style={styles.milesStyle}> 2 Mile</Text>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View style={styles.milesdata}>
+                    <Text style={styles.milesdatatxt}>
+                      Services({activeServices.length} Active Services)
+                    </Text>
+                  </View>
+                )}
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}
+                >
+                  <>
+                    {serviceLoader || switchLoading ? (
+                      <View style={styles.dummyContent}>
+                        <View style={styles.innerDummy}></View>
+                        <View style={styles.innerDummy2}></View>
+                      </View>
+                    ) : checkVisible === false ? (
+                      newServices.length === 0 ? (
+                        <View style={{ paddingLeft: 15 }}>
+                          <Text style={{ color: "#9c9c9c" }}>
+                            No Service Available
+                          </Text>
+                        </View>
+                      ) : (
+                        newServices.map((data) => {
+                          return (
+                            <ListingItem
+                              pad={15}
+                              key={data.id}
+                              data={data}
+                              navigation={navigation}
+                            />
+                          );
+                        })
+                      )
+                    ) : (
+                      <>
+                        {proServices.map((data, index) => {
+                          return (
+                            <ProviderItem
+                              setProviderModal={setProviderModal}
+                              pad={15}
+                              key={data.id}
+                              data={data}
+                              navigation={navigation}
+                            />
+                          );
+                        })}
+                      </>
+                    )}
+                  </>
+                </ScrollView>
+              </View>
+              <View style={styles.bannercont}>
+                {isLoading ? (
+                  <ActivityIndicator />
+                ) : (
+                  <FlatList
+                    data={data}
+                    keyExtractor={({ id }, index) => id}
+                    renderItem={({ item }) => (
+                      <View style={styles.bannerdetail}>
+                        <Text style={styles.bannertitle}>{item.title}</Text>
+
+                        <Text style={styles.bannerdescription}>
+                          {item.content}
+                        </Text>
+                        <View style={styles.bannerbuttontok}>
+                          <TouchableOpacity
+                            style={styles.loginScreenButton}
+                            underlayColor="#fff"
+                          >
+                            <FontAwesome
+                              style={{ fontSize: 30, color: "#62ad80" }}
+                              name="code-fork"
+                            />
+                            <Text style={styles.bannerbutton}>Button</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    )}
+                  />
+                )}
+                <Image
+                  style={styles.bannerimg}
+                  source={require("../../../assets/images/13.png")}
+                />
+              </View>
+              {providerModal && (
+                <ProviderModal
+                  navigation={navigation}
+                  setProviderModal={setProviderModal}
+                  visible={providerModal}
                 />
               )}
-            <Image
-              style={styles.bannerimg}
-              source={require("../../../assets/images/13.png")}
-            />
+              {showFilter && (
+                <Filter
+                  navigation={navigation}
+                  setShowFilter={setShowFilter}
+                  modalVisible={showFilter}
+                  route={props.route}
+                />
+              )}
+            </ScrollView>
           </View>
-          {providerModal && (
-            <ProviderModal
-              navigation={navigation}
-              setProviderModal={setProviderModal}
-              visible={providerModal}
-            />
-          )}
-          {showFilter && (
-            <Filter
-              navigation={navigation}
-              setShowFilter={setShowFilter}
-              modalVisible={showFilter}
-              route={props.route}
-            />
-          )}
-        </ScrollView>
-      </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -238,6 +303,9 @@ const mapStateToProps = (state) => {
     currentUser: state.Auth.user,
     switchLoading: state.User.switchLoader,
     providerServices: state.Service.userServices,
+    dynamicId: state.Service.dynamicId,
+    dynamicLoader: state.Service.dynamicLoader,
+    dynamicUrl1: state.Service.dynamicUrl1,
   };
 };
 export default connect(mapStateToProps, {
@@ -246,6 +314,8 @@ export default connect(mapStateToProps, {
   switchLoader,
   getServicesByProvider,
   bannerInfo,
+  getDynamicLinkId,
+  resetDynamicLoader,
 })(Home);
 
 const items = [

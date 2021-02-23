@@ -17,26 +17,36 @@ import { Entypo, MaterialCommunityIcons } from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
-import { serviceProviderInformation } from "../../store/actions/User";
+import {
+  serviceProviderInformation,
+  shareDynamicLinks,
+} from "../../store/actions/User";
 import {
   addServiceReview,
   getServiceReview,
+  getDataByKey,
+  resetDynamicLinkId,
 } from "../../store/actions/Services";
 import Rating from "../../components/Generic/Rating";
 import Maps from "../../components/Generic/Maps";
 import Loader from "../../screens/Auth/Loader";
 import Carousel from "react-native-snap-carousel";
 import { LinearGradient } from "expo-linear-gradient";
-
 import { styles } from "../../styles/User/ListDestailStyle";
+import ShareLink from "../../components/User/ShareLink";
+
 const { width } = Dimensions.get("window");
 const ListDetail = ({ ...props }) => {
   let navigation = props.navigation;
-  let data = props.route.params.data;
   let addServiceReview = props.addServiceReview;
   let getServiceReview = props.getServiceReview;
   let ReviewsList = props.ReviewsList;
   let dataLoader = props.loader;
+  let shareDynamicLinks = props.shareDynamicLinks;
+  let getDataByKey = props.getDataByKey;
+  let serviceData = props.serviceData;
+  let resetDynamicLinkId = props.resetDynamicLinkId;
+
   const [information, setInformation] = useState({
     about: "",
   });
@@ -45,39 +55,52 @@ const ListDetail = ({ ...props }) => {
     service: 0,
     comment: "",
   });
+  const [data, setData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [visibleText, setTextVisible] = useState(false);
-  const [loader, setLoader] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const [serviceLoader, setServiceLoader] = useState(true);
 
   useEffect(() => {
-    props.serviceProviderInformation(data.userId);
-    getServiceReview(data.id);
+    setServiceLoader(true);
+    getDataByKey(props.route.params.key);
   }, []);
+
+  useEffect(() => {
+    setServiceLoader(dataLoader);
+  }, [dataLoader]);
+
+  useEffect(() => {
+    if (serviceData) {
+      setData(serviceData);
+      props.serviceProviderInformation(serviceData.userId);
+      getServiceReview(serviceData.id);
+    }
+  }, [serviceData]);
+
+  useEffect(() => {
+    if (data) {
+      shareDynamicLinks(data.id);
+      if (data.attributes) {
+        if (data.attributes.length !== 0) {
+          setTextVisible(false);
+        }
+        if (data.attributes.length === 0) {
+          setTextVisible(true);
+        }
+      }
+    }
+  }, [data]);
+
   useEffect(() => {
     props.serviceProviderInfo.map((providerData) => {
       setInformation({ ...information, about: providerData.about });
     });
   }, [props.serviceProviderInfo]);
-  useEffect(() => {
-    setLoader(dataLoader);
-  }, [dataLoader]);
 
-  useEffect(() => {
-    if (ReviewsList.lenght == 0) {
-      setLoader(true);
-    }
-  }, [ReviewsList]);
-  useEffect(() => {
-    if (data.attributes.length !== 0) {
-      setTextVisible(false);
-    }
-    if (data.attributes.length === 0) {
-      setTextVisible(true);
-    }
-  }, []);
   const navHandler = () => {
     navigation.goBack();
+    resetDynamicLinkId();
   };
 
   const handleRatingService = (star) => {
@@ -115,7 +138,7 @@ const ListDetail = ({ ...props }) => {
 
   return (
     <>
-      {dataLoader == false ? (
+      {serviceLoader == true ? (
         <Loader />
       ) : (
         <View>
@@ -131,12 +154,16 @@ const ListDetail = ({ ...props }) => {
 
                   <Text style={styles.title}>{data.category}</Text>
                 </View>
-                <MaterialCommunityIcons
-                  style={styles.close}
-                  name="filter-variant"
-                  onPress={handleFilter}
-                />
-                <Entypo name="share" size={30} color={"#fff"} />
+                <View style={styles.icons}>
+                  <MaterialCommunityIcons
+                    style={styles.close}
+                    name="filter-variant"
+                    onPress={handleFilter}
+                  />
+                  <TouchableOpacity>
+                    <ShareLink name={data.serviceName} />
+                  </TouchableOpacity>
+                </View>
               </SafeAreaView>
               <Text style={styles.categoryTitle}>{data.serviceName} </Text>
             </View>
@@ -168,32 +195,36 @@ const ListDetail = ({ ...props }) => {
               )}
 
               <View style={styles.checkboxList}>
-                {data.attributes.map((item, index) => {
-                  return (
-                    <View
-                      key={index}
-                      style={{
-                        flexDirection: "row",
-                        paddingTop: 10,
-                        paddingLeft: 0,
-                      }}
-                    >
-                      <Image style={{ width: 20, height: 20 }} source={tick} />
-
-                      <Text
+                {data.attributes.length !== 0 &&
+                  data.attributes.map((item, index) => {
+                    return (
+                      <View
+                        key={index}
                         style={{
-                          color: "#282828",
-                          fontSize: 16,
-                          width: 150,
-                          textAlign: "left",
-                          paddingLeft: 10,
+                          flexDirection: "row",
+                          paddingTop: 10,
+                          paddingLeft: 0,
                         }}
                       >
-                        {item.label}
-                      </Text>
-                    </View>
-                  );
-                })}
+                        <Image
+                          style={{ width: 20, height: 20 }}
+                          source={tick}
+                        />
+
+                        <Text
+                          style={{
+                            color: "#282828",
+                            fontSize: 16,
+                            width: 150,
+                            textAlign: "left",
+                            paddingLeft: 10,
+                          }}
+                        >
+                          {item.label}
+                        </Text>
+                      </View>
+                    );
+                  })}
               </View>
               <View></View>
 
@@ -226,19 +257,21 @@ const ListDetail = ({ ...props }) => {
                       >
                         Add
                       </Text>
-
-
                     </View>
                   </TouchableOpacity>
                 </View>
                 <View>
-                      <TouchableOpacity
+                  <TouchableOpacity
                     onPress={() => {
                       setModalVisible(true);
                     }}
                   >
                     <View style={styles.buttonbook}>
-                      <MaterialCommunityIcons name={"calendar"} size={30} color={'#fff'} />
+                      <MaterialCommunityIcons
+                        name={"calendar"}
+                        size={30}
+                        color={"#fff"}
+                      />
                       <Text
                         style={{
                           fontSize: 20,
@@ -248,11 +281,9 @@ const ListDetail = ({ ...props }) => {
                       >
                         Book
                       </Text>
-
-
                     </View>
                   </TouchableOpacity>
-              </View>
+                </View>
 
                 <View style={styles.review}>
                   <View style={styles.reviewsList}>
@@ -403,10 +434,15 @@ const mapStateToProps = (state) => {
     serviceProviderInfo: state.Service.serviceProviderInfo,
     ReviewsList: state.Service.reviewsList,
     loader: state.Service.loader,
+    serviceData: state.Service.serviceDataByKey,
+    dynamicLink: state.User.dynamicLink,
   };
 };
 export default connect(mapStateToProps, {
   serviceProviderInformation,
   addServiceReview,
   getServiceReview,
+  shareDynamicLinks,
+  resetDynamicLinkId,
+  getDataByKey,
 })(ListDetail);

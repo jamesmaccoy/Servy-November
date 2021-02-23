@@ -1,3 +1,5 @@
+import axios from "axios";
+import { Linking } from "react-native";
 export const AddNewService = (
   service,
   attributes,
@@ -20,7 +22,7 @@ export const AddNewService = (
     payload: true,
   });
 
-  const res = await images.forEach(async (serviceImage, index) => {
+  await images.forEach(async (serviceImage, index) => {
     const ImageResponse = await fetch(serviceImage);
     const blob = await ImageResponse.blob();
     var ref = firebase.storage().ref().child(`images/${serviceImage}`);
@@ -75,7 +77,6 @@ export const AddNewService = (
                           });
                         });
                       if (selectedValue.value === "other") {
-                        console.log("in new  ");
                         await db.collection("categories").add({
                           label: category,
                           value: category.replace(/\s/g, ""),
@@ -240,7 +241,7 @@ export const getServiceReview = (id) => async (
   let Reviews = [];
   dispatch({
     type: "LOADER",
-    payload: false,
+    payload: true,
   });
   const res = await db
     .collection("services")
@@ -259,11 +260,17 @@ export const getServiceReview = (id) => async (
     .then(() => {
       dispatch({
         type: "LOADER",
-        payload: true,
+        payload: false,
       });
       dispatch({
         type: "GET_REVIEWS",
         payload: Reviews,
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: "LOADER",
+        payload: false,
       });
     });
 };
@@ -343,7 +350,6 @@ export const deletesService = (id) => async (
   getState,
   { getFirestore, getFirebase }
 ) => {
-  console.log("idddd", id);
   const db = getFirestore();
   const firebase = getFirebase();
   var user = await firebase.auth().currentUser;
@@ -364,7 +370,6 @@ export const deletesService = (id) => async (
     .where("userId", "==", user.uid)
     .get()
     .then((response) => {
-      console.log("kholayyyyyy");
       response.docs.forEach((item, index) => {
         services.push({ ...item.data(), id: item.id });
       });
@@ -663,4 +668,109 @@ export const getServicesBySearch = (data) => async (
       payload: false,
     });
   }
+};
+
+export const getDataByKey = (id) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  let services = [];
+
+  dispatch({
+    type: "LOADER",
+    payload: true,
+  });
+
+  await db
+    .collection("services")
+    .doc(id)
+    .get()
+    .then((res) => {
+      dispatch({
+        type: "SERVICE-DATA-BY-KEY",
+        payload: { ...res.data(), id: res.id },
+      });
+      dispatch({
+        type: "LOADER",
+        payload: false,
+      });
+    })
+    .catch(() => {
+      dispatch({
+        type: "LOADER",
+        payload: false,
+      });
+    });
+};
+
+export const getDynamicLinkId = (link) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  const db = getFirestore();
+  dispatch({
+    type: "DYNAMIC_LOADER",
+    payload: true,
+  });
+  dispatch({
+    type: "DYNAMIC_ID",
+    payload: link,
+  });
+  dispatch({
+    type: "DYNAMIC_URL1",
+    payload: link,
+  });
+};
+
+export const resetDynamicLinkId = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  dispatch({
+    type: "DYNAMIC_LOADER",
+    payload: true,
+  });
+  dispatch({
+    type: "DYNAMIC-ID",
+    payload: "",
+  });
+  dispatch({
+    type: "DYNAMIC_LOADER",
+    payload: false,
+  });
+};
+export const resetDynamicLoader = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  dispatch({
+    type: "DYNAMIC_LOADER",
+    payload: false,
+  });
+};
+export const getLinkFromBackBackground = () => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  Linking.addEventListener("url", (url) => {
+    if (url !== "background") {
+      if (url.startsWith("https")) {
+        dispatch({
+          type: "DYNAMIC_LOADER",
+          payload: true,
+        });
+        let res = url.substr(30);
+        dispatch({
+          type: "DYNAMIC_ID",
+          payload: res,
+        });
+      }
+    }
+  });
 };

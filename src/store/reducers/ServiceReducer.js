@@ -6,13 +6,17 @@ const initialState = {
   serviceProviderInfo: [],
   reviewsList: [],
   userReviewInfo: [],
-  loader: false,
+  loader: true,
   serviceLoader: true,
   uploadData: [],
   deleteService: false,
   userServices: [],
   optionSelect: "",
   filterServices: [],
+  serviceDataByKey: {},
+  dynamicId: "",
+  dynamicLoader: true,
+  dynamicUrl1: "",
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -86,6 +90,26 @@ export default function ServiceReducer(state = initialState, action) {
       return {
         ...state,
         filterServices: action.payload,
+      };
+    case "SERVICE-DATA-BY-KEY":
+      return {
+        ...state,
+        serviceDataByKey: action.payload,
+      };
+    case "DYNAMIC_ID":
+      return {
+        ...state,
+        dynamicId: action.payload,
+      };
+    case "DYNAMIC_LOADER":
+      return {
+        ...state,
+        dynamicLoader: action.payload,
+      };
+    case "DYNAMIC_URL1":
+      return {
+        ...state,
+        dynamicUrl1: action.payload,
       };
 
     default:

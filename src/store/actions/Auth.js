@@ -31,12 +31,10 @@ export const sendPushNotification = (id, dataa, documentId) => async (
       data: {
         experienceId: "@numansafi97/servys",
         title: "Congratulations",
-        message: `Your LIsting has been Approved - [ ${dataa} ]`,
+        message: `Your Listing has been Approved - [ ${dataa} ]`,
       },
     }),
   });
-  console.log("hererererwerwerwe", res);
-
   await db
     .collection("users")
     .doc(id)
@@ -147,6 +145,7 @@ export const verifyUser = () => async (
         type: "LOADING",
         payload: false,
       });
+    
     } else {
       dispatch({
         type: "SIGNIN_SUCCESS",

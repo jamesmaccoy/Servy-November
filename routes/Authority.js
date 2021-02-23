@@ -16,10 +16,6 @@ const Authority = ({ type, Authorization, authCheck, profileInformation }) => {
   }, []);
 
   useEffect(() => {
-    console.log("auysss", authCheck);
-  }, [authCheck]);
-
-  useEffect(() => {
     profileInformation();
   }, [authCheck]);
 
