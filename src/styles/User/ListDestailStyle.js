@@ -221,4 +221,25 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+     fawbtn:{borderWidth:2,borderColor:'#ccc', position:'relative', borderRadius:5,padding:20,marginTop:25},
+      details: {
+        paddingTop: 10,
+        fontSize: 16,
+        lineHeight: 22,
+        color: "#282828",
+      },
+      
+      iconinbtn:{   left:8,   position:'absolute',top:10,},
+    textinbtn:{fontSize:18,fontWeight:'bold',color:'#61ad7f',textTransform:'uppercase',textAlign:'center'},
+     buttonaddrb:{display:'flex',position:'absolute',right:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
+shadowOffset: {
+  width: 0,
+  height: 2,
+},
+shadowOpacity: 0.25,
+shadowRadius: 3.84,
+
+elevation: 5,},
+  titlereviewbtn:{flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',  paddingBottom:10}, 
+    
 });
