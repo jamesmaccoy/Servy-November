@@ -17,6 +17,8 @@ const initialState = {
   dynamicId: "",
   dynamicLoader: true,
   dynamicUrl1: "",
+  checkUrl: "",
+  servicesLenght: false,
 };
 export default function ServiceReducer(state = initialState, action) {
   switch (action.type) {
@@ -111,7 +113,16 @@ export default function ServiceReducer(state = initialState, action) {
         ...state,
         dynamicUrl1: action.payload,
       };
-
+    case "CHECK_URL":
+      return {
+        ...state,
+        checkUrl: action.payload,
+      };
+    case "SERVICES_LENGTH":
+      return {
+        ...state,
+        servicesLenght: action.payload,
+      };
     default:
       return state;
   }

@@ -9,6 +9,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import bg from "../../../assets/images/bg.png";
 import { connect } from "react-redux";
 import { getPreciseDistance } from "geolib";
+import { servicesLenght } from "../../store/actions/Services";
 const stars = [1, 2, 3, 4, 5];
 const ListingItem = ({
   data,
@@ -16,11 +17,14 @@ const ListingItem = ({
   pad,
   userLocation,
   initialDistance,
+  servicesLenght,
+  serviceAvailable,
 }) => {
   const [serviceImage, setServiceImage] = useState({
     image: "",
     state: false,
   });
+
   const [distance, setDistance] = useState(0);
   useEffect(() => {
     if (data.imagesUrl.length !== 0) {
@@ -47,6 +51,18 @@ const ListingItem = ({
       );
     }
   }, [data, userLocation]);
+
+  useEffect(() => {
+    if (serviceAvailable === false) {
+      if (userLocation !== null && distance !== 0) {
+        if (distance <= initialDistance) {
+          servicesLenght(true);
+        }
+        // console.log("hereerer")
+      }
+    }
+  }, [distance , initialDistance]);
+
   return (
     <>
       {userLocation !== null && distance <= initialDistance && (
@@ -123,6 +139,7 @@ const mapStateToProps = (state) => {
   return {
     userLocation: state.location.userLocation,
     initialDistance: state.location.initialDistance,
+    serviceAvailable: state.Service.servicesLenght,
   };
 };
-export default connect(mapStateToProps)(ListingItem);
+export default connect(mapStateToProps, { servicesLenght })(ListingItem);

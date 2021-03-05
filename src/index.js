@@ -12,9 +12,11 @@ import {
   getLinkFromBackBackground,
 } from "./store/actions/Services";
 import * as Linking from "expo-linking";
+import { createStackNavigator } from "@react-navigation/stack";
 
 LogBox.ignoreLogs(["Warning: ..."]);
 LogBox.ignoreAllLogs();
+const Stack = createStackNavigator();
 const index = ({
   userState,
   verifyUser,
@@ -32,9 +34,71 @@ const index = ({
         }
       }
     });
+    Linking.addEventListener("url", (url) => {
+      if (url) {
+        if (url.startsWith("https")) {
+          getDynamicLinkId(url.substr(30));
+        }
+      }
+    });
 
     verifyUser();
+    return () => {
+      Linking.removeEventListener("url", (url) => {
+        console.log("urll", url);
+        if (url) {
+          if (url.startsWith("https")) {
+            getDynamicLinkId(url.substr(30));
+          }
+        }
+      });
+    };
   }, []);
+
+  // const HomeTab = () => {
+  //   return (
+  //     <Stack.Navigator initialRouteName="ServicesHome">
+  //       <Stack.Screen
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //         name="ServicesHome"
+  //         component={ServicesHome}
+  //         initialParams={{ key: 1 }}
+  //       />
+  //       <Stack.Screen
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //         name="AddService"
+  //         component={AddService}
+  //       />
+  //       <Stack.Screen
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //         name="ListDetail"
+  //         component={ListDetail}
+  //       />
+  //       <Stack.Screen
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //         name="Services"
+  //         component={Services}
+  //       />
+  //       <Stack.Screen
+  //         options={{
+  //           headerShown: false,
+  //         }}
+  //         name="SearchResult"
+  //         component={SearchResult}
+  //         initialParams={{ key: 4 }}
+  //       />
+  //       <Stack.Screen name="Notification" component={Notification} />
+  //     </Stack.Navigator>
+  //   );
+  // };
 
   const config = {
     screens: {
@@ -46,7 +110,7 @@ const index = ({
                 screens: {
                   AddService: { path: "addservice" },
                   Services: { path: "Services" },
-                  ListDetail: { path: "addservice" },
+                  ListDetail: { path: "listdetail" },
                 },
               },
             },

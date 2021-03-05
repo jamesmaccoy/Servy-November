@@ -14,9 +14,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -45,27 +43,24 @@
           "apiKey": "AIzaSyDIMee6Qk_MK3zr14cv_b3B3PE7HTnfQA8"
         },
         "googleSignIn": {
-          "apiKey" : "AIzaSyDIMee6Qk_MK3zr14cv_b3B3PE7HTnfQA8",
+          "apiKey": "AIzaSyDIMee6Qk_MK3zr14cv_b3B3PE7HTnfQA8",
           "certificateHash": "F6578CFB17FF092FDE791601D51D7750F975A642"
         }
       },
       "intentFilters": [
         {
           "action": "VIEW",
+          "autoVerify": true,
           "data": [
             {
               "scheme": "https",
               "host": "https://serveys.page.link/iho8",
-              "pathPrefix": "/"
+              "pathPrefix": "/iho8"
             }
           ],
-          "category": [
-            "BROWSABLE",
-            "DEFAULT"
-          ]
+          "category": ["BROWSABLE", "DEFAULT"]
         }
-    ]
+      ]
     }
   }
 }
-

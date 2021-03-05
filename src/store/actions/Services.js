@@ -1,5 +1,4 @@
-import axios from "axios";
-import { Linking } from "react-native";
+import * as Linking from "expo-linking";
 export const AddNewService = (
   service,
   attributes,
@@ -759,7 +758,12 @@ export const getLinkFromBackBackground = () => async (
   { getFirestore, getFirebase }
 ) => {
   Linking.addEventListener("url", (url) => {
-    if (url !== "background") {
+    console.log("urlll", url);
+    dispatch({
+      type: "CHECK_URL",
+      payload: url,
+    });
+    if (url) {
       if (url.startsWith("https")) {
         dispatch({
           type: "DYNAMIC_LOADER",
@@ -772,5 +776,26 @@ export const getLinkFromBackBackground = () => async (
         });
       }
     }
+  });
+};
+export const servicesLenght = (data) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  dispatch({
+    type: "SERVICES_LENGTH",
+    payload: data,
+  });
+};
+
+export const restrictNavigation = (data) => async (
+  dispatch,
+  getState,
+  { getFirestore, getFirebase }
+) => {
+  dispatch({
+    type: "ADD_SERVICE",
+    payload: false,
   });
 };

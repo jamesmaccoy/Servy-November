@@ -11,6 +11,13 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  noService: {
+    flex: 1,
+    width: deviceWidth,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   dummyContent: {
     display: "flex",
     justifyContent: "space-between",
@@ -75,6 +82,7 @@ export const styles = StyleSheet.create({
     paddingBottom: 15,
     paddingLeft: 15,
     paddingRight: 15,
+    marginBottom: 0,
   },
 
   bannerdetail: { flex: 1 },
@@ -110,6 +118,8 @@ export const styles = StyleSheet.create({
   },
   categorieslisting: {
     marginTop: 20,
+    minHeight: 600,
+    paddingBottom: 80,
   },
   milesdata: {
     marginBottom: 18,
@@ -127,7 +137,6 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: -4,
-
   },
   milesdatatxt: { fontSize: 16, color: "#a9a9a9", alignItems: "center" },
   milesdatatxtmi: {
@@ -141,6 +150,6 @@ export const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     color: "#a9a9a9",
-    marginTop: 7
+    marginTop: 7,
   },
 });

@@ -19,15 +19,21 @@ import {
   getServicesByProvider,
   getDynamicLinkId,
   resetDynamicLoader,
+  restrictNavigation,
 } from "../../store/actions/Services";
 import { bannerInfo } from "../../store/actions/User";
 import Filter from "../../components/User/Filter";
 import ProviderItem from "../../components/User/ProviderItem";
-import { FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Entypo,
+  FontAwesome,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import { switchLoader } from "../../store/actions/User";
 import ProviderModal from "../../components/User/ProviderModal";
 import { styles } from "../../styles/User/HomeStyle";
 import Loader from "../Auth/Loader";
+import SnackBar from "../../components/Generic/SnackBar";
 
 const Home = ({ ...props }) => {
   let navigation = props.navigation;
@@ -41,15 +47,17 @@ const Home = ({ ...props }) => {
   let dynamicId = props.dynamicId;
   let dynamicLoader = props.dynamicLoader;
   let resetDynamicLoader = props.resetDynamicLoader;
+  let restrictNavigation = props.restrictNavigation;
 
   const [showFilter, setShowFilter] = useState(false);
   const [newServices, setNewServices] = useState([]);
   const [proServices, setProServices] = useState([]);
   const [providerModal, setProviderModal] = useState(false);
   const [activeServices, setActiveServices] = useState([]);
-  const [dynamicLoading, setDynamicLoading] = useState(true);
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     getServices();
     bannerInfo();
@@ -97,6 +105,22 @@ const Home = ({ ...props }) => {
       })
     );
   }, [props.providerServices]);
+  const [alertMessage, setAlertMessage] = useState("");
+
+  useEffect(() => {
+    if (props.route.params) {
+      if (props.route.params.id === 121) {
+        // restrictNavigation();
+        // setVisible(true);
+        setAlertMessage(props.route.params.message);
+      }
+    }
+  }, [props]);
+  useEffect(() => {
+    if (props.serviceMessage) {
+      setVisible(true);
+    }
+  }, [props.serviceMessage]);
 
   useEffect(() => {
     fetch("https://thanks.digital/survey/banner-content.php")
@@ -108,6 +132,7 @@ const Home = ({ ...props }) => {
   const handleFilter = () => {
     setShowFilter(!showFilter);
   };
+
   return (
     <View>
       {dynamicLoader ? (
@@ -141,7 +166,14 @@ const Home = ({ ...props }) => {
                 filterButton={false}
               />
             </View>
+            {/* <Text>dynamic id {dynamicId} </Text>
+            <Text>check url {props.checkUrl} </Text> */}
             <ScrollView style={styles.screenitemcontainer}>
+              <SnackBar
+                setVisible={setVisible}
+                visible={visible}
+                message={alertMessage}
+              />
               <ScrollView
                 style={styles.screenitem}
                 showsHorizontalScrollIndicator={false}
@@ -164,6 +196,7 @@ const Home = ({ ...props }) => {
                   </View>
                 ))}
               </ScrollView>
+
               <View style={styles.categorieslisting}>
                 {checkVisible === false ? (
                   <View style={styles.milesdata}>
@@ -201,24 +234,30 @@ const Home = ({ ...props }) => {
                         <View style={styles.innerDummy2}></View>
                       </View>
                     ) : checkVisible === false ? (
-                      newServices.length === 0 ? (
-                        <View style={{ paddingLeft: 15 }}>
-                          <Text style={{ color: "#9c9c9c" }}>
-                            No Service Available
-                          </Text>
-                        </View>
-                      ) : (
-                        newServices.map((data) => {
-                          return (
-                            <ListingItem
-                              pad={15}
-                              key={data.id}
-                              data={data}
-                              navigation={navigation}
+                      <>
+                        {props.serviceAvailable === false && (
+                          <View style={styles.noService}>
+                            <Text style={{ color: "#9c9c9c", fontSize: 18 }}>
+                              No Service Available in this Area
+                            </Text>
+                            <Entypo
+                              style={{ color: "#9c9c9c", fontSize: 22 }}
+                              name="emoji-sad"
                             />
-                          );
-                        })
-                      )
+                          </View>
+                        )}
+                        {newServices.length !== 0 &&
+                          newServices.map((data) => {
+                            return (
+                              <ListingItem
+                                pad={15}
+                                key={data.id}
+                                data={data}
+                                navigation={navigation}
+                              />
+                            );
+                          })}
+                      </>
                     ) : (
                       <>
                         {proServices.map((data, index) => {
@@ -236,58 +275,60 @@ const Home = ({ ...props }) => {
                     )}
                   </>
                 </ScrollView>
-              </View>
-              <View style={styles.bannercont}>
-                {isLoading ? (
-                  <ActivityIndicator />
-                ) : (
-                  <FlatList
-                    data={data}
-                    keyExtractor={({ id }, index) => id}
-                    renderItem={({ item }) => (
-                      <View style={styles.bannerdetail}>
-                        <Text style={styles.bannertitle}>{item.title}</Text>
 
-                        <Text style={styles.bannerdescription}>
-                          {item.content}
-                        </Text>
-                        <View style={styles.bannerbuttontok}>
-                          <TouchableOpacity
-                            style={styles.loginScreenButton}
-                            underlayColor="#fff"
-                          >
-                            <FontAwesome
-                              style={{ fontSize: 30, color: "#62ad80" }}
-                              name="code-fork"
-                            />
-                            <Text style={styles.bannerbutton}>Button</Text>
-                          </TouchableOpacity>
+                <View style={styles.bannercont}>
+                  {isLoading ? (
+                    <ActivityIndicator />
+                  ) : (
+                    <FlatList
+                      data={data}
+                      keyExtractor={({ id }, index) => id}
+                      renderItem={({ item }) => (
+                        <View style={styles.bannerdetail}>
+                          <Text style={styles.bannertitle}>{item.title}</Text>
+
+                          <Text style={styles.bannerdescription}>
+                            {item.content}
+                          </Text>
+                          <View style={styles.bannerbuttontok}>
+                            <TouchableOpacity
+                              style={styles.loginScreenButton}
+                              underlayColor="#fff"
+                            >
+                              <FontAwesome
+                                style={{ fontSize: 30, color: "#62ad80" }}
+                                name="code-fork"
+                              />
+                              <Text style={styles.bannerbutton}>Button</Text>
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
-                    )}
+                      )}
+                    />
+                  )}
+                  <Image
+                    style={styles.bannerimg}
+                    source={require("../../../assets/images/13.png")}
                   />
-                )}
-                <Image
-                  style={styles.bannerimg}
-                  source={require("../../../assets/images/13.png")}
-                />
+                </View>
               </View>
-              {providerModal && (
-                <ProviderModal
-                  navigation={navigation}
-                  setProviderModal={setProviderModal}
-                  visible={providerModal}
-                />
-              )}
-              {showFilter && (
-                <Filter
-                  navigation={navigation}
-                  setShowFilter={setShowFilter}
-                  modalVisible={showFilter}
-                  route={props.route}
-                />
-              )}
             </ScrollView>
+
+            {providerModal && (
+              <ProviderModal
+                navigation={navigation}
+                setProviderModal={setProviderModal}
+                visible={providerModal}
+              />
+            )}
+            {showFilter && (
+              <Filter
+                navigation={navigation}
+                setShowFilter={setShowFilter}
+                modalVisible={showFilter}
+                route={props.route}
+              />
+            )}
           </View>
         </View>
       )}
@@ -306,6 +347,9 @@ const mapStateToProps = (state) => {
     dynamicId: state.Service.dynamicId,
     dynamicLoader: state.Service.dynamicLoader,
     dynamicUrl1: state.Service.dynamicUrl1,
+    checkUrl: state.Service.checkUrl,
+    serviceAvailable: state.Service.servicesLenght,
+    serviceMessage: state.Service.serviceMessage,
   };
 };
 export default connect(mapStateToProps, {
@@ -316,6 +360,7 @@ export default connect(mapStateToProps, {
   bannerInfo,
   getDynamicLinkId,
   resetDynamicLoader,
+  restrictNavigation,
 })(Home);
 
 const items = [

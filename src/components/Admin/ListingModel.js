@@ -11,6 +11,7 @@ import { MaterialCommunityIcons } from "react-native-vector-icons";
 import { connect } from "react-redux";
 import { sendPushNotification } from "../../store/actions/Auth";
 import { duplicateListing } from "../../store/actions/Admin";
+import { useNavigation } from "@react-navigation/native";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
 
@@ -22,6 +23,7 @@ const ListingModal = ({
   duplicateListing,
   setSelect,
 }) => {
+  const navigation = useNavigation();
   const handleSelect = () => {
     setProviderModal(false);
   };
@@ -39,6 +41,14 @@ const ListingModal = ({
   const handleDuplicate = () => {
     setProviderModal(false);
     duplicateListing(currentData);
+  };
+  const handleEdit = () => {
+    setProviderModal(false);
+    navigation.navigate("AddService", {
+      data: currentData,
+      key: currentData.id,
+      user: "Provider",
+    });
   };
 
   return (
@@ -88,6 +98,15 @@ const ListingModal = ({
                 <Text style={{ fontSize: 18 }}>Assign</Text>
               </View>
             </TouchableOpacity>
+            <TouchableOpacity onPress={handleEdit} style={styles.actions}>
+              <MaterialCommunityIcons
+                size={30}
+                style={{ color: "#000" }}
+                name="hand"
+              />
+
+              <Text style={{ paddingLeft: 20, fontSize: 18 }}>Edit</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -118,7 +137,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,.5)",
   },
   innerWrapper: {
-    flex: 5,
+    flex: 7,
     width: deviceWidth,
     backgroundColor: "#fff",
     padding: 20,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,15 +8,47 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { ActivityIndicator, Button } from "react-native-paper";
+import { restrictNavigation } from "../../store/actions/Services";
+import { connect } from "react-redux";
 let deviceWidth = Dimensions.get("window").width;
 let deviceHeight = Dimensions.get("window").height;
-const PleaseWait = ({ addServiceLoading, success, navigation }) => {
-  const handleNavigation = () => {
-    navigation.navigate("ServicesHome", {
-      id: 121,
-      messageAlert: true,
-    });
-  };
+import { providerService } from "../../store/actions/Admin";
+const PleaseWait = ({
+  addServiceLoading,
+  success,
+  navigation,
+  type,
+  providerService,
+  serviceMessage,
+  restrictNavigation,
+  saveBtn,
+}) => {
+  // const handleNavigation = () => {};
+
+  useEffect(() => {
+    if (serviceMessage === true) {
+      if (type === "user") {
+        navigation.navigate("ServicesHome", {
+          id: 121,
+          messageAlert: true,
+          message: saveBtn
+            ? "Your Listing has been updated sucessfully"
+            : "your listing was added sucessfully",
+        });
+        restrictNavigation();
+      } else {
+        navigation.navigate("Listing", {
+          id: 111,
+          messageAlert: true,
+          message: saveBtn
+            ? "Your Listing has been updated sucessfully"
+            : "your listing was added sucessfully",
+        });
+        restrictNavigation();
+        providerService();
+      }
+    }
+  }, [serviceMessage]);
   return (
     <Modal
       animationType="slide"
@@ -35,25 +67,19 @@ const PleaseWait = ({ addServiceLoading, success, navigation }) => {
           </View>
         </View>
       )}
-      {success && (
-        <View style={styles.inputContainer}>
-          <View style={styles.container}>
-            <View>
-              <Text style={styles.sucess}>Data Added Sucessfully </Text>
-              <Text style={styles.sucess}>Press ok to continue</Text>
-            </View>
-            <TouchableOpacity onPress={handleNavigation}>
-              <Button style={{ backgroundColor: "#5dae7e" }}>
-                <Text style={{ color: "#000" }}>ok</Text>
-              </Button>
-            </TouchableOpacity>
-          </View>
-        </View>
-      )}
     </Modal>
   );
 };
-export default PleaseWait;
+const mapStateToProps = (state) => {
+  return {
+    type: state.Auth.admin,
+    serviceMessage: state.Service.serviceMessage,
+  };
+};
+export default connect(mapStateToProps, {
+  providerService,
+  restrictNavigation,
+})(PleaseWait);
 
 const styles = StyleSheet.create({
   inputContainer: {

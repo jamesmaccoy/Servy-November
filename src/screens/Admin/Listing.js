@@ -10,13 +10,18 @@ import ListingModel from "../../components/Admin/ListingModel";
 import Loader from "../../screens/Auth/Loader";
 import SelectModal from "../../components/Admin/SelectModal";
 
-const Listing = ({ navigation, providerService, servicesList, loading }) => {
+const Listing = ({ ...props }) => {
+  let navigation = props.navigation;
+  let providerService = props.providerService;
+  let servicesList = props.servicesList;
+  let loading = props.loading;
   const [providerModal, setProviderModal] = useState(false);
   const [select, setSelect] = useState(false);
 
   useEffect(() => {
     providerService();
   }, []);
+
   return (
     <>
       {loading ? (
@@ -46,7 +51,11 @@ const Listing = ({ navigation, providerService, servicesList, loading }) => {
               setSelect={setSelect}
             />
           )}
-          <SelectModal setProviderModal={setProviderModal} select={select} setSelect={setSelect} />
+          <SelectModal
+            setProviderModal={setProviderModal}
+            select={select}
+            setSelect={setSelect}
+          />
         </ScrollView>
       )}
     </>

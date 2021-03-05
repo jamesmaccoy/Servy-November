@@ -65,7 +65,7 @@ const MutipleSelect = ({ categories, setFilterCategory, setGetAgain }) => {
           height: 200,
         }}
         fixedHeight={true}
-        hideSubmitButton={false}
+        hideSubmitButton={true}
         styleTextDropdown={{ paddingLeft: 20 }}
         styleTextTag={{ padding: 0 }}
         tagContainerStyle={{
@@ -92,7 +92,7 @@ const MutipleSelect = ({ categories, setFilterCategory, setGetAgain }) => {
         styleSelectorContainer={{
           elevation: 0,
         }}
-        submitButtonColor="#5dae7e"
+        submitButtonColor="red"
         styleDropdownMenu={{ backgroundColor: "#f7f7f7", margin: 0 }}
         styleMainWrapper={{ backgroundColor: "#f7f7f7" }}
       />

@@ -196,6 +196,7 @@ const AddService = ({ ...props }) => {
   return (
     <View>
       <PleaseWait
+        saveBtn={saveBtn}
         navigation={navigation}
         success={message}
         addServiceLoading={addServiceLoading}
@@ -208,7 +209,6 @@ const AddService = ({ ...props }) => {
           {errorMessage && (
             <Text style={{ color: "red" }}>Provide All Information</Text>
           )}
-
           {saveBtn ? (
             <TouchableOpacity onPress={handleUpdateInfo} style={styles.btn}>
               <Text>Save & Exit</Text>
