@@ -23,8 +23,6 @@ const PleaseWait = ({
   restrictNavigation,
   saveBtn,
 }) => {
-  // const handleNavigation = () => {};
-
   useEffect(() => {
     if (serviceMessage === true) {
       if (type === "user") {
