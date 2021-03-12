@@ -21,6 +21,7 @@ import {
   serviceProviderInformation,
   shareDynamicLinks,
 } from "../../store/actions/User";
+
 import {
   addServiceReview,
   getServiceReview,
@@ -344,17 +345,20 @@ const ListDetail = ({ ...props }) => {
                     ))}
                   </View>
                 </View>
-                 <View>
-                      <TouchableOpacity
+                <View>
+                  <TouchableOpacity
                     onPress={() => {
-                      setModalVisible(true);
-
+                      navigation.navigate("booking");
                     }}
-                     style={{paddingBottom:100,position:'relative',width:'100%'}}
+                    style={{
+                      paddingBottom: 100,
+                      position: "relative",
+                      width: "100%",
+                    }}
                   >
                     <View style={styles.buttonbook}>
-                     <Ionicons name="ios-hand"  size={30} color={'#fff'}/>
-                      
+                      <Ionicons name="ios-hand" size={30} color={"#fff"} />
+
                       <Text
                         style={{
                           fontSize: 20,
@@ -364,12 +368,9 @@ const ListDetail = ({ ...props }) => {
                       >
                         Book
                       </Text>
-
-
                     </View>
                   </TouchableOpacity>
-              </View>
-
+                </View>
               </View>
             </View>
 

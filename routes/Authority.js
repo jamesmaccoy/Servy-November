@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import { Authorization } from "../src/store/actions/Auth";
 import { profileInformation } from "../src/store/actions/User";
 import AddService from "../src/screens/User/AddService";
+import BookingScreen from "../src/screens/User/BookingScreen";
 
 const Stack = createStackNavigator();
 
@@ -55,6 +56,13 @@ const Authority = ({ type, Authorization, authCheck, profileInformation }) => {
                 }}
                 name="user"
                 component={UserHome}
+              />
+              <Stack.Screen
+                options={{
+                  headerShown: false,
+                }}
+                name="booking"
+                component={BookingScreen}
               />
             </Stack.Navigator>
           )}

@@ -758,7 +758,6 @@ export const getLinkFromBackBackground = () => async (
   { getFirestore, getFirebase }
 ) => {
   Linking.addEventListener("url", (url) => {
-    console.log("urlll", url);
     dispatch({
       type: "CHECK_URL",
       payload: url,

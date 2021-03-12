@@ -43,16 +43,6 @@ const index = ({
     });
 
     verifyUser();
-    return () => {
-      Linking.removeEventListener("url", (url) => {
-        console.log("urll", url);
-        if (url) {
-          if (url.startsWith("https")) {
-            getDynamicLinkId(url.substr(30));
-          }
-        }
-      });
-    };
   }, []);
 
   // const HomeTab = () => {
