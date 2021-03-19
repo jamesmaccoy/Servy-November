@@ -58,6 +58,7 @@ const ListDetail = ({ ...props }) => {
   const [data, setData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [modalBook, setModalBook] = useState(false);
+  const [modalTalk, setModalTalk] = useState(false);
   const [visibleText, setTextVisible] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [serviceLoader, setServiceLoader] = useState(true);
@@ -114,6 +115,7 @@ const ListDetail = ({ ...props }) => {
   const handleBook = () => {
     setModalBook(!modalBook);
   };
+
 
   const handleFilter = () => {
     setShowFilter(!showFilter);
@@ -257,7 +259,10 @@ const ListDetail = ({ ...props }) => {
                   </TouchableOpacity>
               </View>
               <View>
-                <TouchableOpacity style={styles.fawbtn}>
+                <TouchableOpacity   onPress={() => {
+                      setModalTalk(true);
+
+                    }} style={styles.fawbtn}>
                 
                 <Text style={styles.iconinbtn}>
                 <Foundation name="telephone" color={'#61ad7f'} size={40}/>
@@ -496,7 +501,59 @@ const ListDetail = ({ ...props }) => {
                 </View>
               </View>
             </Modal>
+            <Modal
+              animationType="fade"
+              transparent={true}
+              visible={modalTalk}
+            >
+              <View style={styles.centeredBookView}>
+                <View style={styles.modalBookView}>
+                  <TouchableHighlight
+                    style={{
+                      textAlign: "right",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      background: "#555",
+                      paddingLeft:15,
+                      paddingRight:15,
+                    }}
+                    onPress={() => {
+                      setModalTalk(!modalTalk);
+                    }}
+                  >
+                    <Text>Close</Text>
+                  </TouchableHighlight>
+                  <View style={styles.moreheading}>
+                    <Text style={styles.moreheadingtxt}>
+                      More Options
+                    </Text>
+                    <View
+                    style={{
+                      borderBottomColor: 'black',
+                      borderBottomWidth: 1,
+                    }}
+                  />
+                    <View style={styles.bookbox}>
+                    <TouchableHighlight>
+                        <View style={{display:'flex',flexDirection:'row',marginBottom:20}}>
+                          <Text style={{marginRight:20}}><MaterialCommunityIcons name='instagram'   size={28} color="#000"/></Text>
+                          <Text style={{color:'#000', fontSize:20}}>   Instagram </Text>
+                        </View>
 
+                        </TouchableHighlight>
+                        <TouchableHighlight>
+                        <View style={{display:'flex',flexDirection:'row',marginBottom:20}}>
+                          <Text style={{marginRight:22}}><Ionicons name='ios-link'   size={30} color="#000" style={{marginRight:12}}/></Text>
+                          <Text style={{color:'#000', fontSize:20}}>   Website</Text>
+                        </View>
+                        </TouchableHighlight>
+               
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </Modal>
           </ScrollView>
           <Filter
             route={props.route}
