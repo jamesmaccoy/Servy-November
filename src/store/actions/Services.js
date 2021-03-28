@@ -762,7 +762,7 @@ export const getLinkFromBackBackground = () => async (
       type: "CHECK_URL",
       payload: url,
     });
-    if (url) {
+    if (url !== "" && typeof url !== "object") {
       if (url.startsWith("https")) {
         dispatch({
           type: "DYNAMIC_LOADER",

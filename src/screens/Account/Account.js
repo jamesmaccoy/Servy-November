@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, Text, ScrollView, TextInput } from "react-native";
+import {
+  View,
+  Image,
+  Text,
+  ScrollView,
+  TextInput,
+  FlatList,
+} from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "../../styles/Account/AccountStyle";
 import Input from "../../components/Generic/AccountInput";
@@ -10,6 +17,8 @@ import {
 } from "../../store/actions/User";
 import { connect } from "react-redux";
 import Loader from "../Auth/Loader";
+import Calendar from "./../../components/User/Calender";
+import { Button } from "native-base";
 
 const Account = ({ ...props }) => {
   let navigation = props.navigation;
@@ -68,9 +77,13 @@ const Account = ({ ...props }) => {
     navigation.goBack();
   };
 
-  useEffect(() => {
-    console.log("stateeee", state);
-  }, [state]);
+  const [callCalender, setCallCalender] = useState(false);
+  const timeSlotes = [
+    { day: "Monday", timing: "3-40-2012" },
+    { day: "Tuesday", timing: "3-40-2012" },
+    { day: "Wednesday", timing: "3-40-2012" },
+    { day: "Monday", timing: "3-40-2012" },
+  ];
 
   return (
     <>
@@ -241,6 +254,37 @@ const Account = ({ ...props }) => {
                       setEdit(true);
                       setState({ ...state, instagramUrl: text });
                     }}
+                  />
+                </View>
+                <View>
+                  <Text style={styles.heading}>Time Slots</Text>
+                  <FlatList
+                    item={timeSlotes}
+                    renderItem={({ item }) => (
+                      <View>
+                        <Text> {item.day} </Text>
+                        <Text> {item.timing} </Text>
+                      </View>
+                    )}
+                  />
+
+                  <Button
+                    onPress={() => setCallCalender(true)}
+                    style={{
+                      marginTop: 10,
+                      backgroundColor: "#f7f7f7",
+                      elevation: 0,
+                      borderRadius: 5,
+                      borderColor: "#a9a9a9",
+                      borderWidth: 1,
+                    }}
+                    full
+                  >
+                    <Text>Add Timing</Text>
+                  </Button>
+                  <Calendar
+                    setCallCalender={setCallCalender}
+                    callCalender={callCalender}
                   />
                 </View>
               </View>

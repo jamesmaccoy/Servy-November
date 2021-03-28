@@ -12,6 +12,7 @@ import { styles } from "../../styles/User/BookingScreenStyle";
 import { useNavigation } from "@react-navigation/native";
 import { connect } from "react-redux";
 import Maps from "../../components/Generic/Maps";
+import Calender from "../../components/User/Calender";
 const { width } = Dimensions.get("window");
 import {
   Entypo,
@@ -19,8 +20,10 @@ import {
   Foundation,
   Ionicons,
 } from "@expo/vector-icons";
+import { Calendar } from "react-native-calendars";
 
 const BookingScreen = ({ serviceData }) => {
+  const [callCalender, setCallCalender] = useState(true);
   const navigation = useNavigation();
   const navHandler = () => {
     navigation.goBack();
@@ -181,6 +184,12 @@ const BookingScreen = ({ serviceData }) => {
                 </Text>
               </View>
             </TouchableOpacity>
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <Calendar
+              setCallCalender={setCallCalender}
+              callCalender={callCalender}
+            />
           </View>
         </View>
       </View>

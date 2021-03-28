@@ -35,6 +35,7 @@ import Carousel from "react-native-snap-carousel";
 import { LinearGradient } from "expo-linear-gradient";
 import { styles } from "../../styles/User/ListDestailStyle";
 import ShareLink from "../../components/User/ShareLink";
+import Booking from "../../components/User/Booking";
 
 const { width } = Dimensions.get("window");
 const ListDetail = ({ ...props }) => {
@@ -61,6 +62,7 @@ const ListDetail = ({ ...props }) => {
   const [visibleText, setTextVisible] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [serviceLoader, setServiceLoader] = useState(true);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setServiceLoader(true);
@@ -264,7 +266,7 @@ const ListDetail = ({ ...props }) => {
                 <View>
                   <TouchableOpacity
                     onPress={() => {
-                      setModalVisible(true);
+                      setVisible(true);
                     }}
                   >
                     <View style={styles.buttonbook}>
@@ -445,6 +447,7 @@ const ListDetail = ({ ...props }) => {
               </View>
             </Modal>
           </ScrollView>
+          <Booking visible={visible} setVisible={setVisible} />
           <Filter
             route={props.route}
             navigation={navigation}

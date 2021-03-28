@@ -28,14 +28,14 @@ const index = ({
   useEffect(() => {
     getLinkFromBackBackground();
     Linking.getInitialURL().then((url) => {
-      if (url) {
+      if (url !== "" && typeof url !== "object") {
         if (url.startsWith("https")) {
           getDynamicLinkId(url.substr(30));
         }
       }
     });
     Linking.addEventListener("url", (url) => {
-      if (url) {
+      if (url !== "" && typeof url !== "object") {
         if (url.startsWith("https")) {
           getDynamicLinkId(url.substr(30));
         }
@@ -44,51 +44,6 @@ const index = ({
 
     verifyUser();
   }, []);
-
-  // const HomeTab = () => {
-  //   return (
-  //     <Stack.Navigator initialRouteName="ServicesHome">
-  //       <Stack.Screen
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //         name="ServicesHome"
-  //         component={ServicesHome}
-  //         initialParams={{ key: 1 }}
-  //       />
-  //       <Stack.Screen
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //         name="AddService"
-  //         component={AddService}
-  //       />
-  //       <Stack.Screen
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //         name="ListDetail"
-  //         component={ListDetail}
-  //       />
-  //       <Stack.Screen
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //         name="Services"
-  //         component={Services}
-  //       />
-  //       <Stack.Screen
-  //         options={{
-  //           headerShown: false,
-  //         }}
-  //         name="SearchResult"
-  //         component={SearchResult}
-  //         initialParams={{ key: 4 }}
-  //       />
-  //       <Stack.Screen name="Notification" component={Notification} />
-  //     </Stack.Navigator>
-  //   );
-  // };
 
   const config = {
     screens: {
