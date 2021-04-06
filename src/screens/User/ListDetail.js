@@ -13,7 +13,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Button } from "native-base";
-import { Entypo, MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import {
+  Entypo,
+  MaterialCommunityIcons,
+  Ionicons,
+  Foundation,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import tick from "../../../assets/images/tick.png";
 import Filter from "../../components/User/Filter";
 import { connect } from "react-redux";
@@ -59,6 +65,8 @@ const ListDetail = ({ ...props }) => {
   });
   const [data, setData] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalBook, setModalBook] = useState(false);
+  const [modalTalk, setModalTalk] = useState(false);
   const [visibleText, setTextVisible] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
   const [serviceLoader, setServiceLoader] = useState(true);
@@ -112,6 +120,9 @@ const ListDetail = ({ ...props }) => {
   const handleReview = () => {
     addServiceReview(Review, data.id);
     setModalVisible(!modalVisible);
+  };
+  const handleBook = () => {
+    setModalBook(!modalBook);
   };
 
   const handleFilter = () => {
@@ -229,8 +240,46 @@ const ListDetail = ({ ...props }) => {
                     );
                   })}
               </View>
-              <View></View>
 
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalBook(true);
+                  }}
+                  style={{
+                    paddingBottom: 100,
+                    position: "relative",
+                    width: "100%",
+                  }}
+                >
+                  <View style={styles.buttonaddrb}>
+                    <Ionicons name="ios-hand" size={30} color={"#fff"} />
+
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        paddingLeft: 5,
+                        color: "#ffffff",
+                      }}
+                    >
+                      Book
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalTalk(true);
+                  }}
+                  style={styles.fawbtn}
+                >
+                  <Text style={styles.iconinbtn}>
+                    <Foundation name="telephone" color={"#61ad7f"} size={40} />
+                  </Text>
+                  <Text style={styles.textinbtn}>Talk</Text>
+                </TouchableOpacity>
+              </View>
               <View>
                 <Text style={styles.services}>Location</Text>
                 <View>
@@ -259,30 +308,6 @@ const ListDetail = ({ ...props }) => {
                         }}
                       >
                         Add
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      setVisible(true);
-                    }}
-                  >
-                    <View style={styles.buttonbook}>
-                      <MaterialCommunityIcons
-                        name={"calendar"}
-                        size={30}
-                        color={"#fff"}
-                      />
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          paddingLeft: 5,
-                          color: "#ffffff",
-                        }}
-                      >
-                        Book
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -346,32 +371,6 @@ const ListDetail = ({ ...props }) => {
                       </View>
                     ))}
                   </View>
-                </View>
-                <View>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("booking");
-                    }}
-                    style={{
-                      paddingBottom: 100,
-                      position: "relative",
-                      width: "100%",
-                    }}
-                  >
-                    <View style={styles.buttonbook}>
-                      <Ionicons name="ios-hand" size={30} color={"#fff"} />
-
-                      <Text
-                        style={{
-                          fontSize: 20,
-                          paddingLeft: 5,
-                          color: "#ffffff",
-                        }}
-                      >
-                        Book
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -442,6 +441,189 @@ const ListDetail = ({ ...props }) => {
                     <Button onPress={handleReview} full style={styles.buttons}>
                       <Text style={styles.buttonstxt}>Add</Text>
                     </Button>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            <Modal animationType="fade" transparent={true} visible={modalBook}>
+              <View style={styles.centeredBookView}>
+                <View style={styles.modalBookView}>
+                  <TouchableHighlight
+                    style={{
+                      textAlign: "right",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      background: "#555",
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                    }}
+                    onPress={() => {
+                      setModalBook(!modalBook);
+                    }}
+                  >
+                    <Text>Close</Text>
+                  </TouchableHighlight>
+                  <View style={styles.moreheading}>
+                    <Text style={styles.moreheadingtxt}>More Options</Text>
+                    <View
+                      style={{
+                        borderBottomColor: "black",
+                        borderBottomWidth: 1,
+                      }}
+                    />
+                    <View style={styles.bookbox}>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          marginBottom: 20,
+                        }}
+                      >
+                        <Text style={{ marginRight: 20 }}>
+                          <FontAwesome5
+                            name="calendar"
+                            size={28}
+                            color="#000"
+                          />
+                        </Text>
+                        <Text style={{ color: "#000", fontSize: 20 }}>
+                          {" "}
+                          Date{" "}
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          marginBottom: 20,
+                        }}
+                      >
+                        <Text style={{ marginRight: 20 }}>
+                          <Ionicons
+                            name="ios-time"
+                            size={28}
+                            color="#000"
+                            style={{ marginRight: 12 }}
+                          />
+                        </Text>
+                        <Text style={{ color: "#000", fontSize: 20 }}>
+                          {" "}
+                          Time
+                        </Text>
+                      </View>
+
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          marginBottom: 20,
+                        }}
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "#bebebe",
+                            padding: 6,
+                            marginRight: 20,
+                          }}
+                        >
+                          <Text style={{ color: "#fff" }}>09:00-13:00</Text>
+                        </View>
+                        <View
+                          style={{ backgroundColor: "#bebebe", padding: 6 }}
+                        >
+                          <Text style={{ color: "#fff" }}>09:00-13:00</Text>
+                        </View>
+                      </View>
+                      <Button onPress={handleBook} full style={styles.buttons}>
+                        <Text style={{ position: "absolute", left: 10 }}>
+                          <Ionicons
+                            name="ios-hand"
+                            style={{ position: "absolute" }}
+                            size={30}
+                            color={"#fff"}
+                          />
+                        </Text>
+                        <Text style={styles.buttonstxt}> Confirm</Text>
+                      </Button>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </Modal>
+            <Modal animationType="fade" transparent={true} visible={modalTalk}>
+              <View style={styles.centeredBookView}>
+                <View style={styles.modalBookView}>
+                  <TouchableHighlight
+                    style={{
+                      textAlign: "right",
+                      display: "flex",
+                      flexDirection: "row",
+                      justifyContent: "flex-end",
+                      background: "#555",
+                      paddingLeft: 15,
+                      paddingRight: 15,
+                    }}
+                    onPress={() => {
+                      setModalTalk(!modalTalk);
+                    }}
+                  >
+                    <Text>Close</Text>
+                  </TouchableHighlight>
+                  <View style={styles.moreheading}>
+                    <Text style={styles.moreheadingtxt}>More Options</Text>
+                    <View
+                      style={{
+                        borderBottomColor: "black",
+                        borderBottomWidth: 1,
+                      }}
+                    />
+                    <View style={styles.bookbox}>
+                      <TouchableHighlight>
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            marginBottom: 20,
+                          }}
+                        >
+                          <Text style={{ marginRight: 20 }}>
+                            <MaterialCommunityIcons
+                              name="instagram"
+                              size={28}
+                              color="#000"
+                            />
+                          </Text>
+                          <Text style={{ color: "#000", fontSize: 20 }}>
+                            {" "}
+                            Instagram{" "}
+                          </Text>
+                        </View>
+                      </TouchableHighlight>
+                      <TouchableHighlight>
+                        <View
+                          style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            marginBottom: 20,
+                          }}
+                        >
+                          <Text style={{ marginRight: 22 }}>
+                            <Ionicons
+                              name="ios-link"
+                              size={30}
+                              color="#000"
+                              style={{ marginRight: 12 }}
+                            />
+                          </Text>
+                          <Text style={{ color: "#000", fontSize: 20 }}>
+                            {" "}
+                            Website
+                          </Text>
+                        </View>
+                      </TouchableHighlight>
+                    </View>
                   </View>
                 </View>
               </View>

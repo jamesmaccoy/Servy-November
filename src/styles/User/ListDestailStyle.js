@@ -146,8 +146,8 @@ export const styles = StyleSheet.create({
     textAlignVertical: "top",
     color: "#000",
   },
-  buttons: { color: "#5c9b84", marginTop: 20, backgroundColor: "#5c9b84" },
-  buttonstxt: { color: "#fff" },
+  buttons: { color: "#5c9b84", marginTop: 20, padding:25,backgroundColor: "#5c9b84" },
+  buttonstxt: { color: "#fff", fontSize:22, textTransform:'uppercase' },
   viewover: { position: "absolute", top: 0, width: width, height: 300 },
 
   corb: { marginRight: -60 },
@@ -221,7 +221,7 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
-     fawbtn:{borderWidth:2,borderColor:'#ccc', position:'relative', borderRadius:5,padding:20,marginTop:25},
+     fawbtn:{borderWidth:2,borderColor:'#ccc', position:'relative', borderRadius:5,padding:20,marginTop:0},
       details: {
         paddingTop: 10,
         fontSize: 16,
@@ -231,7 +231,7 @@ export const styles = StyleSheet.create({
       
       iconinbtn:{   left:8,   position:'absolute',top:10,},
     textinbtn:{fontSize:18,fontWeight:'bold',color:'#61ad7f',textTransform:'uppercase',textAlign:'center'},
-     buttonaddrb:{display:'flex',position:'absolute',right:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
+     buttonaddrb:{display:'flex',position:'absolute',right:0,top:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
 shadowOffset: {
   width: 0,
   height: 2,
@@ -241,5 +241,18 @@ shadowRadius: 3.84,
 
 elevation: 5,},
   titlereviewbtn:{flex: 1,flexDirection: "row", alignItems:'center', justifyContent:'space-between',  paddingBottom:10}, 
-    
+  
+  centeredBookView: {
+    position: "absolute",    height: "100%",    bottom: 0,    width: "100%",    backgroundColor: "rgba(0,0,0,.5)",
+  },
+  modalBookView: {    position: "absolute",    bottom: 0,    width: "100%",
+    margin: 0,    backgroundColor: "white",    borderRadius: 0,    paddingTop: 10,
+    padding: 0,    shadowColor: "#000",    shadowOffset: {      width: 2,
+      height: 2,    },    shadowOpacity: 0.25,    shadowRadius: 3.84,    elevation: 3,  },
+
+      moreheadingtxt:{fontSize:20,fontWeight:'bold',padding:15,borderEndWidth:1,borderColor:'#ccc'},
+      bookbox:{padding:20},
+      buttons:{height:60,backgroundColor:'#60ad7f'}
 });
+
+
