@@ -65,7 +65,7 @@ export const styles = StyleSheet.create({
     padding: 20,
   },
   image: {
-    height: 300,
+    height: 600,
     paddingLeft: 0,
     paddingRight: 0,
     resizeMode: "cover",
@@ -148,7 +148,7 @@ export const styles = StyleSheet.create({
   },
   buttons: { color: "#5c9b84", marginTop: 20, padding:25,backgroundColor: "#5c9b84" },
   buttonstxt: { color: "#fff", fontSize:22, textTransform:'uppercase' },
-  viewover: { position: "absolute", top: 0, width: width, height: 300 },
+  viewover: { position: "absolute", top: 0, width: width, height: 600 },
 
   corb: { marginRight: -60 },
   buttonaddr: {
@@ -231,7 +231,8 @@ export const styles = StyleSheet.create({
       
       iconinbtn:{   left:8,   position:'absolute',top:10,},
     textinbtn:{fontSize:18,fontWeight:'bold',color:'#61ad7f',textTransform:'uppercase',textAlign:'center'},
-     buttonaddrb:{display:'flex',position:'absolute',right:0,top:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
+     buttonaddrb:{display:'flex',
+     right:0,top:0,marginTop:20,flexDirection:'row',backgroundColor:'#61ad7f',paddingTop:18,paddingRight:25,paddingLeft:35,paddingBottom:18,borderRadius:50,shadowColor: "#000",justifyContent:'flex-end',
 shadowOffset: {
   width: 0,
   height: 2,
@@ -252,7 +253,24 @@ elevation: 5,},
 
       moreheadingtxt:{fontSize:20,fontWeight:'bold',padding:15,borderEndWidth:1,borderColor:'#ccc'},
       bookbox:{padding:20},
-      buttons:{height:60,backgroundColor:'#60ad7f'}
+      buttons:{height:60,backgroundColor:'#60ad7f'},
+      fixeddcontain:{  position: 'relative',zIndex:88},
+ 
+    bottomView:{
+ 
+      right:10,
+    
+      justifyContent: 'center', 
+      alignItems: 'center',
+      position: 'absolute',
+      bottom: 10
+    },
+ 
+    textStyle:{
+ 
+      color: '#fff',
+      fontSize:22
+    }
 });
 
 
